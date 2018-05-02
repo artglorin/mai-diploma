@@ -1,0 +1,48 @@
+ext {
+  slf4j_version = '1.7.25'
+  log4j_version = "2.11.0"
+  kotlin_version = '1.2.31'
+  junit_version = "5.2.0"
+  apache_lang = "3.7"
+  apache_io = "2.6"
+  snakeyaml_version = "1.21"
+  jackson_version = "2.9.5"
+  spring_version = "5.0.5.RELEASE"
+  spring_boot_version = "2.0.1.RELEASE"
+
+  libpack = [
+          spring : [
+                "org.springframework:spring-core:$spring_version",
+                "org.springframework.boot:spring-boot:$spring_boot_version",
+                "org.springframework.boot:spring-boot-starter:$spring_boot_version",
+          ],
+          utils : [
+                  "org.apache.commons:commons-lang3:$apache_lang",
+                  "com.fasterxml.jackson.core:jackson-databind:$jackson_version",
+                  "commons-io:commons-io:$apache_io",
+                  "org.yaml:snakeyaml:$snakeyaml_version",
+          ],
+          kotlin : [
+                  "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+          ],
+          logging: [
+                  "org.slf4j:slf4j-api:$slf4j_version",
+                  "org.apache.logging.log4j:log4j-to-slf4j:$log4j_version",
+          ],
+          test : [
+                  "org.junit.jupiter:junit-jupiter-api:$junit_version",
+                  "org.springframework.boot:spring-boot-starter-test:$spring_boot_version",
+                  "org.springframework.boot:spring-boot-test:$spring_boot_version",
+          ]
+  ]
+}
+
+dependencies {
+  compile libpack.logging
+  compile libpack.utils
+  compile libpack.kotlin
+  compile libpack.spring
+  testCompile libpack.test
+
+  testRuntime "org.junit.jupiter:junit-jupiter-engine:$junit_version"
+}
