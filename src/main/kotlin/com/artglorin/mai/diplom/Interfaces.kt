@@ -69,7 +69,7 @@ interface TaskManagerModule : Module, Settingable {
     fun process()
 }
 
-interface DataAcceptModule : Consumer<JsonNode> {
+interface DataObserver : Consumer<JsonNode> {
     fun getObservablesIds(): Collection<String>
 }
 

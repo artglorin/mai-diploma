@@ -23,13 +23,18 @@ interface ModuleLoader<out T> {
 
 interface ModuleLoaderFactory {
     fun createSourceModuleLoader(): ModuleLoader<DataSourceModule>
-    fun createDataViewModuleLoader(): ModuleLoader<Any>
-    fun createTaskManagerModuleLoader(): ModuleLoader<Any>
-    fun createDataHandlerModuleLoader(): ModuleLoader<Any>
+    fun createDataViewModuleLoader(): ModuleLoader<DataObserver>
+    fun createTaskManagerModuleLoader(): ModuleLoader<TaskManagerModule>
+    fun createDataHandlerModuleLoader(): ModuleLoader<DataHandlerModule>
+    fun createResolverModuleLoader(): ModuleLoader<DataResolverModule>
 }
 
 @Component
 class DefaultModuleLoaderFactory: ModuleLoaderFactory {
+    override fun createResolverModuleLoader(): ModuleLoader<DataResolverModule> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun createSourceModuleLoader(): ModuleLoader<DataSourceModule> {
         val loadProperties = PropertiesLoader.APP_CONFIG.loadProperties()
         val modulesDir = loadProperties.path(ConfigKeys.MODULES_DIR).asText(FilesAndFolders.MODULES_DIR)
@@ -40,15 +45,15 @@ class DefaultModuleLoaderFactory: ModuleLoaderFactory {
         return ModuleLoaderImpl("data-sources", dataSource, DataSourceModule::class.java)
     }
 
-    override fun createDataViewModuleLoader(): ModuleLoader<Any> {
+    override fun createDataViewModuleLoader(): ModuleLoader<DataObserver> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun createTaskManagerModuleLoader(): ModuleLoader<Any> {
+    override fun createTaskManagerModuleLoader(): ModuleLoader<TaskManagerModule> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun createDataHandlerModuleLoader(): ModuleLoader<Any> {
+    override fun createDataHandlerModuleLoader(): ModuleLoader<DataHandlerModule> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
