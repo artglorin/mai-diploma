@@ -2,6 +2,7 @@ package com.artglorin.mai.diplom
 
 import com.artglorin.mai.diplom.test.JarUtil.makeServiceJarWithSingleClass
 import com.fasterxml.jackson.databind.JsonNode
+import kotlinx.coroutines.experimental.runBlocking
 import org.apache.commons.io.FileUtils
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
@@ -36,20 +37,25 @@ internal class ModuleLoaderImplTest {
     @Test
     fun load() {
         val folder = testFolder ?: fail("test folder was not created")
-        makeServiceJarWithSingleClass(folder, "mod1", LoadModulesTest.EmptyDataSource::class.java)
-        val loadResult = ModuleLoaderImpl("test-module", folder, DataSourceModule::class.java).load()
+        makeServiceJarWithSingleClass(folder, "mod1", EmptyDataSource::class.java)
+        val loadResult: LoadResult<DataSourceModule> = runBlocking {
+            ModuleLoaderImpl("test-module", folder, DataSourceModule::class.java).load()
+        }
         assertTrue(loadResult.success)
         assertEquals(1, loadResult.classes.size)
     }
 
-    @Test fun `test load module with empty jar archive`() {
+    @Test
+    fun `test load module with empty jar archive`() {
         val folder = testFolder ?: fail("test folder was not created")
-        val loadResult = ModuleLoaderImpl("test-module", folder, DataSourceModule::class.java).load()
+        val loadResult = runBlocking {
+            ModuleLoaderImpl("test-module", folder, DataSourceModule::class.java).load()
+        }
         assertTrue(loadResult.success)
         assertEquals(0, loadResult.classes.size)
     }
 
-    class PrivateDataSource(val int: Int): DataSourceModule {
+    class PrivateDataSource(val int: Int) : DataSourceModule {
         override fun getOutputSchema(): JsonNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
@@ -63,10 +69,27 @@ internal class ModuleLoaderImplTest {
         }
     }
 
-    @Test fun `test fail load module without default public constructor`() {
+    open class EmptyDataSource : DataSourceModule {
+        override fun getOutputSchema(): JsonNode {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun addObserver(observer: Consumer<JsonNode>) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getData(): Stream<JsonNode> {
+            return Stream.empty()
+        }
+    }
+
+    @Test
+    fun `test fail load module without default public constructor`() {
         val folder = testFolder ?: fail("test folder was not created")
         makeServiceJarWithSingleClass(folder, "mod1", PrivateDataSource::class.java)
-        val loadResult = ModuleLoaderImpl("test-module", folder, DataSourceModule::class.java).load()
+        val loadResult = runBlocking {
+            ModuleLoaderImpl("test-module", folder, DataSourceModule::class.java).load()
+        }
         assertFalse(loadResult.success)
         assertEquals(0, loadResult.classes.size)
     }
