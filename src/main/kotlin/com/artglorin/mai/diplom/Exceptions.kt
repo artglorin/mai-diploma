@@ -6,5 +6,8 @@ package com.artglorin.mai.diplom
  */
 
 
-class RequiredModulesNotLoaded(message: String ) : RuntimeException(message)
-class ConfigurationNotLoaded(message: String ) : RuntimeException(message)
+class RequiredModulesNotLoaded(message: String? = null) : ApplicationCannotBeStarted(message)
+
+class ConfigurationNotLoaded(message: String? = null) : ApplicationCannotBeStarted(message)
+
+open class ApplicationCannotBeStarted(message: String? = null) : RuntimeException(message)
