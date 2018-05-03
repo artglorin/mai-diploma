@@ -14,3 +14,11 @@ object FilesAndFolders {
     const val DATA_OBSERVERS_DIR = "dataObservers"
     const val CONFIG_FILE = "app_config.json"
 }
+
+object ModulesNames {
+    const val DATA_SOURCES = "data-sources-module"
+    const val DATA_HANDLERS = "data-handlers-module"
+    const val DATA_OBSERVERS = "data-observers"
+    const val TASK_MANAGER = "task-manager-module"
+    const val RESOLVER = "resolver-module"
+}
