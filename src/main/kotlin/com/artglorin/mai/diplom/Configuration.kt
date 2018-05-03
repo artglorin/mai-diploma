@@ -32,9 +32,9 @@ data class ModuleConfig(var jarName: String = "",
                         var id: String = ""
 )
 
-class ConfigurationLoader(private val source: () -> URI) {
+class ConfigurationLoader(private val source: () -> URI?) {
     companion object {
-        val LOG = LoggerFactory.getLogger(Application::class.java.name)!!
+        val LOG = LoggerFactory.getLogger(ConfigurationLoader::class.java.name)!!
         val APP_CONFIG = ConfigurationLoader({
             val configFile = Paths.get(System.getProperty("user.dir"), FilesAndFolders.CONFIG_FILE)
             if (Files.exists(configFile)) {
@@ -44,7 +44,7 @@ class ConfigurationLoader(private val source: () -> URI) {
                 if (resource.exists()) {
                     return@ConfigurationLoader resource.uri
                 } else {
-                    return@ConfigurationLoader Files.createTempFile(null, null).toUri()
+                    return@ConfigurationLoader null
                 }
             }
         })
@@ -55,20 +55,23 @@ class ConfigurationLoader(private val source: () -> URI) {
     @Synchronized
     fun loadProperties(): Configuration {
         if (!loaded) {
-            try {
-                val mapper = ObjectMapper()
-                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                configuration = mapper.readValue(source().toURL(), Configuration::class.java)
-                if (configuration == null) {
-                    LOG.error(::ConfigurationNotLoaded, "Configuration was not loaded. May be ${FilesAndFolders.CONFIG_FILE} is have wrong structure")
+            val url = source()?.toURL()
+            if (url != null) {
+                try {
+                    val mapper = ObjectMapper()
+                    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    configuration = mapper.readValue(url, Configuration::class.java)
+                    if (configuration == null) {
+                        LOG.error(::ConfigurationNotLoaded, "Configuration was not loaded. May be ${FilesAndFolders.CONFIG_FILE} is have wrong structure. Loaded from $url")
+                    }
+                } catch (e: Exception) {
+                    LOG.error(::ConfigurationNotLoaded, "Configuration was not loaded. May be ${FilesAndFolders.CONFIG_FILE} is have wrong structure.Loaded from $url. Error: $e")
                 }
-            } catch (e: Exception) {
-                LOG.error(::ConfigurationNotLoaded, "Configuration was not loaded. May be ${FilesAndFolders.CONFIG_FILE} is have wrong structure. Error: $e")
             }
             loaded = true
         }
 
-        return configuration!!
+        return configuration ?: Configuration()
 
     }
 }
