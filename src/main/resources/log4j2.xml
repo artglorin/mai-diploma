@@ -3,22 +3,9 @@
     <Properties>
         <Property name="filename">log/test.log</Property>
     </Properties>
-    <!--<Filter type="ThresholdFilter" level="trace"/>-->
-
     <Appenders>
-        <!--<Appender type="Console" name="STDOUT">-->
-            <!--<Layout type="PatternLayout" pattern="%m MDC%X%n"/>-->
-            <!--<Filters>-->
-                <!--<Filter type="MarkerFilter" marker="CONSOLE" onMatch="DENY" onMismatch="NEUTRAL"/>-->
-                <!--<Filter type="MarkerFilter" marker="EXCEPTION" onMatch="DENY" onMismatch="ACCEPT"/>-->
-            <!--</Filters>-->
-        <!--</Appender>-->
         <Appender type="Console" name="CONSOLE">
             <Layout type="PatternLayout" pattern="%C{1}.%M %m %ex%n"/><!-- class and line number -->
-            <!--<Filters>-->
-                <!--<Filter type="MarkerFilter" marker="CONSOLE" onMatch="ACCEPT" onMismatch="NEUTRAL"/>-->
-                <!--<Filter type="MarkerFilter" marker="EXCEPTION" onMatch="ACCEPT" onMismatch="DENY"/>-->
-            <!--</Filters>-->
         </Appender>
         <Appender type="File" name="File" fileName="${filename}">
             <Layout type="PatternLayout">
@@ -29,13 +16,15 @@
 
     <Loggers>
         <Logger name="com.artglorin.mai.diplom.ModuleLoaderImpl" level="debug" additivity="false">
-            <!--<Filter type="ThreadContextMapFilter">-->
-                <!--<KeyValuePair key="test" value="123"/>-->
-            <!--</Filter>-->
             <AppenderRef ref="CONSOLE"/>
         </Logger>
-
         <Logger name="com.artglorin.mai.diplom.Application" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+        <Logger name="com.artglorin.mai.diplom.DefaultModuleLoaderFactory" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+        <Logger name="com.artglorin.mai.diplom.ConfigurationLoader" level="debug" additivity="false">
             <AppenderRef ref="CONSOLE"/>
         </Logger>
 
