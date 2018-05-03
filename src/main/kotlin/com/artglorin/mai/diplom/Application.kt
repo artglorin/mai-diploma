@@ -1,7 +1,5 @@
 package com.artglorin.mai.diplom
 
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.CoroutineExceptionHandler
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
 import org.slf4j.LoggerFactory
@@ -23,12 +21,7 @@ open class Application(@Autowired private val factory: ModuleLoaderFactory) {
         var dataHandlerModulesLoadResult: LoadResult<DataHandlerModule>? = null
         var dataObserversLoadResult: LoadResult<DataObserver>? = null
         var solutionModulesLoadResult: LoadResult<SolutionModule>? = null
-        runBlocking(CommonPool + CoroutineExceptionHandler({ _, e ->
-            {
-
-            }
-
-        })) {
+        runBlocking {
             LOG.info("Starting load modules")
             val task1 = async {
                 sourceModulesLoadResult = factory.createSourceModuleLoader().load()
