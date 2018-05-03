@@ -2,6 +2,7 @@ package com.artglorin.mai.diplom
 
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
+import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import java.net.URLClassLoader
 import java.nio.file.Files
@@ -19,7 +20,7 @@ data class LoadResult<out T>(val success: Boolean, val message: String, val clas
 
 
 interface ModuleLoader<out T> {
-    fun load(): LoadResult<T>
+    suspend fun load(): LoadResult<T>
 }
 
 interface ModuleLoaderFactory {
@@ -33,19 +34,30 @@ interface ModuleLoaderFactory {
 @Component
 open class DefaultModuleLoaderFactory : ModuleLoaderFactory {
     companion object {
-        val LOG = LoggerFactory.getLogger(Application::class.java.name)!!
+        val LOG = LoggerFactory.getLogger(DefaultModuleLoaderFactory::class.java.name)!!
     }
+
     private val modulesDir: Path
 
     init {
         val loadProperties = ConfigurationLoader.APP_CONFIG.loadProperties()
         try {
-            modulesDir = Paths.get(loadProperties.modules.path)
+            val stringPath = loadProperties.modules.path
+            var path = Paths.get(stringPath)
+            if (Files.exists(path).not()) {
+                val classPathResource = ClassPathResource(stringPath)
+                if (classPathResource.exists()) {
+                    path = Paths.get(classPathResource.uri)
+                } else {
+                    LOG.error(::IllegalArgumentException, "Modules directory does not exist. Application cannot be started. Specified directory: '$stringPath'")
+
+                }
+            }
+            modulesDir = path
         } catch (e: Exception) {
             throw IllegalArgumentException()
         }
         if (Files.exists(modulesDir).not()) {
-            LOG.error(::IllegalArgumentException, "Modules directory does not exist. Application cannot be started. Specified directory: '$modulesDir'")
         }
     }
 
@@ -83,7 +95,7 @@ class ModuleLoaderImpl<out T>(private val moduleName: String,
                               private val moduleClass: Class<T>) : ModuleLoader<T> {
 
     companion object {
-        val LOG = LoggerFactory.getLogger(Application::class.java.name)!!
+        val LOG = LoggerFactory.getLogger(ModuleLoaderImpl::class.java.name)!!
     }
 
     init {
@@ -91,25 +103,29 @@ class ModuleLoaderImpl<out T>(private val moduleName: String,
         if (Files.exists(moduleFolder).not()) throw IllegalArgumentException("Folder: '$moduleFolder' for module '$moduleName' is not exist")
     }
 
-    override fun load(): LoadResult<T> {
+    override suspend fun load(): LoadResult<T> {
         try {
             LOG.info("Starting load modules by name '$moduleName' in folder '$moduleFolder'")
-            Files.list(moduleFolder)
+            val modules = Files.list(moduleFolder)
                     .filter({ it.fileName.toString().endsWith(".jar") })
                     .map { it.toUri().toURL() }
-                    .collect(Collectors.toList())
+                    .collect(Collectors.toList()).toTypedArray()
                     .let {
-                        val loader = URLClassLoader(it.toTypedArray())
+                        val loader = URLClassLoader(it)
                         val load = ServiceLoader.load(moduleClass, loader)
                         load.toList()
-                    }.apply {
-                        val msg = "Modules for module by name '$moduleName' were loaded. Count of modules: ${this.size}"
-                        LOG.info(msg)
-                        return LoadResult(true, msg, this)
                     }
-            val msg = "No one module was found for module name '$moduleName' in folder '$moduleFolder'"
-            LOG.warn(msg)
-            return LoadResult(true, msg, emptyList())
+            return LoadResult(true,
+                    if (modules.isNotEmpty()) {
+                        val msg = "Modules for module by name '$moduleName' were loaded. Count of modules: ${modules.size}"
+                        LOG.info(msg)
+                        msg
+                    } else {
+                        val msg = "No one module was found for module name '$moduleName' in folder '$moduleFolder'"
+                        LOG.warn(msg)
+                        msg
+                    },
+                    modules)
         } catch (ex: Throwable) {
             val msg = "Module load fail with exception: $ex"
             LOG.error(msg)
