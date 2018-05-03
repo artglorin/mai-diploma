@@ -1,6 +1,7 @@
 package com.artglorin.mai.diplom
 
 import org.apache.commons.lang3.StringUtils
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.net.URLClassLoader
 import java.nio.file.Files
@@ -23,45 +24,68 @@ interface ModuleLoader<out T> {
 
 interface ModuleLoaderFactory {
     fun createSourceModuleLoader(): ModuleLoader<DataSourceModule>
-    fun createDataViewModuleLoader(): ModuleLoader<DataObserver>
+    fun createDataObserversLoader(): ModuleLoader<DataObserver>
     fun createTaskManagerModuleLoader(): ModuleLoader<TaskManagerModule>
     fun createDataHandlerModuleLoader(): ModuleLoader<DataHandlerModule>
-    fun createResolverModuleLoader(): ModuleLoader<DataResolverModule>
+    fun createSolutionModuleLoader(): ModuleLoader<SolutionModule>
 }
 
 @Component
-class DefaultModuleLoaderFactory: ModuleLoaderFactory {
-    override fun createResolverModuleLoader(): ModuleLoader<DataResolverModule> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+open class DefaultModuleLoaderFactory : ModuleLoaderFactory {
+    companion object {
+        val LOG = LoggerFactory.getLogger(Application::class.java.name)!!
+    }
+    private val modulesDir: Path
+
+    init {
+        val loadProperties = ConfigurationLoader.APP_CONFIG.loadProperties()
+        try {
+            modulesDir = Paths.get(loadProperties.modules.path)
+        } catch (e: Exception) {
+            throw IllegalArgumentException()
+        }
+        if (Files.exists(modulesDir).not()) {
+            LOG.error(::IllegalArgumentException, "Modules directory does not exist. Application cannot be started. Specified directory: '$modulesDir'")
+        }
+    }
+
+    override fun createSolutionModuleLoader(): ModuleLoader<SolutionModule> {
+        return moduleLoaderImpl(SolutionModule::class.java, FilesAndFolders.SOLUTION_MODULE_DIR, "solution")
     }
 
     override fun createSourceModuleLoader(): ModuleLoader<DataSourceModule> {
-        val loadProperties = PropertiesLoader.APP_CONFIG.loadProperties()
-        val modulesDir = loadProperties.path(ConfigKeys.MODULES_DIR).asText(FilesAndFolders.MODULES_DIR)
-        if (StringUtils.isBlank(modulesDir) || Files.exists(Paths.get(modulesDir)).not()) {
-            throw RequiredModulesNotLoaded("data-sources module is not specified")
-        }
-        val dataSource = Paths.get(modulesDir).resolve(FilesAndFolders.DATA_SOURCES_MODULE_DIR)
-        return ModuleLoaderImpl("data-sources", dataSource, DataSourceModule::class.java)
+        return moduleLoaderImpl(DataSourceModule::class.java, FilesAndFolders.DATA_SOURCES_MODULE_DIR, "data-sources")
     }
 
-    override fun createDataViewModuleLoader(): ModuleLoader<DataObserver> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun createDataObserversLoader(): ModuleLoader<DataObserver> {
+        return moduleLoaderImpl(DataObserver::class.java, FilesAndFolders.DATA_OBSERVERS_DIR, "data-observers")
+
     }
 
     override fun createTaskManagerModuleLoader(): ModuleLoader<TaskManagerModule> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return moduleLoaderImpl(TaskManagerModule::class.java, FilesAndFolders.TASK_MANAGER_MODULE_DIR, "task-manger")
     }
 
     override fun createDataHandlerModuleLoader(): ModuleLoader<DataHandlerModule> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return moduleLoaderImpl(DataHandlerModule::class.java, FilesAndFolders.DATA_HANDLERS_DIR, "data-handlers")
+    }
+
+    private fun <T> moduleLoaderImpl(clazz: Class<T>, pathToModule: String, moduleName: String): ModuleLoaderImpl<T> {
+        LOG.info("Create loader for modules: $moduleName")
+        val dataSource = modulesDir.resolve(pathToModule)
+        return ModuleLoaderImpl(moduleName, dataSource, clazz)
     }
 
 }
 
 class ModuleLoaderImpl<out T>(private val moduleName: String,
-                          private val moduleFolder: Path,
-                          private val moduleClass: Class<T>) : ModuleLoader<T> {
+                              private val moduleFolder: Path,
+                              private val moduleClass: Class<T>) : ModuleLoader<T> {
+
+    companion object {
+        val LOG = LoggerFactory.getLogger(Application::class.java.name)!!
+    }
+
     init {
         if (StringUtils.isBlank(moduleName)) throw IllegalArgumentException("Module name must be not blank")
         if (Files.exists(moduleFolder).not()) throw IllegalArgumentException("Folder: '$moduleFolder' for module '$moduleName' is not exist")
@@ -69,6 +93,7 @@ class ModuleLoaderImpl<out T>(private val moduleName: String,
 
     override fun load(): LoadResult<T> {
         try {
+            LOG.info("Starting load modules by name '$moduleName' in folder '$moduleFolder'")
             Files.list(moduleFolder)
                     .filter({ it.fileName.toString().endsWith(".jar") })
                     .map { it.toUri().toURL() }
@@ -78,11 +103,17 @@ class ModuleLoaderImpl<out T>(private val moduleName: String,
                         val load = ServiceLoader.load(moduleClass, loader)
                         load.toList()
                     }.apply {
-                        return LoadResult(true, "Modules for module by name '$moduleName' were loaded. Count of modules: ${this.size}", this)
+                        val msg = "Modules for module by name '$moduleName' were loaded. Count of modules: ${this.size}"
+                        LOG.info(msg)
+                        return LoadResult(true, msg, this)
                     }
-            return LoadResult(true, "No one module was found for module name '$moduleName' in folder '$moduleFolder'", emptyList())
+            val msg = "No one module was found for module name '$moduleName' in folder '$moduleFolder'"
+            LOG.warn(msg)
+            return LoadResult(true, msg, emptyList())
         } catch (ex: Throwable) {
-            return LoadResult(false, ex.message?: "Module load fail with exception: $ex", emptyList())
+            val msg = "Module load fail with exception: $ex"
+            LOG.error(msg)
+            return LoadResult(false, ex.message ?: msg, emptyList())
         }
     }
 
