@@ -44,12 +44,12 @@ interface Mapperable {
     fun getDataMapper(): DataMapper
 }
 
-interface OutputModule {
+interface OutputModule: Module {
     fun getOutputSchema(): JsonNode
     fun addObserver(observer: Consumer<JsonNode>)
 }
 
-interface InputModule {
+interface InputModule: Module {
     fun getInputSchema(): JsonNode
 }
 
@@ -73,6 +73,6 @@ interface DataObserver : Consumer<JsonNode> {
     fun getObservablesIds(): Collection<String>
 }
 
-interface DataResolverModule : Module, Settingable, OutputModule, InputModule {
+interface SolutionModule : Module, Settingable, OutputModule, InputModule {
     fun getData(): Stream<JsonNode>
 }
