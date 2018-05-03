@@ -46,6 +46,7 @@ dependencies {
   testCompile libpack.test
   compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_kourutines_version"
 
+  compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
   testRuntime "org.junit.jupiter:junit-jupiter-engine:$junit_version"
 }
