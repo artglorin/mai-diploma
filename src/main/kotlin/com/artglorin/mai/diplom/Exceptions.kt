@@ -7,3 +7,4 @@ package com.artglorin.mai.diplom
 
 
 class RequiredModulesNotLoaded(message: String ) : RuntimeException(message)
+class ConfigurationNotLoaded(message: String ) : RuntimeException(message)
