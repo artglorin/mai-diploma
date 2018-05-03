@@ -20,5 +20,5 @@ object ModulesNames {
     const val DATA_HANDLERS = "data-handlers-module"
     const val DATA_OBSERVERS = "data-observers"
     const val TASK_MANAGER = "task-manager-module"
-    const val RESOLVER = "resolver-module"
+    const val SOLUTION = "solution-module"
 }
