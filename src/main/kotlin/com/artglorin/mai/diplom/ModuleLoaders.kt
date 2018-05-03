@@ -62,24 +62,24 @@ open class DefaultModuleLoaderFactory : ModuleLoaderFactory {
     }
 
     override fun createSolutionModuleLoader(): ModuleLoader<SolutionModule> {
-        return moduleLoaderImpl(SolutionModule::class.java, FilesAndFolders.SOLUTION_MODULE_DIR, "solution")
+        return moduleLoaderImpl(SolutionModule::class.java, FilesAndFolders.SOLUTION_MODULE_DIR, ModulesNames.SOLUTION)
     }
 
     override fun createSourceModuleLoader(): ModuleLoader<DataSourceModule> {
-        return moduleLoaderImpl(DataSourceModule::class.java, FilesAndFolders.DATA_SOURCES_MODULE_DIR, "data-sources")
+        return moduleLoaderImpl(DataSourceModule::class.java, FilesAndFolders.DATA_SOURCES_MODULE_DIR, ModulesNames.DATA_SOURCES)
     }
 
     override fun createDataObserversLoader(): ModuleLoader<DataObserver> {
-        return moduleLoaderImpl(DataObserver::class.java, FilesAndFolders.DATA_OBSERVERS_DIR, "data-observers")
+        return moduleLoaderImpl(DataObserver::class.java, FilesAndFolders.DATA_OBSERVERS_DIR, ModulesNames.DATA_OBSERVERS)
 
     }
 
     override fun createTaskManagerModuleLoader(): ModuleLoader<TaskManagerModule> {
-        return moduleLoaderImpl(TaskManagerModule::class.java, FilesAndFolders.TASK_MANAGER_MODULE_DIR, "task-manger")
+        return moduleLoaderImpl(TaskManagerModule::class.java, FilesAndFolders.TASK_MANAGER_MODULE_DIR, ModulesNames.TASK_MANAGER)
     }
 
     override fun createDataHandlerModuleLoader(): ModuleLoader<DataHandlerModule> {
-        return moduleLoaderImpl(DataHandlerModule::class.java, FilesAndFolders.DATA_HANDLERS_DIR, "data-handlers")
+        return moduleLoaderImpl(DataHandlerModule::class.java, FilesAndFolders.DATA_HANDLERS_DIR, ModulesNames.DATA_HANDLERS)
     }
 
     private fun <T> moduleLoaderImpl(clazz: Class<T>, pathToModule: String, moduleName: String): ModuleLoaderImpl<T> {
