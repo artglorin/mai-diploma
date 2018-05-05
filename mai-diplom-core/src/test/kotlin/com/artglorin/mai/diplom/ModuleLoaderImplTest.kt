@@ -24,7 +24,7 @@ internal class ModuleLoaderImplTest {
     @BeforeEach
     fun createTestData() {
         testFolder = Files.createTempDirectory(null)
-        configFile = testFolder?.resolve(FilesAndFolders.CONFIG_FILE)
+        configFile = testFolder?.resolve(com.artglorin.mai.diplom.FilesAndFolders.CONFIG_FILE)
         Files.createFile(configFile)
         System.setProperty("user.dir", testFolder?.toAbsolutePath().toString())
     }
@@ -38,8 +38,8 @@ internal class ModuleLoaderImplTest {
     fun load() {
         val folder = testFolder ?: fail("test folder was not created")
         makeServiceJarWithSingleClass(folder, "mod1", EmptyDataSource::class.java)
-        val loadResult: LoadResult<DataSourceModule> = runBlocking {
-            ModuleLoaderImpl(DataSourceModule::class,"test-module", folder).load()
+        val loadResult: com.artglorin.mai.diplom.LoadResult<com.artglorin.mai.diplom.DataSourceModule> = runBlocking {
+            com.artglorin.mai.diplom.ModuleLoaderImpl(com.artglorin.mai.diplom.DataSourceModule::class, "test-module", folder).load()
         }
         assertTrue(loadResult.success)
         assertEquals(1, loadResult.classes.size)
@@ -49,13 +49,13 @@ internal class ModuleLoaderImplTest {
     fun `test load module with empty jar archive`() {
         val folder = testFolder ?: fail("test folder was not created")
         val loadResult = runBlocking {
-            ModuleLoaderImpl(DataSourceModule::class,"test-module", folder ).load()
+            com.artglorin.mai.diplom.ModuleLoaderImpl(com.artglorin.mai.diplom.DataSourceModule::class, "test-module", folder).load()
         }
         assertTrue(loadResult.success)
         assertEquals(0, loadResult.classes.size)
     }
 
-    class PrivateDataSource(val int: Int) : DataSourceModule {
+    class PrivateDataSource(val int: Int) : com.artglorin.mai.diplom.DataSourceModule {
         override fun getOutputSchema(): JsonNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
@@ -69,7 +69,7 @@ internal class ModuleLoaderImplTest {
         }
     }
 
-    open class EmptyDataSource : DataSourceModule {
+    open class EmptyDataSource : com.artglorin.mai.diplom.DataSourceModule {
         override fun getOutputSchema(): JsonNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
@@ -88,7 +88,7 @@ internal class ModuleLoaderImplTest {
         val folder = testFolder ?: fail("test folder was not created")
         makeServiceJarWithSingleClass(folder, "mod1", PrivateDataSource::class.java)
         val loadResult = runBlocking {
-            ModuleLoaderImpl(DataSourceModule::class, "test-module", folder).load()
+            com.artglorin.mai.diplom.ModuleLoaderImpl(com.artglorin.mai.diplom.DataSourceModule::class, "test-module", folder).load()
         }
         assertFalse(loadResult.success)
         assertEquals(0, loadResult.classes.size)

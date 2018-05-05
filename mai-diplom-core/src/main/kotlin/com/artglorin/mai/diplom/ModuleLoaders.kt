@@ -70,7 +70,7 @@ class MultiplyModuleLoaderImpl(@Autowired private val factory: ModuleLoaderFacto
 
 @Component
 open class DefaultModuleLoaderFactory : ModuleLoaderFactory {
-    override fun  createLoader(module: KClass<out Module >): ModuleLoader<Module> = when (module) {
+    override fun  createLoader(module: KClass<out Module>): ModuleLoader<Module> = when (module) {
         SolutionModule::class -> createSolutionModuleLoader()
         DataObserver::class -> createDataHandlerModuleLoader()
         DataHandlerModule::class -> createDataHandlerModuleLoader()
@@ -103,7 +103,7 @@ open class DefaultModuleLoaderFactory : ModuleLoaderFactory {
             }
             modulesDir = path
         } catch (e: Exception) {
-            throw IllegalArgumentException()
+            throw IllegalArgumentException(e)
         }
         if (Files.exists(modulesDir).not()) {
         }

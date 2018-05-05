@@ -17,7 +17,7 @@ internal class ConfigurationLoaderTest {
 
     @Test
     fun `test fail when source does not exist`() {
-        assertThrows(ConfigurationNotLoaded::class.java, {
+        assertThrows(com.artglorin.mai.diplom.ConfigurationNotLoaded::class.java, {
             val path = TempFile(file = Paths.get("test.json"))
             load(path.file)
         })
@@ -25,21 +25,21 @@ internal class ConfigurationLoaderTest {
 
     @Test
     fun `test fail when source is exist but is not a json structure`() {
-        assertThrows(ConfigurationNotLoaded::class.java, {
+        assertThrows(com.artglorin.mai.diplom.ConfigurationNotLoaded::class.java, {
             val path = TempFile()
             load(path.file)
         })
     }
 
     @Test fun `test that APP_CONFIG file is loaded without issue when configuration file is not specified`() {
-        assertNotNull(ConfigurationLoader.APP_CONFIG.loadProperties())
+        assertNotNull(com.artglorin.mai.diplom.ConfigurationLoader.APP_CONFIG.loadProperties())
     }
 
-    private fun load(path: Path) = ConfigurationLoader({ path.toUri() }).loadProperties()
+    private fun load(path: Path) = com.artglorin.mai.diplom.ConfigurationLoader({ path.toUri() }).loadProperties()
 
     @Test
     fun `test correct read value`() {
-        val configuration = Configuration(modulesPath = "/test/modules")
+        val configuration = com.artglorin.mai.diplom.Configuration(modulesPath = "/test/modules")
         val tempFile = TempFile()
         tempFile.save(configuration)
         val loadedConfiguration = load(tempFile.file)

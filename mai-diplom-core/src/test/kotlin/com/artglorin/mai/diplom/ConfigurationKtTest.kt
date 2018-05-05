@@ -16,7 +16,7 @@ import java.util.stream.Stream
  */
 internal class ConfigurationKtTest {
 
-    open class TestModule: Module, Settingable , SolutionModule{
+    open class TestModule: com.artglorin.mai.diplom.Module, com.artglorin.mai.diplom.Settingable, com.artglorin.mai.diplom.SolutionModule {
         override fun getOutputSchema(): JsonNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
@@ -39,7 +39,7 @@ internal class ConfigurationKtTest {
 
     @Test
     fun `test that applySetting was called`() {
-        val configuration = Configuration(modules = mapOf( Pair("module", ModuleConfig(ObjectMapper().createObjectNode()))))
+        val configuration = com.artglorin.mai.diplom.Configuration(modules = mapOf(Pair("module", com.artglorin.mai.diplom.ModuleConfig(ObjectMapper().createObjectNode()))))
         val testModule = TestModule()
         val spy = spy(testModule)
         configuration.configure(spy)
@@ -49,7 +49,7 @@ internal class ConfigurationKtTest {
 
     @Test
     fun `test that applySettings was called with settings are null`() {
-        val configuration = Configuration(modules = mapOf( Pair("module", ModuleConfig(ObjectMapper().createObjectNode()))))
+        val configuration = com.artglorin.mai.diplom.Configuration(modules = mapOf(Pair("module", com.artglorin.mai.diplom.ModuleConfig(ObjectMapper().createObjectNode()))))
         val testModule = TestModule()
         val spy = spy(testModule)
         configuration.configure(spy)
@@ -59,7 +59,7 @@ internal class ConfigurationKtTest {
 
     @Test
     fun `test that applySettings was not called if module name is dismatch`() {
-        val configuration = Configuration(modules = mapOf( Pair("module1", ModuleConfig(ObjectMapper().createObjectNode()))))
+        val configuration = com.artglorin.mai.diplom.Configuration(modules = mapOf(Pair("module1", com.artglorin.mai.diplom.ModuleConfig(ObjectMapper().createObjectNode()))))
         val testModule = TestModule()
         val spy = spy(testModule)
         configuration.configure(spy)
