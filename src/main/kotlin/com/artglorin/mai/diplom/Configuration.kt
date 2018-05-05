@@ -14,7 +14,8 @@ import java.nio.file.Paths
  * @since 03/05/2018
  */
 data class Configuration(
-        var modules: Modules = Modules()
+        var modulesPath: String = FilesAndFolders.MODULES_DIR,
+        var modules: Map<String, ModuleConfig> = emptyMap()
 )
 
 object ConfigurationLogger{
@@ -27,35 +28,13 @@ fun Configuration.configure(modules: List<Module>) {
 }
 
 fun Configuration.configure(module: Module) {
-    when (module) {
-        is DataSourceModule -> configure(module, modules.dataSources)
-        is TaskManagerModule -> configure(module, modules.taskManager)
-        is DataObserver -> configure(module, modules.dataObservers)
-        is SolutionModule -> configure(module, modules.solutionModule)
-        is DataHandlerModule -> configure(module, modules.dataHandlers)
+    modules[module.getModuleId()]?.apply {
+        if (module is Settingable) {
+            ConfigurationLogger.LOG.debug("Apply settings got module '${module.getModuleId()}'")
+            module.applySettings(this.settings)
+        }
     }
 }
-private fun configure(module: Module, list: List<ModuleConfig>) {
-    list.forEach{it -> configure(module, it) }
-}
-
-private fun configure(module: Module, configs: ModuleConfig) {
-    if (configs.id == module.getModuleId()) {
-        ConfigurationLogger.LOG.debug("Configure module by Id: '${configs.id}'")
-        (module as Settingable).applySettings(configs.settings)
-    }
-}
-
-
-data class Modules (
-        var path: String = FilesAndFolders.MODULES_DIR,
-        val dataSources: List<ModuleConfig> = emptyList(),
-        val taskManager: ModuleConfig = ModuleConfig(),
-        val solutionModule: ModuleConfig = ModuleConfig(),
-        val dataHandlers: List<ModuleConfig> = emptyList(),
-        val dataObservers: List<ModuleConfig> = emptyList()
-
-)
 
 data class ModuleConfig(var settings: JsonNode = ObjectMapper().createObjectNode().nullNode(),
                         var id: String = ""

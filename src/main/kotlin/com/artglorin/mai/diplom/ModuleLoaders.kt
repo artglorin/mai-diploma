@@ -90,7 +90,7 @@ open class DefaultModuleLoaderFactory : ModuleLoaderFactory {
     init {
         val loadProperties = ConfigurationLoader.APP_CONFIG.loadProperties()
         try {
-            val stringPath = loadProperties.modules.path
+            val stringPath = loadProperties.modulesPath
             var path = Paths.get(stringPath)
             if (Files.exists(path).not()) {
                 val classPathResource = ClassPathResource(stringPath)

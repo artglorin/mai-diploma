@@ -39,7 +39,7 @@ internal class ConfigurationKtTest {
 
     @Test
     fun `test that applySetting was called`() {
-        val configuration = Configuration(modules = Modules(solutionModule = ModuleConfig(id = "module", settings = ObjectMapper().createObjectNode())))
+        val configuration = Configuration(modules = mapOf( Pair("module", ModuleConfig(ObjectMapper().createObjectNode()))))
         val testModule = TestModule()
         val spy = spy(testModule)
         configuration.configure(spy)
@@ -49,7 +49,7 @@ internal class ConfigurationKtTest {
 
     @Test
     fun `test that applySettings was called with settings are null`() {
-        val configuration = Configuration(modules = Modules(solutionModule = ModuleConfig(id = "module")))
+        val configuration = Configuration(modules = mapOf( Pair("module", ModuleConfig(ObjectMapper().createObjectNode()))))
         val testModule = TestModule()
         val spy = spy(testModule)
         configuration.configure(spy)
@@ -59,7 +59,7 @@ internal class ConfigurationKtTest {
 
     @Test
     fun `test that applySettings was not called if module name is dismatch`() {
-        val configuration = Configuration(modules = Modules(solutionModule = ModuleConfig(id = "module1")))
+        val configuration = Configuration(modules = mapOf( Pair("module1", ModuleConfig(ObjectMapper().createObjectNode()))))
         val testModule = TestModule()
         val spy = spy(testModule)
         configuration.configure(spy)
@@ -67,13 +67,4 @@ internal class ConfigurationKtTest {
         verify(spy, times(0)).applySettings(any())
     }
 
-    @Test
-    fun `test that applySettings and getModuleId were not called if module has another class`() {
-        val configuration = Configuration(modules = Modules(taskManager = ModuleConfig(id = "module1")))
-        val testModule = TestModule()
-        val spy = spy(testModule)
-        configuration.configure(spy)
-        verify(spy, times(1)).getModuleId()
-        verify(spy, times(0)).applySettings(any())
-    }
 }

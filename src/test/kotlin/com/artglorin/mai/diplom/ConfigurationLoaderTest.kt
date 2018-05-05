@@ -39,7 +39,7 @@ internal class ConfigurationLoaderTest {
 
     @Test
     fun `test correct read value`() {
-        val configuration = Configuration(Modules("/test/modules"))
+        val configuration = Configuration(modulesPath = "/test/modules")
         val tempFile = TempFile()
         tempFile.save(configuration)
         val loadedConfiguration = load(tempFile.file)
