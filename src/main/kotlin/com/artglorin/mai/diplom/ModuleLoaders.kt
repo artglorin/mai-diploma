@@ -1,7 +1,10 @@
 package com.artglorin.mai.diplom
 
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import java.net.URLClassLoader
@@ -10,20 +13,22 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
 import java.util.stream.Collectors
+import kotlin.reflect.KClass
 
 /**
  * @author V.Verminskiy (vverminskiy@alfabank.ru)
  * @since 01/05/2018
  */
 
-data class LoadResult<out T>(val success: Boolean, val message: String, val classes: List<T>)
+data class LoadResult<out T : Module>(val clazz: KClass<out T>, val success: Boolean, val message: String, val classes: List<T>)
 
 
-interface ModuleLoader<out T> {
+interface ModuleLoader<out T : Module> {
     suspend fun load(): LoadResult<T>
 }
 
 interface ModuleLoaderFactory {
+    fun createLoader(module: KClass<out Module>): ModuleLoader<Module>
     fun createSourceModuleLoader(): ModuleLoader<DataSourceModule>
     fun createDataObserversLoader(): ModuleLoader<DataObserver>
     fun createTaskManagerModuleLoader(): ModuleLoader<TaskManagerModule>
@@ -31,8 +36,51 @@ interface ModuleLoaderFactory {
     fun createSolutionModuleLoader(): ModuleLoader<SolutionModule>
 }
 
+interface MultipleModuleLoader {
+    fun load(loaders: Array<KClass<out Module>>): MultipleModuleLoadResult
+}
+
+class MultipleModuleLoadResult(private val result: List<LoadResult<Module>>) {
+
+    fun <T : Module> getModulesFor(klass: KClass<T>, moduleName: String = "UNDEFINED", required: Boolean = true): List<T> {
+        val loadResult = result.find { it -> (it.clazz == klass) }
+        if (required
+                && (loadResult == null || loadResult.success.not().or(loadResult.classes.isEmpty()))) {
+            throw RequiredModulesNotLoaded(loadResult?.message
+                    ?: "Modules for required module by name '$moduleName' were not loaded. ")
+
+        }
+        @Suppress("UNCHECKED_CAST")
+        return if (loadResult == null) emptyList() else loadResult.classes as List<T>
+    }
+}
+
+@Component
+class MultiplyModuleLoaderImpl(@Autowired private val factory: ModuleLoaderFactory) : MultipleModuleLoader {
+    override fun load(loaders: Array<KClass<out Module>>): MultipleModuleLoadResult {
+        val factories = loaders.map(factory::createLoader)
+        return MultipleModuleLoadResult(runBlocking {
+            factories.map {
+                async { it.load() }
+            }.map { it -> it.join(); it.getCompleted() }
+        }.toList())
+    }
+}
+
+
 @Component
 open class DefaultModuleLoaderFactory : ModuleLoaderFactory {
+    override fun  createLoader(module: KClass<out Module >): ModuleLoader<Module> = when (module) {
+        SolutionModule::class -> createSolutionModuleLoader()
+        DataObserver::class -> createDataHandlerModuleLoader()
+        DataHandlerModule::class -> createDataHandlerModuleLoader()
+        TaskManagerModule::class -> createTaskManagerModuleLoader()
+        DataSourceModule::class -> createSourceModuleLoader()
+        else -> {
+            throw IllegalArgumentException("Factory does not support module for class '$module'")
+        }
+    }
+
     companion object {
         val LOG = LoggerFactory.getLogger(DefaultModuleLoaderFactory::class.java.name)!!
     }
@@ -62,37 +110,38 @@ open class DefaultModuleLoaderFactory : ModuleLoaderFactory {
     }
 
     override fun createSolutionModuleLoader(): ModuleLoader<SolutionModule> {
-        return moduleLoaderImpl(SolutionModule::class.java, FilesAndFolders.SOLUTION_MODULE_DIR, ModulesNames.SOLUTION)
+        return create(SolutionModule::class.java, FilesAndFolders.SOLUTION_MODULE_DIR, ModulesNames.SOLUTION)
     }
 
     override fun createSourceModuleLoader(): ModuleLoader<DataSourceModule> {
-        return moduleLoaderImpl(DataSourceModule::class.java, FilesAndFolders.DATA_SOURCES_MODULE_DIR, ModulesNames.DATA_SOURCES)
+        return create(DataSourceModule::class.java, FilesAndFolders.DATA_SOURCES_MODULE_DIR, ModulesNames.DATA_SOURCES)
     }
 
     override fun createDataObserversLoader(): ModuleLoader<DataObserver> {
-        return moduleLoaderImpl(DataObserver::class.java, FilesAndFolders.DATA_OBSERVERS_DIR, ModulesNames.DATA_OBSERVERS)
+        return create(DataObserver::class.java, FilesAndFolders.DATA_OBSERVERS_DIR, ModulesNames.DATA_OBSERVERS)
 
     }
 
     override fun createTaskManagerModuleLoader(): ModuleLoader<TaskManagerModule> {
-        return moduleLoaderImpl(TaskManagerModule::class.java, FilesAndFolders.TASK_MANAGER_MODULE_DIR, ModulesNames.TASK_MANAGER)
+        return create(TaskManagerModule::class.java, FilesAndFolders.TASK_MANAGER_MODULE_DIR, ModulesNames.TASK_MANAGER)
     }
 
     override fun createDataHandlerModuleLoader(): ModuleLoader<DataHandlerModule> {
-        return moduleLoaderImpl(DataHandlerModule::class.java, FilesAndFolders.DATA_HANDLERS_DIR, ModulesNames.DATA_HANDLERS)
+        return create(DataHandlerModule::class.java, FilesAndFolders.DATA_HANDLERS_DIR, ModulesNames.DATA_HANDLERS)
     }
 
-    private fun <T> moduleLoaderImpl(clazz: Class<T>, pathToModule: String, moduleName: String): ModuleLoaderImpl<T> {
+    private fun <T : Module> create(clazz: Class<T>, pathToModule: String, moduleName: String): ModuleLoaderImpl<T> {
         LOG.info("Create loader for modules: $moduleName")
         val dataSource = modulesDir.resolve(pathToModule)
-        return ModuleLoaderImpl(moduleName, dataSource, clazz)
+        return ModuleLoaderImpl(clazz.kotlin, moduleName, dataSource)
     }
 
 }
 
-class ModuleLoaderImpl<out T>(private val moduleName: String,
-                              private val moduleFolder: Path,
-                              private val moduleClass: Class<T>) : ModuleLoader<T> {
+class ModuleLoaderImpl<out T : Module>(
+        private val clazz: KClass<T>,
+        private val moduleName: String,
+        private val moduleFolder: Path) : ModuleLoader<T> {
 
     companion object {
         val LOG = LoggerFactory.getLogger(ModuleLoaderImpl::class.java.name)!!
@@ -112,10 +161,11 @@ class ModuleLoaderImpl<out T>(private val moduleName: String,
                     .collect(Collectors.toList()).toTypedArray()
                     .let {
                         val loader = URLClassLoader(it)
-                        val load = ServiceLoader.load(moduleClass, loader)
+                        val load = ServiceLoader.load(clazz.java, loader)
                         load.toList()
                     }
-            return LoadResult(true,
+            return LoadResult(clazz,
+                    true,
                     if (modules.isNotEmpty()) {
                         val msg = "Modules for module by name '$moduleName' were loaded. Count of modules: ${modules.size}"
                         LOG.info(msg)
@@ -129,7 +179,7 @@ class ModuleLoaderImpl<out T>(private val moduleName: String,
         } catch (ex: Throwable) {
             val msg = "Module load fail with exception: $ex"
             LOG.error(msg)
-            return LoadResult(false, ex.message ?: msg, emptyList())
+            return LoadResult(clazz, false, ex.message ?: msg, emptyList())
         }
     }
 

@@ -39,7 +39,7 @@ internal class ModuleLoaderImplTest {
         val folder = testFolder ?: fail("test folder was not created")
         makeServiceJarWithSingleClass(folder, "mod1", EmptyDataSource::class.java)
         val loadResult: LoadResult<DataSourceModule> = runBlocking {
-            ModuleLoaderImpl("test-module", folder, DataSourceModule::class.java).load()
+            ModuleLoaderImpl(DataSourceModule::class,"test-module", folder).load()
         }
         assertTrue(loadResult.success)
         assertEquals(1, loadResult.classes.size)
@@ -49,7 +49,7 @@ internal class ModuleLoaderImplTest {
     fun `test load module with empty jar archive`() {
         val folder = testFolder ?: fail("test folder was not created")
         val loadResult = runBlocking {
-            ModuleLoaderImpl("test-module", folder, DataSourceModule::class.java).load()
+            ModuleLoaderImpl(DataSourceModule::class,"test-module", folder ).load()
         }
         assertTrue(loadResult.success)
         assertEquals(0, loadResult.classes.size)
@@ -88,7 +88,7 @@ internal class ModuleLoaderImplTest {
         val folder = testFolder ?: fail("test folder was not created")
         makeServiceJarWithSingleClass(folder, "mod1", PrivateDataSource::class.java)
         val loadResult = runBlocking {
-            ModuleLoaderImpl("test-module", folder, DataSourceModule::class.java).load()
+            ModuleLoaderImpl(DataSourceModule::class, "test-module", folder).load()
         }
         assertFalse(loadResult.success)
         assertEquals(0, loadResult.classes.size)
