@@ -53,10 +53,6 @@ interface InputModule: Module {
     fun getInputSchema(): JsonNode
 }
 
-enum class WorkStatus {
-    IDLE, IN_PROGRESS, FINISHED
-}
-
 interface DataSourceModule : Module, OutputModule {
     fun getData(): Stream<JsonNode>
 }
@@ -73,6 +69,6 @@ interface DataObserver : Consumer<JsonNode>, Module {
     fun getObservablesIds(): Collection<String>
 }
 
-interface SolutionModule : Module, Settingable, OutputModule, InputModule {
+interface SolutionModule : Module, OutputModule, InputModule {
     fun getData(): Stream<JsonNode>
 }
