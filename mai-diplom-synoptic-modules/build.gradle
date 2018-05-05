@@ -28,3 +28,9 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+apply from: file('../libraries.gradle')
+
+dependencies{
+    compile project(':mai-diplom-core')
+}
