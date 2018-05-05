@@ -28,9 +28,10 @@ fun Configuration.configure(modules: List<Module>) {
 }
 
 fun Configuration.configure(module: Module) {
-    modules[module.getModuleId()]?.apply {
+    val moduleId = module.getModuleId()
+    modules[moduleId]?.apply {
         if (module is Settingable) {
-            ConfigurationLogger.LOG.debug("Apply settings got module '${module.getModuleId()}'")
+            ConfigurationLogger.LOG.debug("Apply settings got module '$moduleId'")
             module.applySettings(this.settings)
         }
     }
