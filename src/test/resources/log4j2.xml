@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration strict="true" name="XMLConfigTest">
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <Layout type="PatternLayout" pattern="%d{HH:mm:ss.SSS} [%t] %-5level | %C{1}.%M (%L) | >>> %m %ex%n"/><!-- class and line number -->
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.artglorin.mai.diplom.ModuleLoaderImpl" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+        <Logger name="com.artglorin.mai.diplom.Application" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+        <Logger name="com.artglorin.mai.diplom.DefaultModuleLoaderFactory" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+        <Logger name="com.artglorin.mai.diplom.ConfigurationLoader" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+        <Logger name="com.artglorin.mai.diplom.ConfigurationLogger" level="debug" additivity="false">
+            <AppenderRef ref="CONSOLE"/>
+        </Logger>
+
+        <Root level="warn">
+            <AppenderRef ref="CONSOLE"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

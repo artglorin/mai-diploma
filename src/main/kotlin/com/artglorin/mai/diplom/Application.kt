@@ -1,5 +1,6 @@
 package com.artglorin.mai.diplom
 
+import com.artglorin.mai.diplom.ConfigurationLoader.Companion.APP_CONFIG
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -22,10 +23,13 @@ open class Application(@Autowired private val loader: MultipleModuleLoader) {
                 , SolutionModule::class
         ))
         val sources = result.getModulesFor(DataSourceModule::class, ModulesNames.DATA_SOURCES)
-        val taskManager =  result.getModulesFor(TaskManagerModule::class,ModulesNames.TASK_MANAGER)[0]
-        val dataHandlers =  result.getModulesFor(DataHandlerModule::class, ModulesNames.DATA_HANDLERS)
-        val observers =  result.getModulesFor(DataObserver::class, ModulesNames.DATA_OBSERVERS, false)
-        val solution =  result.getModulesFor(SolutionModule::class, ModulesNames.SOLUTION)[0]
+        val taskManager = result.getModulesFor(TaskManagerModule::class, ModulesNames.TASK_MANAGER)[0]
+        val dataHandlers = result.getModulesFor(DataHandlerModule::class, ModulesNames.DATA_HANDLERS)
+        val observers = result.getModulesFor(DataObserver::class, ModulesNames.DATA_OBSERVERS, false)
+        val solution = result.getModulesFor(SolutionModule::class, ModulesNames.SOLUTION)[0]
+        LOG.info("Modules were loaded. Starting configure modules")
+        val allModules = ArrayList(sources) + taskManager + dataHandlers + observers + solution
+        APP_CONFIG.loadProperties().configure(allModules)
         LOG.debug("Add observers to modules")
         (ArrayList<OutputModule>(sources) + dataHandlers + solution).forEach {
             val observable = it

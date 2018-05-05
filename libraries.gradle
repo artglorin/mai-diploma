@@ -39,6 +39,7 @@ ext {
                   "org.springframework.boot:spring-boot-starter-test:$spring_boot_version",
                   "org.springframework.boot:spring-boot-test:$spring_boot_version",
                   "org.junit.jupiter:junit-jupiter-engine:$junit_version",
+                  "com.nhaarman:mockito-kotlin-kt1.1:1.5.0",
           ]
   ]
 }

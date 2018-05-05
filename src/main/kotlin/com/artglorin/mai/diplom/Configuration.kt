@@ -17,6 +17,36 @@ data class Configuration(
         var modules: Modules = Modules()
 )
 
+object ConfigurationLogger{
+    val LOG = LoggerFactory.getLogger(ConfigurationLogger::class.java.name)!!
+}
+
+fun Configuration.configure(modules: List<Module>) {
+    modules.filter { it -> it.javaClass.kotlin.isInstance(Settingable::class) }
+            .forEach { configure(it) }
+}
+
+fun Configuration.configure(module: Module) {
+    when (module) {
+        is DataSourceModule -> configure(module, modules.dataSources)
+        is TaskManagerModule -> configure(module, modules.taskManager)
+        is DataObserver -> configure(module, modules.dataObservers)
+        is SolutionModule -> configure(module, modules.solutionModule)
+        is DataHandlerModule -> configure(module, modules.dataHandlers)
+    }
+}
+private fun configure(module: Module, list: List<ModuleConfig>) {
+    list.forEach{it -> configure(module, it) }
+}
+
+private fun configure(module: Module, configs: ModuleConfig) {
+    if (configs.id == module.getModuleId()) {
+        ConfigurationLogger.LOG.debug("Configure module by Id: '${configs.id}'")
+        (module as Settingable).applySettings(configs.settings)
+    }
+}
+
+
 data class Modules (
         var path: String = FilesAndFolders.MODULES_DIR,
         val dataSources: List<ModuleConfig> = emptyList(),
@@ -27,8 +57,7 @@ data class Modules (
 
 )
 
-data class ModuleConfig(var jarName: String = "",
-                        var settings: JsonNode = ObjectMapper().createObjectNode().nullNode(),
+data class ModuleConfig(var settings: JsonNode = ObjectMapper().createObjectNode().nullNode(),
                         var id: String = ""
 )
 
