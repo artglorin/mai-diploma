@@ -1,3 +1,4 @@
 rootProject.name = 'mai-diplom'
 include 'mai-diplom-core'
+include 'mai-diplom-synoptic-modules'
 

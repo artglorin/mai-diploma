@@ -6,6 +6,8 @@
       <module name="mai-diplom-core_test" target="1.8" />
       <module name="mai-diplom-symoptic-modules_main" target="1.8" />
       <module name="mai-diplom-symoptic-modules_test" target="1.8" />
+      <module name="mai-diplom-synoptic-modules_main" target="1.8" />
+      <module name="mai-diplom-synoptic-modules_test" target="1.8" />
       <module name="mai-diplom_main" target="1.8" />
       <module name="mai-diplom_test" target="1.8" />
     </bytecodeTargetLevel>
