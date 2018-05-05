@@ -38,12 +38,15 @@ class ConfigurationLoader(private val source: () -> URI?) {
         val APP_CONFIG = ConfigurationLoader({
             val configFile = Paths.get(System.getProperty("user.dir"), FilesAndFolders.CONFIG_FILE)
             if (Files.exists(configFile)) {
+                LOG.debug("${FilesAndFolders.CONFIG_FILE} was loaded from user.dir")
                 return@ConfigurationLoader configFile.toUri()
             } else {
                 val resource = ClassPathResource(FilesAndFolders.CONFIG_FILE)
                 if (resource.exists()) {
+                    LOG.debug("${FilesAndFolders.CONFIG_FILE} was loaded from classpath")
                     return@ConfigurationLoader resource.uri
                 } else {
+                    LOG.debug("${FilesAndFolders.CONFIG_FILE} was not found")
                     return@ConfigurationLoader null
                 }
             }
@@ -58,6 +61,7 @@ class ConfigurationLoader(private val source: () -> URI?) {
             val url = source()?.toURL()
             if (url != null) {
                 try {
+                    LOG.debug("Loading Configuration from url : '$url'")
                     val mapper = ObjectMapper()
                     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                     configuration = mapper.readValue(url, Configuration::class.java)
