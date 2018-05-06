@@ -11,3 +11,10 @@ fun Logger.error(exception: (msg:String) -> Throwable, msg : String) {
     error(msg)
     throw exception.invoke(msg)
 }
+
+fun Enum<*>.toLowerCaseCollection(): Collection<String> {
+    return this::class.java.enumConstants.map { it.name.toLowerCase() }
+
+}
+
+fun Enum<*>.toLowerCase() = name.toLowerCase()
