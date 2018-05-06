@@ -15,16 +15,16 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="com.artglorin.mai.diplom.ModuleLoaderImpl" level="debug" additivity="false">
+        <Logger name="com.artglorin.mai.diplom.core.ModuleLoaderImpl" level="debug" additivity="false">
             <AppenderRef ref="CONSOLE"/>
         </Logger>
-        <Logger name="com.artglorin.mai.diplom.Application" level="debug" additivity="false">
+        <Logger name="com.artglorin.mai.diplom.core.Application" level="debug" additivity="false">
             <AppenderRef ref="CONSOLE"/>
         </Logger>
-        <Logger name="com.artglorin.mai.diplom.DefaultModuleLoaderFactory" level="debug" additivity="false">
+        <Logger name="com.artglorin.mai.diplom.core.DefaultModuleLoaderFactory" level="debug" additivity="false">
             <AppenderRef ref="CONSOLE"/>
         </Logger>
-        <Logger name="com.artglorin.mai.diplom.ConfigurationLoader" level="debug" additivity="false">
+        <Logger name="com.artglorin.mai.diplom.core.ConfigurationLoader" level="debug" additivity="false">
             <AppenderRef ref="CONSOLE"/>
         </Logger>
 

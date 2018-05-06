@@ -1,7 +1,7 @@
 package com.artglorin.mai.diplom.synoptic
 
-import com.artglorin.mai.diplom.DataHandlerModule
-import com.artglorin.mai.diplom.DataMapper
+import com.artglorin.mai.diplom.core.DataHandlerModule
+import com.artglorin.mai.diplom.core.DataMapper
 import com.fasterxml.jackson.databind.JsonNode
 import java.util.function.Consumer
 

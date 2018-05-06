@@ -1,5 +1,6 @@
 package com.artglorin.mai.diplom
 
+import com.artglorin.mai.diplom.core.Application
 import org.springframework.boot.SpringApplication
 
 /**

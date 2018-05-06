@@ -1,5 +1,6 @@
-package com.artglorin.mai.diplom
+package com.artglorin.mai.diplom.core
 
+import com.artglorin.mai.diplom.error
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
 import org.apache.commons.lang3.StringUtils

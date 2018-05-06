@@ -1,4 +1,4 @@
-package com.artglorin.mai.diplom
+package com.artglorin.mai.diplom.core
 
 import com.fasterxml.jackson.databind.JsonNode
 import java.util.function.Consumer

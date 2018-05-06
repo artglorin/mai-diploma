@@ -1,4 +1,4 @@
-package com.artglorin.mai.diplom
+package com.artglorin.mai.diplom.core
 
 /**
  * @author V.Verminskiy (vverminskiy@alfabank.ru)

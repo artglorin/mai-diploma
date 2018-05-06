@@ -1,5 +1,6 @@
-package com.artglorin.mai.diplom
+package com.artglorin.mai.diplom.core
 
+import com.artglorin.mai.diplom.error
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper

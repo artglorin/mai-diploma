@@ -1,5 +1,6 @@
-package com.artglorin.mai.diplom
+package com.artglorin.mai.diplom.core
 
+import com.artglorin.mai.diplom.Category
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Tag
@@ -17,7 +18,7 @@ internal class ConfigurationLoaderTest {
 
     @Test
     fun `test fail when source does not exist`() {
-        assertThrows(com.artglorin.mai.diplom.ConfigurationNotLoaded::class.java, {
+        assertThrows(ConfigurationNotLoaded::class.java, {
             val path = TempFile(file = Paths.get("test.json"))
             load(path.file)
         })
@@ -25,21 +26,21 @@ internal class ConfigurationLoaderTest {
 
     @Test
     fun `test fail when source is exist but is not a json structure`() {
-        assertThrows(com.artglorin.mai.diplom.ConfigurationNotLoaded::class.java, {
+        assertThrows(ConfigurationNotLoaded::class.java, {
             val path = TempFile()
             load(path.file)
         })
     }
 
     @Test fun `test that APP_CONFIG file is loaded without issue when configuration file is not specified`() {
-        assertNotNull(com.artglorin.mai.diplom.ConfigurationLoader.APP_CONFIG.loadProperties())
+        assertNotNull(ConfigurationLoader.APP_CONFIG.loadProperties())
     }
 
-    private fun load(path: Path) = com.artglorin.mai.diplom.ConfigurationLoader({ path.toUri() }).loadProperties()
+    private fun load(path: Path) = ConfigurationLoader({ path.toUri() }).loadProperties()
 
     @Test
     fun `test correct read value`() {
-        val configuration = com.artglorin.mai.diplom.Configuration(modulesPath = "/test/modules")
+        val configuration = Configuration(modulesPath = "/test/modules")
         val tempFile = TempFile()
         tempFile.save(configuration)
         val loadedConfiguration = load(tempFile.file)

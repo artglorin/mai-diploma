@@ -1,7 +1,7 @@
 package com.artglorin.mai.diplom.synoptic
 
-import com.artglorin.mai.diplom.DataSourceModule
-import com.artglorin.mai.diplom.Settingable
+import com.artglorin.mai.diplom.core.DataSourceModule
+import com.artglorin.mai.diplom.core.Settingable
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.nio.file.Files

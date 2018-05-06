@@ -1,6 +1,6 @@
-package com.artglorin.mai.diplom
+package com.artglorin.mai.diplom.core
 
-import com.artglorin.mai.diplom.ConfigurationLoader.Companion.APP_CONFIG
+import com.artglorin.mai.diplom.core.ConfigurationLoader.Companion.APP_CONFIG
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
