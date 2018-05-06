@@ -56,6 +56,10 @@ class JsonOrGroupMapper(private val groupName: String, private val mappers: List
         errors["orMapper"] = "No one of mapper in group '$groupName' match in object: $from"
         return false
     }
+
+    override fun toString(): String {
+        return "JsonOrGroupMapper"
+    }
 }
 
 class JsonAllGroupMapper(
@@ -78,9 +82,14 @@ class JsonAllGroupMapper(
         }
         return true
     }
+
+    override fun toString(): String {
+        return "JsonAllGroupMapper"
+    }
 }
 //</editor-fold>
 
+//<editor-fold desc="SimpleMappers">
 class JsonArrayMapper(
         private val field: String,
         nodePredicate: (JsonNode) -> Boolean = { _ -> true }
@@ -130,7 +139,7 @@ open class JsonNotBlankStringMapper(
 }
 
 open class JsonIntMapper(
-        field: String,
+        private val field: String,
         nodePredicate: (it: JsonNode) -> Boolean = { _ -> true })
     : AbstractJsonMapper<Int, JsonNode, ObjectNode>(
         field,
@@ -138,10 +147,15 @@ open class JsonIntMapper(
         nodePredicate,
         { node -> node.intValue() },
         { value, to -> to.put(field, value) }
-)
+) {
+
+    override fun toString(): String {
+        return "JsonIntMapper for field: '$field'"
+    }
+}
 
 open class JsonLongMapper(
-        field: String,
+        private val field: String,
         nodePredicate: (it: JsonNode) -> Boolean = { _ -> true })
     : AbstractJsonMapper<Long, JsonNode, ObjectNode>(
         field,
@@ -149,10 +163,15 @@ open class JsonLongMapper(
         nodePredicate,
         { node -> node.longValue() },
         { value, to -> to.put(field, value) }
-)
+) {
+
+    override fun toString(): String {
+        return "JsonLongMapper for field: '$field'"
+    }
+}
 
 open class JsonBigDecimalMapper(
-        field: String,
+        private val field: String,
         nodePredicate: (it: JsonNode) -> Boolean = { _ -> true })
     : AbstractJsonMapper<BigDecimal, JsonNode, ObjectNode>(
         field,
@@ -160,7 +179,12 @@ open class JsonBigDecimalMapper(
         nodePredicate,
         { node -> node.decimalValue() },
         { value, to -> to.put(field, value) }
-)
+) {
+
+    override fun toString(): String {
+        return "JsonBigDecimalMapper for field: '$field'"
+    }
+}
 
 fun JsonNode.copyTo(other: JsonNode) {
     if (isObject && other.isObject) {
@@ -180,6 +204,10 @@ class CopyMapper : JsonMapper<JsonNode, JsonNode> {
         from.copyTo(to)
         return true
     }
+
+    override fun toString(): String {
+        return "CopyMapper"
+    }
 }
 
 class JsonObjectMapper(
@@ -197,14 +225,24 @@ class JsonObjectMapper(
             false
         }
     }
+
+    override fun toString(): String {
+        return "JsonObjectMapper for field: '$field'"
+    }
 }
 
 class JsonEnumMapper(
-        field: String,
+        private val field: String,
         vararg enumText: String)
     : JsonStringMapper(
         field,
         {it ->
             val fieldValue = it.asText()
             enumText.all { it.equals(fieldValue, true) }
-        })
+        }) {
+
+    override fun toString(): String {
+        return "JsonEnumMapper for field: '$field'"
+    }
+}
+//</editor-fold>
