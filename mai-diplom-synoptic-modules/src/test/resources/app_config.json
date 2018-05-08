@@ -1,0 +1,240 @@
+{
+  "description" : "Настройка модуля для работы из Json файла, где каждый объект на отдельной строке. Используются следующие модули: Оптимист, Пессимист, Синоптик, Математик. Данные выводяться на консоль",
+  "modules"     : {
+    "JsonDataSource" : {
+      "settings"     : {
+        "sourceFile" : "test.data",
+        "filter"     : {
+          "equals" : [
+            { "city.country" : "RU" },
+            { "city.name" : "MOSCOW" }
+          ]
+        },
+        "mappers"    : [
+          {
+            "getter" : "main.humidity",
+            "setter" : "humidity"
+          }, {
+            "getter" : "main.pressure",
+            "setter" : "pressure"
+          }, {
+            "getter" : "main.temp",
+            "setter" : "temp"
+          }, {
+            "getter" : "wind.deg",
+            "setter" : "wind.deg"
+          }, {
+            "getter" : "wind.speed",
+            "setter" : "wind.speed"
+          }, {
+            "getter" : "clouds.all",
+            "setter" : "clouds"
+          },
+          {
+            "getter" : "time",
+            "setter" : "time"
+          }
+        ]
+      },
+      "outputScheme" : {
+        "title"      : "TempMeasure",
+        "type"       : "object",
+        "properties" : {
+          "time"     : {
+            "type"        : "long",
+            "description" : "время измерения"
+          },
+          "humidity" : {
+            "type"        : "integer",
+            "description" : "влажность"
+          },
+          "clouds"   : {
+            "type"        : "integer",
+            "description" : "облачность в размере от 1 до 100"
+          },
+          "pressure" : {
+            "type"        : "integer",
+            "description" : "давление"
+          },
+          "temp"     : {
+            "type"        : "double",
+            "description" : "температура в фаренгейтах"
+          },
+          "wind"     : {
+            "type"        : "object",
+            "description" : "ветер",
+            "properties"  : {
+              "deg"   : {
+                "type"        : "integer",
+                "description" : "направление ветра"
+              },
+              "speed" : {
+                "type"        : "integer",
+                "description" : "скорость ветра ветра"
+              }
+            }
+          }
+        }
+      }
+    },
+    "optimist"          : {
+      "settings" : {
+        "answers" : [ "Отличная погодка", "Завтра будет лучше чем вчера", "У природы нет плохой погоды" ]
+      }
+    },
+    "pessimist"         : {
+      "settings" : {
+        "answers" : [ "Завтра можно не просыпаться", "Мама, роди меня обратно", "Хорошего не жди" ]
+      }
+    },
+    "mathematics"       : { },
+    "synoptic"          : {
+      "settings" : {
+        "answers" : [ "Как вчера", "Туманно", "Ясно как всегда", "Погода перменчивая" ]
+      }
+    },
+    "taskManager"       : {
+      "settings" : {
+        "dependencies" : {
+          "optimist"    : {
+            "input"    : {
+              "from" : "JsonDataSource"
+            },
+            "priority" : 0.1
+          },
+          "pessimist"   : {
+            "input"    : {
+              "from" : "JsonDataSource"
+            },
+            "priority" : 0.1
+          },
+          "mathematics" : {
+            "input"    : {
+              "from" : "JsonDataSource"
+            },
+            "priority" : 0.1
+          },
+          "synoptic"    : {
+            "input"    : {
+              "from" : "JsonDataSource"
+            },
+            "priority" : 0.1
+          },
+          "solution"    : {
+            "input" : {
+              "allOf" : [ "optimist", "pessimist", "mathematics", "synoptic" ]
+            }
+          }
+        }
+      }
+    },
+    "solution"          : {
+      "settings" : {
+        "weights"     : {
+          "optimist"    : 0.25,
+          "pessimist"   : 0.25,
+          "mathematics" : 0.4,
+          "synoptic"    : 0.1
+        },
+        "inputScheme" : {
+          "title" : ""
+        },
+        "mappings"    : {
+          "optimist"     : [
+            {
+              "from" : "answer",
+              "to"   : "value"
+            }
+          ],
+          "pessimist"    : [
+            {
+              "from" : "answer",
+              "to"   : "value"
+            }
+          ],
+          "mathematics"  : [
+            {
+              "from" : "answer",
+              "to"   : "value"
+            }
+          ],
+          "synoptic"     : [
+            {
+              "from" : "answer",
+              "to"   : "value"
+            }
+          ],
+          "transformers" : {
+            "pessimist"   : {
+              "answer" : {
+                "from"   : "string",
+                "to"     : "integer",
+                "equals" : {
+                  "Завтра можно не просыпаться" : 1,
+                  "Мама, роди меня обратно"     : 2,
+                  "Хорошего не жди"             : 3
+                }
+              }
+            },
+            "optimist"    : {
+              "answer" : {
+                "from"   : "string",
+                "to"     : "integer",
+                "equals" : {
+                  "Отличная погодка"             : 1,
+                  "У природы нет плохой погоды"  : 2,
+                  "Завтра будет лучше чем вчера" : 3
+                }
+              }
+            },
+            "mathematics" : {
+              "answer" : {
+                "from"        : "double",
+                "to"          : "integer",
+                "comparisons" : {
+                  "lessThen"    : {
+                    "value" : 33.33,
+                    "then"  : 1
+                  },
+                  "between"     : {
+                    "from" : 33.33,
+                    "to"   : 66.66,
+                    "then" : 2
+                  },
+                  "greaterThen" : {
+                    "value" : 66.66,
+                    "then"  : 3
+                  }
+                }
+              }
+            },
+            "synoptic"    : {
+              "answer" : {
+                "from"   : "string",
+                "to"     : "integer",
+                "equals" : {
+                  "Как вчера"          : 1,
+                  "Туманно"            : 2,
+                  "Ясно как всегда"    : 3,
+                  "Погода перменчивая" : 4
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "console"           : {
+      "settings" : {
+        "listerTo" : [
+          "JsonDataSource",
+          "solution",
+          "optimist",
+          "pessimist",
+          "mathematics",
+          "synoptic"
+        ]
+      }
+    }
+  }
+}
