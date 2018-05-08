@@ -9,8 +9,10 @@ buildscript {
     }
 }
 
+//noinspection GroovyAssignabilityCheck
 group 'com.artglorin'
-version '0.1.0'
+//noinspection GroovyAssignabilityCheck
+version '0.1.1'
 
 apply plugin: 'java'
 apply plugin: 'kotlin'

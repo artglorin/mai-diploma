@@ -1,7 +1,5 @@
 package com.artglorin.mai.diplom.json
 
-import com.artglorin.mai.diplom.toLowerCase
-import com.artglorin.mai.diplom.toLowerCaseCollection
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.*
 
@@ -31,7 +29,7 @@ class JsonSchemaBuilder {
         val factory = JsonNodeFactory.instance
         return factory.objectNode().apply {
             put("title", ttl)
-            put("type", tp.toLowerCase())
+            put("type", tp.name)
             putArray("required").apply {
                 addAll(required.map(factory::textNode))
             }
@@ -39,7 +37,7 @@ class JsonSchemaBuilder {
                 putObject("properties").apply {
                     properties.forEach {
                         putObject(it.name).apply {
-                            put("type", it.type.toLowerCase())
+                            put("type", it.type.name)
                             it.description?.apply {
                                 put("description", this)
                             }
@@ -121,7 +119,7 @@ class JsonSchemaParser private constructor() {
 class JsonSchemaPropertyFieldValidator : JsonValidator<JsonNode> {
     val fields = ArrayList<String>()
     val mappers = ArrayList<JsonMapper<JsonNode, JsonNode>>()
-    private val types = JsonType.ARRAY.toLowerCaseCollection()
+    private val types = JsonType.values().map { it.name }
     override fun validate(errors: MutableMap<String, String>, node: JsonNode): Boolean {
         val propertiesObject = node.path("properties")
         return when (propertiesObject) {

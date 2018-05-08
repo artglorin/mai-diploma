@@ -135,10 +135,10 @@ internal class JsonSchemaTest {
                         "Simple mapping with required",
                         JsonSchemaBuilder().apply {
                             title = "Simple"
-                            type = JsonType.OBJECT
+                            type = ObjectType
                             addRequired("name", "age")
-                            newProperty("name", JsonType.STRING)
-                            newProperty("age", JsonType.INTEGER)
+                            newProperty("name", StringType)
+                            newProperty("age", IntegerType)
                         }.build(),
                         factory.objectNode().apply {
                             put("title", "Simple")

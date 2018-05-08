@@ -90,6 +90,32 @@ class JsonAllGroupMapper(
 //</editor-fold>
 
 //<editor-fold desc="SimpleMappers">
+data class TransferValueItem(private val getter: String, private val setter: String, private val replaceExists: Boolean = false) {
+    fun transfer(from: JsonNode, to: JsonNode) {
+        JsonValueSetter.setValue(to, setter, JsonValueGetter.get(getter, from), replaceExists)
+    }
+}
+
+class JsonTransferMapper(private val mappers: List<TransferValueItem>) : JsonMapper<JsonNode, JsonNode> {
+    override fun map(errors: MutableMap<String, String>, from: JsonNode, to: JsonNode): Boolean {
+        var result = true
+        for (mapper in mappers) {
+            try {
+                mapper.transfer(from, to)
+            } catch (e: Exception) {
+                errors["Mapping exception"] = e.message?:""
+                result = false
+            }
+        }
+        return result
+    }
+
+    override fun toString(): String {
+        return "JsonTransferMapper"
+    }
+}
+
+
 class JsonArrayMapper(
         private val field: String,
         nodePredicate: (JsonNode) -> Boolean = { _ -> true }
@@ -186,19 +212,6 @@ open class JsonBigDecimalMapper(
     }
 }
 
-fun JsonNode.copyTo(other: JsonNode) {
-    if (isObject && other.isObject) {
-        other as ObjectNode
-        fields().forEach {
-            other.set(it.key, it.value)
-        }
-    } else if (isArray && other.isArray) {
-        other as ArrayNode
-        this as ArrayNode
-        other.addAll(this)
-    }
-}
-
 class CopyMapper : JsonMapper<JsonNode, JsonNode> {
     override fun map(errors: MutableMap<String, String>, from: JsonNode, to: JsonNode): Boolean {
         from.copyTo(to)
@@ -236,7 +249,7 @@ class JsonEnumMapper(
         vararg enumText: String)
     : JsonStringMapper(
         field,
-        {it ->
+        { it ->
             val fieldValue = it.asText()
             enumText.all { it.equals(fieldValue, true) }
         }) {
