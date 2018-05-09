@@ -4,7 +4,7 @@
     "JsonDataSource" : {
       "settings"     : {
         "sourceFile" : "test.data",
-        "filter"     : {
+        "filters"     : {
           "equals" : [
             { "city.country" : "RU" },
             { "city.name" : "MOSCOW" }

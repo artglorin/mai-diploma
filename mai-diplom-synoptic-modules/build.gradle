@@ -34,3 +34,14 @@ apply from: file('../libraries.gradle')
 dependencies{
     compile project(':mai-diplom-core')
 }
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+
+    reports {
+        html.enabled = true
+    }
+}
