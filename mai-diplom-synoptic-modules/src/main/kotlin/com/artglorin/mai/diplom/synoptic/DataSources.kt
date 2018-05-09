@@ -38,7 +38,7 @@ class JsonDataSource : DataSourceModule, Settingable, JsonNodeObservable {
     }
 
     private fun mapMappers(settings: Settings) {
-        settings.mapperData?.filter {
+        settings.mappers?.filter {
             allNotNull(it.getter, it.setter)
         }?.map {
             Mapper(JsonFieldGetterFactory.create(it.getter!!), JsonFieldSetterFactory.create(it.setter!!))
@@ -108,7 +108,7 @@ class JsonDataSource : DataSourceModule, Settingable, JsonNodeObservable {
     class Settings(
             var sourceFile: String? = null,
             var filters: Filters? = null,
-            var mapperData: List<MapperData>? = null
+            var mappers: List<MapperData>? = null
     )
 
     class Filters(var equals: List<EqualsFilterData>? = null)

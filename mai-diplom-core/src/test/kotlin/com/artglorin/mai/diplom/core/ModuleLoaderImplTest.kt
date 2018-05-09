@@ -56,9 +56,6 @@ internal class ModuleLoaderImplTest {
     }
 
     class PrivateDataSource(val int: Int) : DataSourceModule {
-        override fun getOutputSchema(): JsonNode {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
 
         override fun addObserver(observer: Consumer<JsonNode>) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -70,9 +67,6 @@ internal class ModuleLoaderImplTest {
     }
 
     open class EmptyDataSource : DataSourceModule {
-        override fun getOutputSchema(): JsonNode {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
 
         override fun addObserver(observer: Consumer<JsonNode>) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

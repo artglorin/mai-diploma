@@ -137,8 +137,8 @@ internal class JsonSchemaTest {
                             title = "Simple"
                             type = ObjectType
                             addRequired("name", "age")
-                            newProperty("name", StringType)
-                            newProperty("age", IntegerType)
+                            property("name", StringType)
+                            property("age", IntegerType)
                         }.build(),
                         factory.objectNode().apply {
                             put("title", "Simple")

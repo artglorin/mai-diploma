@@ -16,7 +16,7 @@ class JsonSchemaBuilder {
     private val required = ArrayList<String>()
     private val properties = ArrayList<JsonSchemaProperty>()
 
-    fun newProperty(name: String, type: JsonType) = JsonSchemaProperty(name, type).apply { properties.add(this) }
+    fun property(name: String, type: JsonType) = JsonSchemaProperty(name, type).apply { properties.add(this) }
 
     fun addRequired(vararg required: String) {
         this.required.addAll(required)

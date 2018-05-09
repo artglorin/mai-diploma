@@ -1,8 +1,12 @@
 package com.artglorin.mai.diplom.synoptic
 
 import com.artglorin.mai.diplom.core.DataHandlerModule
-import com.artglorin.mai.diplom.core.DataMapper
+import com.artglorin.mai.diplom.core.JsonNodeObservableImpl
+import com.artglorin.mai.diplom.core.Processor
+import com.artglorin.mai.diplom.core.Settingable
+import com.artglorin.mai.diplom.json.*
 import com.fasterxml.jackson.databind.JsonNode
+import java.util.*
 import java.util.function.Consumer
 
 /**
@@ -10,21 +14,53 @@ import java.util.function.Consumer
  * @since 05/05/2018
  */
 
-class Optimist: DataHandlerModule {
+open class SimpleAnswerDataHandler: DataHandlerModule, Settingable, Processor {
 
-    override fun getDataMapper(): DataMapper {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private var answers: List<String>? = null
+    private val random = Random()
+    private val outId = lazy { "${getModuleId()}.out"}
+    private val inId = lazy { "${getModuleId()}.out"}
+
+    private val listeners = lazy {
+        JsonNodeObservableImpl()
+    }
+
+    override fun process(data: JsonNode) {
+        if (listeners.isInitialized() && answers != null) {
+            answers?.let { it[random.nextInt(it.size)] }
+                    ?.let { JacksonNodeFactory.createModuleResult(outId.value, it) }
+                    ?.apply (listeners.value::notify)
+        }
+    }
+
+    override fun applySettings(settings: JsonNode) {
+        answers = AppJsonMappers.ignoreUnknown.treeToValue(settings, Settings::class.java)?.answers
     }
 
     override fun getOutputSchema(): JsonNode {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return JsonSchemaBuilder().apply {
+            title = outId.value
+            type = ObjectType
+            property("answer", StringType)
+            addRequired("answer")
+        }.build()
     }
 
     override fun addObserver(observer: Consumer<JsonNode>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        listeners.value.addObserver(observer)
     }
 
     override fun getInputSchema(): JsonNode {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return JsonSchemaBuilder().apply {
+            title = inId.value
+            type = ObjectType
+        }.build()
     }
+
+    data class Settings(var answers: List<String>? = null)
 }
+
+class Optimist: SimpleAnswerDataHandler()
+class Pessimist: SimpleAnswerDataHandler()
+class Synoptic: SimpleAnswerDataHandler()
+class Mathematician: SimpleAnswerDataHandler()

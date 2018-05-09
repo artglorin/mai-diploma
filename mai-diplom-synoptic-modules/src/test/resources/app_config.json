@@ -77,18 +77,18 @@
         }
       }
     },
-    "optimist"       : {
+    "Optimist"       : {
       "settings" : {
         "answers" : [ "Отличная погодка", "Завтра будет лучше чем вчера", "У природы нет плохой погоды" ]
       }
     },
-    "pessimist"      : {
+    "Pessimist"      : {
       "settings" : {
         "answers" : [ "Завтра можно не просыпаться", "Мама, роди меня обратно", "Хорошего не жди" ]
       }
     },
-    "mathematics"    : { },
-    "synoptic"       : {
+    "Mathematician"    : { },
+    "Synoptic"       : {
       "settings" : {
         "answers" : [ "Как вчера", "Туманно", "Ясно как всегда", "Погода перменчивая" ]
       }
@@ -96,25 +96,25 @@
     "taskManager"    : {
       "settings" : {
         "dependencies" : {
-          "optimist"    : {
+          "Optimist"    : {
             "input"    : {
               "from" : "JsonDataSource"
             },
             "priority" : 0.1
           },
-          "pessimist"   : {
+          "Pessimist"   : {
             "input"    : {
               "from" : "JsonDataSource"
             },
             "priority" : 0.1
           },
-          "mathematics" : {
+          "Mathematician" : {
             "input"    : {
               "from" : "JsonDataSource"
             },
             "priority" : 0.1
           },
-          "synoptic"    : {
+          "Synoptic"    : {
             "input"    : {
               "from" : "JsonDataSource"
             },
@@ -122,7 +122,7 @@
           },
           "solution"    : {
             "input" : {
-              "allOf" : [ "optimist", "pessimist", "mathematics", "synoptic" ]
+              "allOf" : [ "Optimist", "Pessimist", "Mathematician", "Synoptic" ]
             }
           }
         }
@@ -131,41 +131,41 @@
     "solution"       : {
       "settings" : {
         "weights"     : {
-          "optimist"    : 0.25,
-          "pessimist"   : 0.25,
-          "mathematics" : 0.4,
-          "synoptic"    : 0.1
+          "Optimist"    : 0.25,
+          "Pessimist"   : 0.25,
+          "Mathematician" : 0.4,
+          "Synoptic"    : 0.1
         },
         "inputScheme" : {
           "title" : ""
         },
         "mappings"    : {
-          "optimist"     : [
+          "Optimist"     : [
             {
               "from" : "answer",
               "to"   : "value"
             }
           ],
-          "pessimist"    : [
+          "Pessimist"    : [
             {
               "from" : "answer",
               "to"   : "value"
             }
           ],
-          "mathematics"  : [
+          "Mathematician"  : [
             {
               "from" : "answer",
               "to"   : "value"
             }
           ],
-          "synoptic"     : [
+          "Synoptic"     : [
             {
               "from" : "answer",
               "to"   : "value"
             }
           ],
           "transformers" : {
-            "pessimist"   : {
+            "Pessimist"   : {
               "answer" : {
                 "from"   : "string",
                 "to"     : "integer",
@@ -176,7 +176,7 @@
                 }
               }
             },
-            "optimist"    : {
+            "Optimist"    : {
               "answer" : {
                 "from"   : "string",
                 "to"     : "integer",
@@ -187,7 +187,7 @@
                 }
               }
             },
-            "mathematics" : {
+            "Mathematician" : {
               "answer" : {
                 "from"        : "double",
                 "to"          : "integer",
@@ -208,7 +208,7 @@
                 }
               }
             },
-            "synoptic"    : {
+            "Synoptic"    : {
               "answer" : {
                 "from"   : "string",
                 "to"     : "integer",
@@ -229,10 +229,10 @@
         "listerTo" : [
           "JsonDataSource",
           "solution",
-          "optimist",
-          "pessimist",
-          "mathematics",
-          "synoptic"
+          "Optimist",
+          "Pessimist",
+          "Mathematician",
+          "Synoptic"
         ]
       }
     }

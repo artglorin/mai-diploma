@@ -40,10 +40,6 @@ interface Settingable {
     fun applySettings(settings: JsonNode)
 }
 
-interface Mapperable {
-    fun getDataMapper(): DataMapper
-}
-
 interface OutputModule: Module {
     fun getOutputSchema(): JsonNode
 }
@@ -60,7 +56,7 @@ interface DataSourceModule : JsonNodeObservableModule {
     fun getData(): Stream<JsonNode>
 }
 
-interface DataHandlerModule : JsonNodeObservableModule, Mapperable, InputModule, OutputModule
+interface DataHandlerModule : JsonNodeObservableModule, InputModule, OutputModule
 
 interface TaskManagerModule : Module, Settingable {
     fun addSources(source: List<DataSourceModule>)

@@ -7,6 +7,15 @@ import java.math.BigDecimal
 object JacksonNodeFactory {
     private val inputCheck = Regex("(?<primitive>(integer|long|string|double|object|array))\\s*?(?:\\((?<args>([^)]+))?)\\)")
     private val factory = JsonNodeFactory.instance
+    private val mapper = AppJsonMappers.ignoreUnknown
+
+    fun <T: Any>createModuleResult(moduleId: String, data: T): JsonNode {
+        return factory.objectNode().apply {
+            put("id", moduleId)
+            putPOJO("data", data)
+        }
+    }
+
     fun create(nodeDescription: String): JsonNode {
         val matchResult = inputCheck.matchEntire(nodeDescription)
                 ?: throw JsonException("Specified wrong type: $nodeDescription, Must be on of pattern:[], {}, integer\\(\\d+\\)\$, long\\(\\d+\\)\$, double\\(\\d+\\.\\d+\\)\$, string\\([^)]\\)\$")
@@ -33,4 +42,5 @@ object JacksonNodeFactory {
                 else -> throw IllegalStateException("Cannot create type $type")
             }!!
 
+    fun toJson(item: Any): JsonNode = mapper.valueToTree(item)
 }
