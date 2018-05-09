@@ -122,8 +122,8 @@ internal class JsonSetterTest {
                         true
                 ),
                 TestData(
-                        "Path: array[5].item.value={}",
-                        "array[5].item[0].value=object()",
+                        "Path: array[5].item.value",
+                        "array[5].item[0].value",
                         factory.objectNode().apply { },
                         factory.objectNode().apply {
                             putArray("array").apply {
