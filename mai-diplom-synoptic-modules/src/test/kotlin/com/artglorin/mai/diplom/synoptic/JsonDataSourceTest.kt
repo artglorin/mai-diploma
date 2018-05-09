@@ -1,9 +1,15 @@
 package com.artglorin.mai.diplom.synoptic
 
 import com.artglorin.mai.diplom.json.AppJsonMappers
+import com.fasterxml.jackson.databind.JsonNode
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.times
+import com.nhaarman.mockito_kotlin.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito.mock
 import org.springframework.core.io.ClassPathResource
+import java.util.function.Consumer
 
 /**
  * @author V.Verminskiy (vverminskiy@alfabank.ru)
@@ -13,30 +19,17 @@ internal class JsonDataSourceTest {
 
     @Test
     fun `test read from file`() {
-        val jsonDataSource = JsonDataSource()
-        JsonDataSource.Settings().apply {
-            sourceFile = ClassPathResource("test_data.json").file.absolutePath.toString()
-            filters = JsonDataSource.Filters(listOf(
-                    JsonDataSource.EqualsFilterData("city.country", "US"),
-                    JsonDataSource.EqualsFilterData("city.name", "New York")
-            ))
-            mapperData = listOf(
-                    JsonDataSource.MapperData("main.humidity", "humidity"),
-                    JsonDataSource.MapperData("main.pressure", "pressure"),
-                    JsonDataSource.MapperData("main.temp", "temp"),
-                    JsonDataSource.MapperData("wind.deg", "wind.deg"),
-                    JsonDataSource.MapperData("wind.speed", "wind.speed"),
-                    JsonDataSource.MapperData("clouds.all", "clouds"),
-                    JsonDataSource.MapperData("time", "time")
-            )
-        }.let {
-            val mapper = AppJsonMappers.ignoreUnknown
-            mapper.writerWithDefaultPrettyPrinter().writeValueAsString(it).let {
-                mapper.readTree(it)
-            }
-        }.let {
-            jsonDataSource.applySettings(it)
-        }
-        assertEquals(2, jsonDataSource.getData().count())
+        val jsonNode = AppJsonMappers.ignoreUnknown.readTree(ClassPathResource("app_config.json").url)
+        @Suppress("UNCHECKED_CAST")
+        val listener = mock(Consumer::class.java) as Consumer<JsonNode>
+        val itemsCount = jsonNode
+                .path("modules")
+                .path("JsonDataSource")
+                .path("settings")
+                .let { JsonDataSource().apply {
+                    addObserver(listener)
+                    applySettings(it) } }.getData().count()
+        verify(listener, times(1)).accept(any())
+        assertEquals(1, itemsCount)
     }
 }

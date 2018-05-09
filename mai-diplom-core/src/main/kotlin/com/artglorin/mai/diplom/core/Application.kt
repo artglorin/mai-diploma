@@ -31,7 +31,7 @@ open class Application(@Autowired private val loader: MultipleModuleLoader) {
         val allModules = ArrayList(sources) + taskManager + dataHandlers + observers + solution
         APP_CONFIG.loadProperties().configure(allModules)
         LOG.debug("Add observers to modules")
-        (ArrayList<OutputModule>(sources) + dataHandlers + solution).forEach {
+        (ArrayList<JsonNodeObservableModule>(sources) + dataHandlers + solution).forEach {
             val observable = it
             observers.filter { it.getObservablesIds().contains(observable.getModuleId()) }.forEach(observable::addObserver)
         }

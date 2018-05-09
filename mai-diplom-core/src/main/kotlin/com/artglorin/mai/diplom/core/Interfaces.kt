@@ -46,6 +46,9 @@ interface Mapperable {
 
 interface OutputModule: Module {
     fun getOutputSchema(): JsonNode
+}
+
+interface JsonNodeObservable {
     fun addObserver(observer: Consumer<JsonNode>)
 }
 
@@ -53,11 +56,11 @@ interface InputModule: Module {
     fun getInputSchema(): JsonNode
 }
 
-interface DataSourceModule : Module, OutputModule {
+interface DataSourceModule : JsonNodeObservableModule {
     fun getData(): Stream<JsonNode>
 }
 
-interface DataHandlerModule : Module, Mapperable, InputModule, OutputModule
+interface DataHandlerModule : JsonNodeObservableModule, Mapperable, InputModule, OutputModule
 
 interface TaskManagerModule : Module, Settingable {
     fun addSources(source: List<DataSourceModule>)
@@ -65,10 +68,12 @@ interface TaskManagerModule : Module, Settingable {
     fun process()
 }
 
+interface JsonNodeObservableModule: Module, JsonNodeObservable
+
 interface DataObserver : Consumer<JsonNode>, Module {
     fun getObservablesIds(): Collection<String>
 }
 
-interface SolutionModule : Module, OutputModule, InputModule {
+interface SolutionModule : JsonNodeObservableModule, OutputModule, InputModule {
     fun getData(): Stream<JsonNode>
 }

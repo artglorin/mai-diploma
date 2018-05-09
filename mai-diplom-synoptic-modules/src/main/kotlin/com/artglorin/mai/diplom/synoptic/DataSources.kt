@@ -2,14 +2,16 @@ package com.artglorin.mai.diplom.synoptic
 
 import com.artglorin.mai.diplom.allNotNull
 import com.artglorin.mai.diplom.core.DataSourceModule
+import com.artglorin.mai.diplom.core.JsonNodeObservable
+import com.artglorin.mai.diplom.core.JsonNodeObservableImpl
 import com.artglorin.mai.diplom.core.Settingable
 import com.artglorin.mai.diplom.json.*
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import org.springframework.core.io.ClassPathResource
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.util.*
 import java.util.function.Consumer
 import java.util.stream.Stream
@@ -19,41 +21,40 @@ import java.util.stream.Stream
  * @since 05/05/2018
  */
 
-class JsonDataSource : DataSourceModule, Settingable {
+class JsonDataSource : DataSourceModule, Settingable, JsonNodeObservable {
     private var sourceFile: Path? = null
     private var filters: MutableList<Filter> = ArrayList()
     private var mappers: MutableList<Mapper> = ArrayList()
     private val factory = JsonNodeFactory.instance
-
-    override fun applySettings(settingsNode: JsonNode) {
-        sourceFile = AppJsonMappers.ignoreUnknown.readValue(settingsNode.toString(), Settings::class.java).apply {
-            mapFilters(this)
-            mapMappers(this)
-        }?.sourceFile?.let { Paths.get(it) }
+    private val listeners = lazy {
+        JsonNodeObservableImpl()
     }
 
-    private fun mapMappers(settings1: Settings) {
-        settings1.mapperData?.filter {
-            allNotNull(it.getter, it.getter)
+    override fun applySettings(settings: JsonNode) {
+        sourceFile = AppJsonMappers.ignoreUnknown.treeToValue(settings, Settings::class.java).apply {
+            mapFilters(this)
+            mapMappers(this)
+        }?.sourceFile?.let { ClassPathResource(it).file.toPath() }
+    }
+
+    private fun mapMappers(settings: Settings) {
+        settings.mapperData?.filter {
+            allNotNull(it.getter, it.setter)
         }?.map {
             Mapper(JsonFieldGetterFactory.create(it.getter!!), JsonFieldSetterFactory.create(it.setter!!))
         }?.apply { mappers.addAll(this) }
     }
 
-    private fun mapFilters(settings1: Settings) {
-        settings1.filters?.equals?.filter { allNotNull(it.field, it.value) }?.map {
+    private fun mapFilters(settings: Settings) {
+        settings.filters?.equals?.filter {
+            allNotNull(it.field, it.value)
+        }?.map {
             EqualsFilter(JsonFieldGetterFactory.create(it.field!!), it.value!!)
         }?.apply { filters.addAll(this) }
     }
 
-    override fun getOutputSchema(): JsonNode {
-        return JsonSchemaBuilder().apply {
-            title = "json source"
-            type = ObjectType
-        }.build()
-    }
-
     override fun addObserver(observer: Consumer<JsonNode>) {
+        listeners.value.addObserver(observer)
     }
 
     override fun getData(): Stream<JsonNode> {
@@ -75,6 +76,8 @@ class JsonDataSource : DataSourceModule, Settingable {
                     } else it).let {
                         result.set("result", it)
                     }
+                }.peek {
+                    listeners.value.notify(it)
                 }
     }
 

@@ -3,11 +3,11 @@
   "modules"     : {
     "JsonDataSource" : {
       "settings"     : {
-        "sourceFile" : "test.data",
-        "filters"     : {
+        "sourceFile" : "test_data.json",
+        "filters"    : {
           "equals" : [
-            { "city.country" : "RU" },
-            { "city.name" : "MOSCOW" }
+            { "field" : "city.country", "value" : "RU" },
+            { "field" : "city.name", "value" : "Moscow" }
           ]
         },
         "mappers"    : [
@@ -77,23 +77,23 @@
         }
       }
     },
-    "optimist"          : {
+    "optimist"       : {
       "settings" : {
         "answers" : [ "Отличная погодка", "Завтра будет лучше чем вчера", "У природы нет плохой погоды" ]
       }
     },
-    "pessimist"         : {
+    "pessimist"      : {
       "settings" : {
         "answers" : [ "Завтра можно не просыпаться", "Мама, роди меня обратно", "Хорошего не жди" ]
       }
     },
-    "mathematics"       : { },
-    "synoptic"          : {
+    "mathematics"    : { },
+    "synoptic"       : {
       "settings" : {
         "answers" : [ "Как вчера", "Туманно", "Ясно как всегда", "Погода перменчивая" ]
       }
     },
-    "taskManager"       : {
+    "taskManager"    : {
       "settings" : {
         "dependencies" : {
           "optimist"    : {
@@ -128,7 +128,7 @@
         }
       }
     },
-    "solution"          : {
+    "solution"       : {
       "settings" : {
         "weights"     : {
           "optimist"    : 0.25,
@@ -224,7 +224,7 @@
         }
       }
     },
-    "console"           : {
+    "console"        : {
       "settings" : {
         "listerTo" : [
           "JsonDataSource",
