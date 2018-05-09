@@ -12,6 +12,12 @@ fun Logger.error(exception: (msg:String) -> Throwable, msg : String) {
     throw exception.invoke(msg)
 }
 
+/**
+ * Check all arguments by null
+ * @return true if all arguments not null
+ */
+fun allNotNull(vararg items: Any?) = items.all { it != null }
+
 fun Enum<*>.toLowerCaseCollection(): Collection<String> {
     return this::class.java.enumConstants.map { it.name.toLowerCase() }
 
