@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.node.*
 
 class JsonSchemaBuilder {
     var title: String? = null
-    var type: JsonType? = null
+    var type: JsonType = ObjectType
     private val required = ArrayList<String>()
     private val properties = ArrayList<JsonSchemaProperty>()
 
@@ -24,12 +24,11 @@ class JsonSchemaBuilder {
 
     fun build(): ObjectNode {
         val ttl = title ?: throw IllegalStateException("title must be specified")
-        val tp = type ?: throw IllegalStateException("type must be specified")
         if (properties.map { it.name }.containsAll(required).not()) throw IllegalStateException("Required properties must be described")
         val factory = JsonNodeFactory.instance
         return factory.objectNode().apply {
             put("title", ttl)
-            put("type", tp.name)
+            put("type", type.name)
             putArray("required").apply {
                 addAll(required.map(factory::textNode))
             }
