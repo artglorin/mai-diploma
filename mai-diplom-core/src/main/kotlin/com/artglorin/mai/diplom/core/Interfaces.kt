@@ -40,7 +40,7 @@ interface Settingable {
     fun applySettings(settings: JsonNode)
 }
 
-interface OutputModule: Module {
+interface OutputModule : Module {
     fun getOutputSchema(): JsonNode
 }
 
@@ -48,7 +48,7 @@ interface JsonNodeObservable {
     fun addObserver(observer: Consumer<JsonNode>)
 }
 
-interface InputModule: Module {
+interface InputModule : Module {
     fun getInputSchema(): JsonNode
 }
 
@@ -64,12 +64,12 @@ interface TaskManagerModule : Module, Settingable {
     fun process()
 }
 
-interface JsonNodeObservableModule: Module, JsonNodeObservable
+interface JsonNodeObservableModule : Module, JsonNodeObservable
 
 interface DataObserver : Consumer<JsonNode>, Module {
     fun getObservablesIds(): Collection<String>
 }
 
 interface SolutionModule : JsonNodeObservableModule, OutputModule, InputModule {
-    fun getData(): Stream<JsonNode>
+    fun process(data: List<JsonNode>)
 }
