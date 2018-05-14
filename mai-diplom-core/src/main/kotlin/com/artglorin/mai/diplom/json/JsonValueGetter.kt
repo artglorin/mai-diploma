@@ -16,14 +16,8 @@ class JsonFieldGetterFactory {
         private val indexMatcher = Regex(".*?\\[(\\d+?)]")
 
         fun create(name: String): JsonFieldGetter {
-            return split(name)
-        }
-
-        private data class Description (val value: String, val type: ContainerType)
-
-        private fun split(income: String) : JsonFieldGetter {
             val descriptions = ArrayList<Description>()
-            for (it in income.split(".").filter { it.isNotBlank() }) {
+            for (it in name.split(".").filter { it.isNotBlank() }) {
                 val index: String? =  indexMatcher.matchEntire(it)?.groups?.get(1)?.value
                 val fieldName: String = if (index != null) it.substringBeforeLast("[") else it
                 if (fieldName.isNotBlank()) {
@@ -33,9 +27,11 @@ class JsonFieldGetterFactory {
                     descriptions.add(Description(index, ArrayType))
                 }
             }
-            val result = descriptions.map (::toGetter)
-            return if (result.size == 1) result.first() else CompositeGetter(result)
+            val result = descriptions.map(::toGetter)
+            return if (result.size == 1) result.first() else CompositeGetter(result, name)
         }
+
+        private data class Description (val value: String, val type: ContainerType)
 
         private fun toGetter(description: Description) : JsonFieldGetter {
             return when (description.type) {
@@ -48,11 +44,11 @@ class JsonFieldGetterFactory {
 
 }
 
-sealed class JsonFieldGetter {
+sealed class JsonFieldGetter(val path: String) {
     abstract fun extract(from: JsonNode): JsonNode
 }
 
-private class ArrayGetter(private val index: Int): JsonFieldGetter() {
+private class ArrayGetter(private val index: Int): JsonFieldGetter(index.toString()) {
     override fun extract(from: JsonNode): JsonNode {
         if(from.isArray.not()) return MissingNode.getInstance()
         from as ArrayNode
@@ -64,7 +60,7 @@ private class ArrayGetter(private val index: Int): JsonFieldGetter() {
     }
 }
 
-private class ObjectGetter(private val name: String): JsonFieldGetter() {
+private class ObjectGetter(private val name: String): JsonFieldGetter(name) {
     override fun extract(from: JsonNode): JsonNode {
         if(from.isObject.not()) return MissingNode.getInstance()
         from as ObjectNode
@@ -72,7 +68,7 @@ private class ObjectGetter(private val name: String): JsonFieldGetter() {
     }
 }
 
-private class CompositeGetter(var getters: List<JsonFieldGetter>) :JsonFieldGetter(){
+private class CompositeGetter(var getters: List<JsonFieldGetter>,path: String) :JsonFieldGetter(path){
 
     override fun extract(from: JsonNode): JsonNode {
         var result: JsonNode = from
