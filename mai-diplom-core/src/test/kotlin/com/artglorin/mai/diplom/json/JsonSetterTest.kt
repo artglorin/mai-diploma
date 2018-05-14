@@ -147,7 +147,7 @@ internal class JsonSetterTest {
                 )
         ).map {
             dynamicTest("Test create path on JsonNode. Case: ${it.caseName}") {
-                JsonValueSetter.setValue(it.target, it.path, it.value, it.replace)
+                JsonNodeSetter.setValue(it.target, it.path, it.value, it.replace)
                 assertEquals(it.expectTarget, it.target)
             }
         }
@@ -181,7 +181,7 @@ internal class JsonSetterTest {
         ).map {
             dynamicTest("test throw JsonCreationException${it.caseName}") {
                 assertThrows(JsonPathCreationException::class.java, {
-                    JsonValueSetter.setValue(it.target, it.path, it.value)
+                    JsonNodeSetter.setValue(it.target, it.path, it.value)
                 })
             }
         }

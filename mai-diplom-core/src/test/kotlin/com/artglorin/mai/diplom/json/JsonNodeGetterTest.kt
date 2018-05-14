@@ -11,7 +11,7 @@ import org.junit.jupiter.api.TestFactory
  * @author V.Verminskiy (vverminskiy@alfabank.ru)
  * @since 08/05/2018
  */
-internal class JsonValueGetterTest {
+internal class JsonNodeGetterTest {
 
     @TestFactory
     fun `test JsonValueGetter`():Collection<DynamicTest> {
@@ -68,7 +68,7 @@ internal class JsonValueGetterTest {
             )
         ).map {
             dynamicTest(it.caeName){
-                assertEquals(it.result, JsonValueGetter.get(it.path, it.target))
+                assertEquals(it.result, JsonNodeGetter.get(it.path, it.target))
             }
         }
     }

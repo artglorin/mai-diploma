@@ -92,7 +92,7 @@ class JsonAllGroupMapper(
 //<editor-fold desc="SimpleMappers">
 data class TransferValueItem(private val getter: String, private val setter: String, private val replaceExists: Boolean = false) {
     fun transfer(from: JsonNode, to: JsonNode) {
-        JsonValueSetter.setValue(to, setter, JsonValueGetter.get(getter, from), replaceExists)
+        JsonNodeSetter.setValue(to, setter, JsonNodeGetter.get(getter, from), replaceExists)
     }
 }
 

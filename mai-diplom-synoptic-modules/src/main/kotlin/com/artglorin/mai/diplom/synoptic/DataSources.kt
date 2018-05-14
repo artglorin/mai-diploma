@@ -49,7 +49,7 @@ class JsonDataSource : DataSourceModule, Settingable, JsonNodeObservable {
         settings.filters?.equals?.filter {
             allNotNull(it.field, it.value)
         }?.map {
-            EqualsFilter(JsonFieldGetterFactory.create(it.field!!), it.value!!)
+            EqualsFilter(JsonNodeGetterFactory.create(it.field!!), it.value!!)
         }?.apply { filters.addAll(this) }
     }
 
@@ -86,13 +86,13 @@ class JsonDataSource : DataSourceModule, Settingable, JsonNodeObservable {
         override fun pass(node: JsonNode): Boolean {
             val path = field ?: return true
             val target = value ?: return true
-            return JsonValueGetter.get(path, node).let {
+            return JsonNodeGetter.get(path, node).let {
                 it.isTextual.and(target == it.asText())
             }
         }
     }
 
-    class EqualsFilter(private val getter: JsonFieldGetter, private val example: String) : Filter() {
+    class EqualsFilter(private val getter: JsonNodeGetter, private val example: String) : Filter() {
 
         override fun pass(node: JsonNode): Boolean {
             return getter.extract(node).let {

@@ -4,24 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
-object JsonValueSetter {
-
-    fun setValue(target: JsonNode, fullPath: String, value: JsonNode, replaceExist: Boolean = false) {
-        if (target.isContainerNode.not()) {
-            throw JsonPathCreationException("Cannot crate path on not container node")
-        }
-        JsonFieldSetterFactory.create(fullPath, replaceExist).set(value, target)
-    }
-}
-
-class JsonFieldSetterFactory {
+class JsonNodeSetterFactory {
     companion object {
         private val indexMatcher = Regex(".*?\\[(\\d+?)]")
 
-        fun create(name: String, replaceExist: Boolean = false): JsonFieldSetter {
+        fun create(name: String, replaceExist: Boolean = false): JsonNodeSetter {
             JsonPathValidator.validate(name)
             val parts = name.split(".").filter { it.isNotBlank() }
-            val setters = ArrayList<ContainerFiledSetter>()
+            val setters = ArrayList<ContainerNodeSetter>()
             for (part in parts) {
                 val fieldName: String
                 val index: Int?
@@ -47,7 +37,15 @@ class JsonFieldSetterFactory {
 
 }
 
-sealed class JsonFieldSetter {
+sealed class JsonNodeSetter {
+    companion object {
+        fun setValue(target: JsonNode, fullPath: String, value: JsonNode, replaceExist: Boolean = false) {
+            if (target.isContainerNode.not()) {
+                throw JsonPathCreationException("Cannot crate path on not container node")
+            }
+            JsonNodeSetterFactory.create(fullPath, replaceExist).set(value, target)
+        }
+    }
     var target: JsonNode? = null
     open var source: JsonNode? = null
 
@@ -59,17 +57,17 @@ sealed class JsonFieldSetter {
 
 }
 
-private abstract class ContainerFiledSetter : JsonFieldSetter() {
+private abstract class ContainerNodeSetter : JsonNodeSetter() {
     override var source: JsonNode? = null
     abstract fun createContainer(): JsonNode
 }
 
-private fun ContainerFiledSetter.join(setterJson: ContainerFiledSetter) {
+private fun ContainerNodeSetter.join(setterJson: ContainerNodeSetter) {
     val node = set(requireNotNull(setterJson.source?: setterJson.createContainer()), requireNotNull(target))
     setterJson.target = node
 }
 
-private class ArraySetter(private val index: Int, private val replaceExist: Boolean) : ContainerFiledSetter()  {
+private class ArraySetter(private val index: Int, private val replaceExist: Boolean) : ContainerNodeSetter()  {
 
     override fun createContainer(): JsonNode = JacksonNodeFactory.create(ArrayType)
 
@@ -95,7 +93,7 @@ private class ArraySetter(private val index: Int, private val replaceExist: Bool
     }
 }
 
-private class ObjectSetter(private val fieldName: String, private val replaceExist: Boolean) : ContainerFiledSetter() {
+private class ObjectSetter(private val fieldName: String, private val replaceExist: Boolean) : ContainerNodeSetter() {
 
     override fun createContainer(): JsonNode = JacksonNodeFactory.create(ObjectType)
 
@@ -119,7 +117,7 @@ private class ObjectSetter(private val fieldName: String, private val replaceExi
     }
 }
 
-private class ComplexSetter(private val setters: List<ContainerFiledSetter>) : JsonFieldSetter() {
+private class ComplexSetter(private val setters: List<ContainerNodeSetter>) : JsonNodeSetter() {
 
     override fun set(source: JsonNode, target: JsonNode): JsonNode {
          var setterPointer = setters.first()

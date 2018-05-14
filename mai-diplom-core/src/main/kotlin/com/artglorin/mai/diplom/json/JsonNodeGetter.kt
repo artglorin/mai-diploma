@@ -5,17 +5,11 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.MissingNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
-object JsonValueGetter {
-    fun get(pathToValue: String, source: JsonNode): JsonNode {
-        return JsonFieldGetterFactory.create(pathToValue).extract(source)
-    }
-}
-
-class JsonFieldGetterFactory {
+class JsonNodeGetterFactory {
     companion object {
         private val indexMatcher = Regex(".*?\\[(\\d+?)]")
 
-        fun create(name: String): JsonFieldGetter {
+        fun create(name: String): JsonNodeGetter {
             val descriptions = ArrayList<Description>()
             for (it in name.split(".").filter { it.isNotBlank() }) {
                 val index: String? =  indexMatcher.matchEntire(it)?.groups?.get(1)?.value
@@ -33,7 +27,7 @@ class JsonFieldGetterFactory {
 
         private data class Description (val value: String, val type: ContainerType)
 
-        private fun toGetter(description: Description) : JsonFieldGetter {
+        private fun toGetter(description: Description) : JsonNodeGetter {
             return when (description.type) {
                 ArrayType -> ArrayGetter(description.value.toInt())
                 ObjectType -> ObjectGetter(description.value)
@@ -44,11 +38,16 @@ class JsonFieldGetterFactory {
 
 }
 
-sealed class JsonFieldGetter(val path: String) {
+sealed class JsonNodeGetter(val path: String) {
+    companion object {
+        fun get(pathToValue: String, source: JsonNode): JsonNode {
+            return JsonNodeGetterFactory.create(pathToValue).extract(source)
+        }
+    }
     abstract fun extract(from: JsonNode): JsonNode
 }
 
-private class ArrayGetter(private val index: Int): JsonFieldGetter(index.toString()) {
+private class ArrayGetter(private val index: Int): JsonNodeGetter(index.toString()) {
     override fun extract(from: JsonNode): JsonNode {
         if(from.isArray.not()) return MissingNode.getInstance()
         from as ArrayNode
@@ -60,7 +59,7 @@ private class ArrayGetter(private val index: Int): JsonFieldGetter(index.toStrin
     }
 }
 
-private class ObjectGetter(private val name: String): JsonFieldGetter(name) {
+private class ObjectGetter(private val name: String): JsonNodeGetter(name) {
     override fun extract(from: JsonNode): JsonNode {
         if(from.isObject.not()) return MissingNode.getInstance()
         from as ObjectNode
@@ -68,7 +67,7 @@ private class ObjectGetter(private val name: String): JsonFieldGetter(name) {
     }
 }
 
-private class CompositeGetter(var getters: List<JsonFieldGetter>,path: String) :JsonFieldGetter(path){
+private class CompositeGetter(var getters: List<JsonNodeGetter>, path: String) :JsonNodeGetter(path){
 
     override fun extract(from: JsonNode): JsonNode {
         var result: JsonNode = from

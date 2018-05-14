@@ -2,9 +2,9 @@ package com.artglorin.mai.diplom.json
 
 import com.fasterxml.jackson.databind.JsonNode
 
-class JsonValueConverter(private val nodeGetter: JsonFieldGetter,
+class JsonValueConverter(private val nodeGetter: JsonNodeGetter,
                          private val matcher: JsonNodeMatcher,
-                         private val nodeSetter: JsonFieldSetter,
+                         private val nodeSetter: JsonNodeSetter,
                          private val valueNode: JsonNode,
                          private val defaultNode: JsonNode? = null) {
 
@@ -21,8 +21,8 @@ class JsonValueConverter(private val nodeGetter: JsonFieldGetter,
 internal object JsonValueConverterFactory {
     fun create(settings: JsonNode): JsonValueConverter {
 
-        val sourceGetter = JsonFieldGetterFactory.create(settings.path("sourcePath").asText())
-        val targetSetter = JsonFieldSetterFactory.create(settings.path("targetPath").asText())
+        val sourceGetter = JsonNodeGetterFactory.create(settings.path("sourcePath").asText())
+        val targetSetter = JsonNodeSetterFactory.create(settings.path("targetPath").asText())
         val matchNode = settings.get("matchValue")
         val misMatchNode = settings.get("mismatchValue")
         val nodeMatcher = JsonNodeMatcherFactory.create(settings.get("matcher"))
