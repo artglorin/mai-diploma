@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.function.Consumer
+import java.util.function.BiConsumer
 import java.util.stream.Stream
 
 /**
@@ -56,8 +56,7 @@ internal class ModuleLoaderImplTest {
     }
 
     class PrivateDataSource(val int: Int) : DataSourceModule {
-
-        override fun addObserver(observer: Consumer<JsonNode>) {
+        override fun addObserver(observer: BiConsumer<Module, JsonNode>) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -67,8 +66,7 @@ internal class ModuleLoaderImplTest {
     }
 
     open class EmptyDataSource : DataSourceModule {
-
-        override fun addObserver(observer: Consumer<JsonNode>) {
+        override fun addObserver(observer: BiConsumer<Module, JsonNode>) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 

@@ -24,14 +24,14 @@ object ConfigurationLogger{
 }
 
 fun Configuration.configure(modules: List<Module>) {
-    modules.filter { it -> it.javaClass.kotlin.isInstance(Settingable::class) }
+    modules.filter { it -> it.javaClass.kotlin.isInstance(Customizable::class) }
             .forEach { configure(it) }
 }
 
 fun Configuration.configure(module: Module) {
     val moduleId = module.getModuleId()
     modules[moduleId]?.apply {
-        if (module is Settingable) {
+        if (module is Customizable) {
             ConfigurationLogger.LOG.debug("Apply settings got module '$moduleId'")
             module.applySettings(this.settings)
         }

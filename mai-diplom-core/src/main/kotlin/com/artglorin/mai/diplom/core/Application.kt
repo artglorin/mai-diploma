@@ -31,13 +31,13 @@ open class Application(@Autowired private val loader: MultipleModuleLoader) {
         val allModules = ArrayList(sources) + taskManager + dataHandlers + observers + solution
         APP_CONFIG.loadProperties().configure(allModules)
         LOG.debug("Add observers to modules")
-        (ArrayList<JsonNodeObservableModule>(sources) + dataHandlers + solution).forEach {
+        (ArrayList<ObservableModule>(sources) + dataHandlers + solution).forEach {
             val observable = it
             observers.filter { it.getObservablesIds().contains(observable.getModuleId()) }.forEach(observable::addObserver)
         }
         LOG.debug("Set sources and handlers to task manager")
-        taskManager.addSources(sources)
-        taskManager.addHandlers(dataHandlers)
+        taskManager.setSources(sources)
+        taskManager.setHandlers(dataHandlers)
         LOG.debug("Run tasks")
         taskManager.process()
     }

@@ -2,9 +2,9 @@ package com.artglorin.mai.diplom.core
 
 import com.fasterxml.jackson.databind.JsonNode
 import java.util.*
-import java.util.function.Consumer
+import java.util.function.BiConsumer
 
-class JsonNodeObservableImpl : JsonNodeObservable {
+class JsonNodeObservableImpl(private val module: Module) : ObservableModule {
     private val items = object :java.util.Observable() {
         fun notify(node: JsonNode) {
             setChanged()
@@ -13,19 +13,19 @@ class JsonNodeObservableImpl : JsonNodeObservable {
 
     }
 
-    override fun addObserver(observer: Consumer<JsonNode>) {
-        items.addObserver(ConsumeOBserver(observer))
+    override fun addObserver(observer: BiConsumer<Module, JsonNode>) {
+        items.addObserver(ConsumeObserver(observer))
     }
 
     fun notify(node: JsonNode) {
         items.notify(node)
     }
 
-    private class ConsumeOBserver(private val consume: Consumer<JsonNode>) : Observer {
+    inner class ConsumeObserver(private val consume: BiConsumer<Module, JsonNode>) : Observer {
         override fun update(o: java.util.Observable?, arg: Any?) {
             arg?.takeIf { it is JsonNode }
                     ?.let { it as JsonNode }
-                    ?.apply { consume.accept(this) }
+                    ?.apply { consume.accept(module, this) }
         }
 
     }

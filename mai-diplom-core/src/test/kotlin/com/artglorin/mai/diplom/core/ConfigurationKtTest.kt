@@ -7,8 +7,7 @@ import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.jupiter.api.Test
-import java.util.function.Consumer
-import java.util.stream.Stream
+import java.util.function.BiConsumer
 
 /**
  * @author V.Verminskiy (vverminskiy@alfabank.ru)
@@ -16,12 +15,16 @@ import java.util.stream.Stream
  */
 internal class ConfigurationKtTest {
 
-    open class TestModule: Module, Settingable, SolutionModule {
-        override fun getOutputSchema(): JsonNode {
+    open class TestModule: Module, Customizable, SolutionModule {
+        override fun process(data: List<JsonNode>) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun addObserver(observer: Consumer<JsonNode>) {
+        override fun addObserver(observer: BiConsumer<Module, JsonNode>) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getOutputSchema(): JsonNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -31,9 +34,6 @@ internal class ConfigurationKtTest {
 
         override fun getModuleId() = "module"
         override fun applySettings(settings: JsonNode) {}
-        override fun getData(): Stream<JsonNode> {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
 
     }
 

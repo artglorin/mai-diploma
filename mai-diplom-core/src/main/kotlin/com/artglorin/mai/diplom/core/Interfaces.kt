@@ -1,7 +1,7 @@
 package com.artglorin.mai.diplom.core
 
 import com.fasterxml.jackson.databind.JsonNode
-import java.util.function.Consumer
+import java.util.function.BiConsumer
 import java.util.stream.Stream
 
 /**
@@ -9,23 +9,8 @@ import java.util.stream.Stream
  * @since 01/05/2018
  */
 
-data class Mapper(val sourceId: String,
-                  val sourceIdPath: String,
-                  val sourcePath: String,
-                  val targetPath: String)
-
-interface DataMapper {
-    fun setFieldMapping(mappings: List<Mapper>?)
-    fun canMap(json: JsonNode): Boolean
-    fun map(source: JsonNode): JsonNode
-}
-
 interface Module {
     fun getModuleId(): String = this::javaClass.name
-}
-
-interface ComparableModule {
-    fun getComparator(): Comparator<JsonNode>
 }
 
 interface Processor {
@@ -33,10 +18,10 @@ interface Processor {
 }
 
 interface BatchProcessor {
-    fun batchProcess(data: List<JsonNode>)
+    fun process(data: List<JsonNode>)
 }
 
-interface Settingable {
+interface Customizable {
     fun applySettings(settings: JsonNode)
 }
 
@@ -44,32 +29,31 @@ interface OutputModule : Module {
     fun getOutputSchema(): JsonNode
 }
 
-interface JsonNodeObservable {
-    fun addObserver(observer: Consumer<JsonNode>)
-}
-
 interface InputModule : Module {
     fun getInputSchema(): JsonNode
 }
 
-interface DataSourceModule : JsonNodeObservableModule {
+interface DataSourceModule : ObservableModule {
     fun getData(): Stream<JsonNode>
 }
 
-interface DataHandlerModule : JsonNodeObservableModule, InputModule, OutputModule
+interface DataHandlerModule : ObservableModule, InputModule, OutputModule
 
-interface TaskManagerModule : Module, Settingable {
-    fun addSources(source: List<DataSourceModule>)
-    fun addHandlers(handler: List<DataHandlerModule>)
+interface TaskManagerModule : Module {
+    fun setSources(source: List<DataSourceModule>)
+    fun setHandlers(handler: List<DataHandlerModule>)
+    fun setSolution(solutionModule: SolutionModule)
     fun process()
 }
 
-interface JsonNodeObservableModule : Module, JsonNodeObservable
+interface ObservableModule : Module {
+    fun addObserver(observer: BiConsumer<Module, JsonNode>)
+}
 
-interface DataObserver : Consumer<JsonNode>, Module {
+interface DataObserver : BiConsumer<Module, JsonNode>, Module {
     fun getObservablesIds(): Collection<String>
 }
 
-interface SolutionModule : JsonNodeObservableModule, OutputModule, InputModule {
+interface SolutionModule : ObservableModule, OutputModule, InputModule {
     fun process(data: List<JsonNode>)
 }
