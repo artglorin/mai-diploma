@@ -108,5 +108,22 @@
     },
     "target"   : { "one" : "test" },
     "expected" : { "one" : "test", "mapped" : [ { "say" : "yes" } ] }
+  },
+  {
+    "caseName" : "test convert from {\"value\" : 2.0} by path \"value\" to {\"one\":\"exist\"} by path \"mapped[0]\" with LessThenMatcher = 2.0000001 ",
+    "source"   : {
+      "value" : 2.0
+    },
+    "settings" : {
+      "sourcePath" : "value",
+      "targetPath" : "mapped[0]",
+      "matchValue" : { "say" : "yes" },
+      "matcher"    : {
+        "name"     : "lessThen",
+        "template" : 2.0000001
+      }
+    },
+    "target"   : { "one" : "test" },
+    "expected" : { "one" : "test", "mapped" : [ { "say" : "yes" } ] }
   }
 ]

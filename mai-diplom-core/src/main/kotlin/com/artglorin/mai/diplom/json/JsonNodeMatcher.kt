@@ -54,7 +54,20 @@ object JsonNodeMatcherFactory {
                     else -> throw IllegalArgumentException("Unsupported json type: ${template.nodeType}. Supported values: $types")
                 }
             }
-//            "lessThen" -> LessThenTransformerMatcher(settings.path("fromValue"))
+            "lessThen" -> {
+                val template = settings.get("template")
+                when {
+//                    template.isTextual -> StringEqualsMatcher(template.asText())
+//                    template.isInt -> IntegerEqualsMatcher(template.asInt())
+//                    template.isBigInteger -> BigIntegerEqualsMatcher(template.bigIntegerValue())
+//                    template.isLong -> LongEqualsMatcher(template.asLong())
+                    template.isDouble -> DoubleLessThanMatcher(template.asDouble())
+//                    template.isBigDecimal -> BigDecimalEqualsMatcher(template.decimalValue())
+//                    template.isArray -> ArrayEqualsMatcher(template as ArrayNode)
+//                    template.isObject -> ObjectEqualsMatcher(template as ObjectNode)
+                    else -> throw IllegalArgumentException("Unsupported json type: ${template.nodeType}. Supported values: $types")
+                }
+            }
             "greatThen" -> {
                 val template = settings.get("template")
                 when {
@@ -139,5 +152,15 @@ class DoubleGreatThanMatcher(private val template: Double) : JsonNodeMatcher() {
 
     override fun toString(): String {
         return "DoubleGreatThanMatcher($template)"
+    }
+}
+
+class DoubleLessThanMatcher(private val template: Double) : JsonNodeMatcher() {
+    override fun match(node: JsonNode): Boolean {
+        return template > node.doubleValue()
+    }
+
+    override fun toString(): String {
+        return "DoubleLessThanMatcher($template)"
     }
 }
