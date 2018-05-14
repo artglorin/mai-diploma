@@ -53,8 +53,7 @@ internal class JsonNodeMatcherFactoryTest {
                 TestData("test equals by integer. Template: '1', target: '1', expected: true",
                         factory.objectNode().apply {
                             put("name", "equals")
-                            put("type", "integer")
-                            put("template", "1")
+                            put("template", 1)
                         },
                         factory.numberNode(1),
                         true
@@ -63,7 +62,7 @@ internal class JsonNodeMatcherFactoryTest {
                         factory.objectNode().apply {
                             put("name", "equals")
                             put("type", "integer")
-                            put("template", "1")
+                            put("template", 1)
                         },
                         factory.numberNode(2),
                         false
@@ -72,7 +71,7 @@ internal class JsonNodeMatcherFactoryTest {
                         factory.objectNode().apply {
                             put("name", "equals")
                             put("type", "double")
-                            put("template", "1.0")
+                            put("template", 1.0)
                         },
                         factory.numberNode(1.0),
                         true
@@ -81,7 +80,7 @@ internal class JsonNodeMatcherFactoryTest {
                         factory.objectNode().apply {
                             put("name", "equals")
                             put("type", "double")
-                            put("template", "1.00")
+                            put("template", 1.00)
                         },
                         factory.numberNode(0.0),
                         false
@@ -90,7 +89,7 @@ internal class JsonNodeMatcherFactoryTest {
                         factory.objectNode().apply {
                             put("name", "equals")
                             put("type", "long")
-                            put("template", "1")
+                            put("template", 1L)
                         },
                         factory.numberNode(1L),
                         true
