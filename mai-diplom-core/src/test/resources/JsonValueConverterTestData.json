@@ -125,5 +125,24 @@
     },
     "target"   : { "one" : "test" },
     "expected" : { "one" : "test", "mapped" : [ { "say" : "yes" } ] }
+  },
+  {
+    "caseName" : "test convert from {\"value\" : 1.5} by path \"value\" to {\"one\":\"exist\"} by path \"mapped[0]\" with BetweenMatcher from 1.0 to 2.0 ",
+    "source"   : {
+      "value" : 1.5
+    },
+    "settings" : {
+      "sourcePath" : "value",
+      "targetPath" : "mapped[0]",
+      "matchValue" : { "say" : "yes" },
+      "matcher"    : {
+        "name"     : "between",
+        "type"     : "double",
+        "from" : 1.0,
+        "to" : 2.0
+      }
+    },
+    "target"   : { "one" : "test" },
+    "expected" : { "one" : "test", "mapped" : [ { "say" : "yes" } ] }
   }
 ]

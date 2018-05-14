@@ -82,6 +82,20 @@ object JsonNodeMatcherFactory {
                     else -> throw IllegalArgumentException("Unsupported json type: ${template.nodeType}. Supported values: $types")
                 }
             }
+            "between" -> {
+                val type = settings.get("type").asText()
+                when (type){
+//                    template.isTextual -> StringEqualsMatcher(template.asText())
+//                    template.isInt -> IntegerEqualsMatcher(template.asInt())
+//                    template.isBigInteger -> BigIntegerEqualsMatcher(template.bigIntegerValue())
+//                    template.isLong -> LongEqualsMatcher(template.asLong())
+                    "double" -> DoubleBetweenMatcher(settings.get("from").asDouble(), settings.get("to").asDouble())
+//                    template.isBigDecimal -> BigDecimalEqualsMatcher(template.decimalValue())
+//                    template.isArray -> ArrayEqualsMatcher(template as ArrayNode)
+//                    template.isObject -> ObjectEqualsMatcher(template as ObjectNode)
+                    else -> throw IllegalArgumentException("Unsupported json type: $type. Supported values: $types")
+                }
+            }
 //            "between" -> BetweenTransformerMatcher(settings.path("from"), settings.path("to"))
             else -> throw IllegalArgumentException("Unsupported TransformerMatcher type: '$name'")
         }
@@ -145,6 +159,7 @@ class ObjectEqualsMatcher(private val string: ObjectNode) : JsonNodeMatcher() {
 }
 //</editor-fold>
 
+//<editor-fold desc="GreatThan">
 class DoubleGreatThanMatcher(private val template: Double) : JsonNodeMatcher() {
     override fun match(node: JsonNode): Boolean {
         return template < node.doubleValue()
@@ -154,7 +169,9 @@ class DoubleGreatThanMatcher(private val template: Double) : JsonNodeMatcher() {
         return "DoubleGreatThanMatcher($template)"
     }
 }
+//</editor-fold>
 
+//<editor-fold desc="LessThan">
 class DoubleLessThanMatcher(private val template: Double) : JsonNodeMatcher() {
     override fun match(node: JsonNode): Boolean {
         return template > node.doubleValue()
@@ -164,3 +181,17 @@ class DoubleLessThanMatcher(private val template: Double) : JsonNodeMatcher() {
         return "DoubleLessThanMatcher($template)"
     }
 }
+//</editor-fold>
+
+
+//<editor-fold desc="Between">
+class DoubleBetweenMatcher(private val from: Double, private val to: Double) : JsonNodeMatcher() {
+    override fun match(node: JsonNode): Boolean {
+        return (from <= node.doubleValue()).and( node.doubleValue() <= to)
+    }
+
+    override fun toString(): String {
+        return "DoubleBetweenMatcher($from, $to)"
+    }
+}
+//</editor-fold>
