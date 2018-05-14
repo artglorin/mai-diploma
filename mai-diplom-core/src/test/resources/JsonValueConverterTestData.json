@@ -1,0 +1,95 @@
+[
+  {
+    "caseName" : "test convert from {\"string\" : \"value\" } to {} with EqualsMatcher by value \"value\" ",
+    "source"   : {
+      "string" : "value"
+    },
+    "settings" : {
+      "sourcePath" : "string",
+      "targetPath" : "result.value",
+      "matchValue" : "SUCCESS",
+      "matcher"    : {
+        "name"     : "equals",
+        "template" : "value"
+      }
+    },
+    "target"   : { },
+    "expected" : {
+      "result" : {
+        "value" : "SUCCESS"
+      }
+    }
+  },
+  {
+    "caseName" : "test convert from [\"value\"] by path \"[0]\" to {} by path \"fromArray\" with EqualsMatcher by value \"value\" ",
+    "source"   : [
+      "value"
+    ],
+    "settings" : {
+      "sourcePath" : "[0]",
+      "targetPath" : "fromArray",
+      "matchValue" : "SUCCESS",
+      "matcher"    : {
+        "name"     : "equals",
+        "template" : "value"
+      }
+    },
+    "target"   : { },
+    "expected" : {
+      "fromArray" : "SUCCESS"
+    }
+  },
+  {
+    "caseName" : "test convert from [\"value\"] by path \"[0]\" to [] by path \"[0].fromArray\" with EqualsMatcher by value \"value\" ",
+    "source"   : [
+      "value"
+    ],
+    "settings" : {
+      "sourcePath" : "[0]",
+      "targetPath" : "[0].fromArray",
+      "matchValue" : "SUCCESS",
+      "matcher"    : {
+        "name"     : "equals",
+        "template" : "value"
+      }
+    },
+    "target"   : [ ],
+    "expected" : [
+      { "fromArray" : "SUCCESS" }
+    ]
+  },
+  {
+    "caseName" : "test convert from {\"int\" : 1} by path \"int\" to {\"one\":\"test\"} by path \"array[0]\" with EqualsMatcher by integer=1 ",
+    "source"   : {
+      "int" : 1
+    },
+    "settings" : {
+      "sourcePath" : "int",
+      "targetPath" : "array[0]",
+      "matchValue" : "SUCCESS",
+      "matcher"    : {
+        "name"     : "equals",
+        "template" : 1
+      }
+    },
+    "target"   : { "one" : "test" },
+    "expected" : { "one" : "test", "array" : [ "SUCCESS" ] }
+  },
+  {
+    "caseName" : "test convert from {\"bigDecimal\" : 123456789987654321.123456654321} by path \"bigDecimal\" to {\"one\":\"test\"} by path \"bigDecimal\" with EqualsMatcher by long=1 ",
+    "source"   : {
+      "bigDecimal" : 123456789987654321.123456654321
+    },
+    "settings" : {
+      "sourcePath" : "bigDecimal",
+      "targetPath" : "bigDecimal",
+      "matchValue" : 345,
+      "matcher"    : {
+        "name"     : "equals",
+        "template" : 123456789987654321.123456654321
+      }
+    },
+    "target"   : { "one" : "test" },
+    "expected" : { "one" : "test", "bigDecimal" : 345 }
+  }
+]
