@@ -91,5 +91,22 @@
     },
     "target"   : { "one" : "test" },
     "expected" : { "one" : "test", "bigDecimal" : 345 }
+  },
+  {
+    "caseName" : "test convert from {\"value\" : 2.0} by path \"value\" to {\"one\":\"exist\"} by path \"mapped[0]\" with GreatThenMatcher > 1.0 ",
+    "source"   : {
+      "value" : 2.0
+    },
+    "settings" : {
+      "sourcePath" : "value",
+      "targetPath" : "mapped[0]",
+      "matchValue" : { "say" : "yes" },
+      "matcher"    : {
+        "name"     : "greatThen",
+        "template" : 1.0
+      }
+    },
+    "target"   : { "one" : "test" },
+    "expected" : { "one" : "test", "mapped" : [ { "say" : "yes" } ] }
   }
 ]
