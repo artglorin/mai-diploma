@@ -38,16 +38,23 @@ class JsonNodeGetterFactory {
 
 }
 
-sealed class JsonNodeGetter(val path: String) {
+interface JsonNodeGetter {
+    val path:String
     companion object {
         fun get(pathToValue: String, source: JsonNode): JsonNode {
             return JsonNodeGetterFactory.create(pathToValue).extract(source)
         }
     }
-    abstract fun extract(from: JsonNode): JsonNode
+     fun extract(from: JsonNode): JsonNode
 }
 
-private class ArrayGetter(private val index: Int): JsonNodeGetter(index.toString()) {
+class SameGetter(override val path: String = ""): JsonNodeGetter {
+    override fun extract(from: JsonNode) = from
+}
+
+private class ArrayGetter(private val index: Int): JsonNodeGetter {
+    override val path: String
+        get() = index.toString()
     override fun extract(from: JsonNode): JsonNode {
         if(from.isArray.not()) return MissingNode.getInstance()
         from as ArrayNode
@@ -59,15 +66,15 @@ private class ArrayGetter(private val index: Int): JsonNodeGetter(index.toString
     }
 }
 
-private class ObjectGetter(private val name: String): JsonNodeGetter(name) {
+private class ObjectGetter(override val path: String): JsonNodeGetter {
     override fun extract(from: JsonNode): JsonNode {
         if(from.isObject.not()) return MissingNode.getInstance()
         from as ObjectNode
-        return from.path(name)
+        return from.path(path)
     }
 }
 
-private class CompositeGetter(var getters: List<JsonNodeGetter>, path: String) :JsonNodeGetter(path){
+private class CompositeGetter(var getters: List<JsonNodeGetter>, override val path: String) :JsonNodeGetter{
 
     override fun extract(from: JsonNode): JsonNode {
         var result: JsonNode = from
