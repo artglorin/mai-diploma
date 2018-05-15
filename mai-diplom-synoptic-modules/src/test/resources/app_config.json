@@ -1,80 +1,9 @@
 {
-  "description" : "Настройка модуля для работы из Json файла, где каждый объект на отдельной строке. Используются следующие модули: Оптимист, Пессимист, Синоптик, Математик. Данные выводяться на консоль",
-  "modules"     : {
+  "description"   : "Настройка модуля для работы из Json файла, где каждый объект на отдельной строке. Используются следующие модули: Оптимист, Пессимист, Синоптик, Математик. Данные выводяться на консоль",
+  "modules"       : {
     "JsonDataSource" : {
-      "settings"     : {
-        "sourceFile" : "test_data.json",
-        "filters"    : {
-          "equals" : [
-            { "field" : "city.country", "value" : "RU" },
-            { "field" : "city.name", "value" : "Moscow" }
-          ]
-        },
-        "mappers"    : [
-          {
-            "getter" : "main.humidity",
-            "setter" : "humidity"
-          }, {
-            "getter" : "main.pressure",
-            "setter" : "pressure"
-          }, {
-            "getter" : "main.temp",
-            "setter" : "temp"
-          }, {
-            "getter" : "wind.deg",
-            "setter" : "wind.deg"
-          }, {
-            "getter" : "wind.speed",
-            "setter" : "wind.speed"
-          }, {
-            "getter" : "clouds.all",
-            "setter" : "clouds"
-          },
-          {
-            "getter" : "time",
-            "setter" : "time"
-          }
-        ]
-      },
-      "outputScheme" : {
-        "title"      : "TempMeasure",
-        "type"       : "object",
-        "properties" : {
-          "time"     : {
-            "type"        : "long",
-            "description" : "время измерения"
-          },
-          "humidity" : {
-            "type"        : "integer",
-            "description" : "влажность"
-          },
-          "clouds"   : {
-            "type"        : "integer",
-            "description" : "облачность в размере от 1 до 100"
-          },
-          "pressure" : {
-            "type"        : "integer",
-            "description" : "давление"
-          },
-          "temp"     : {
-            "type"        : "double",
-            "description" : "температура в фаренгейтах"
-          },
-          "wind"     : {
-            "type"        : "object",
-            "description" : "ветер",
-            "properties"  : {
-              "deg"   : {
-                "type"        : "integer",
-                "description" : "направление ветра"
-              },
-              "speed" : {
-                "type"        : "integer",
-                "description" : "скорость ветра ветра"
-              }
-            }
-          }
-        }
+      "settings" : {
+        "sourceFile" : "test_data.json"
       }
     },
     "Optimist"       : {
@@ -136,105 +65,135 @@
           "Mathematician" : 0.4,
           "Synoptic"    : 0.1
         },
-        "inputScheme" : {
+        "inputScheme"   : {
           "title" : ""
         },
-        "mappings"    : {
-          "Optimist"     : [
-            {
-              "from" : "answer",
-              "to"   : "value"
-            }
-          ],
-          "Pessimist"    : [
-            {
-              "from" : "answer",
-              "to"   : "value"
-            }
-          ],
-          "Mathematician"  : [
-            {
-              "from" : "answer",
-              "to"   : "value"
-            }
-          ],
-          "Synoptic"     : [
-            {
-              "from" : "answer",
-              "to"   : "value"
-            }
-          ],
-          "transformers" : {
-            "Pessimist"   : {
-              "answer" : {
-                "from"   : "string",
-                "to"     : "integer",
-                "equals" : {
-                  "Завтра можно не просыпаться" : 1,
-                  "Мама, роди меня обратно"     : 2,
-                  "Хорошего не жди"             : 3
-                }
-              }
-            },
-            "Optimist"    : {
-              "answer" : {
-                "from"   : "string",
-                "to"     : "integer",
-                "equals" : {
-                  "Отличная погодка"             : 1,
-                  "У природы нет плохой погоды"  : 2,
-                  "Завтра будет лучше чем вчера" : 3
-                }
-              }
-            },
-            "Mathematician" : {
-              "answer" : {
-                "from"        : "double",
-                "to"          : "integer",
-                "comparisons" : {
-                  "lessThen"    : {
-                    "value" : 33.33,
-                    "then"  : 1
-                  },
-                  "between"     : {
-                    "from" : 33.33,
-                    "to"   : 66.66,
-                    "then" : 2
-                  },
-                  "greaterThen" : {
-                    "value" : 66.66,
-                    "then"  : 3
-                  }
-                }
-              }
-            },
-            "Synoptic"    : {
-              "answer" : {
-                "from"   : "string",
-                "to"     : "integer",
-                "equals" : {
-                  "Как вчера"          : 1,
-                  "Туманно"            : 2,
-                  "Ясно как всегда"    : 3,
-                  "Погода перменчивая" : 4
-                }
-              }
-            }
+        "dataFlowGraph" : {
+          "broadCast" : {
+            "producer"  : "JsonDataSource",
+            "consumers" : [ "Optimist", "Pessimist", "Synoptic", "Mathematician" ]
+          },
+          "bundle"    : {
+            "producers"  : [ "Optimist", "Pessimist", "Synoptic", "Mathematician" ],
+            "consumer"   : "SolutionModule",
+            "bundleSize" : 1
           }
         }
       }
-    },
-    "console"        : {
-      "settings" : {
-        "listerTo" : [
-          "JsonDataSource",
-          "solution",
-          "Optimist",
-          "Pessimist",
-          "Mathematician",
-          "Synoptic"
+    }
+  },
+  "dataListeners" : {
+    "id"       : "console",
+    "listerTo" : [
+      "SolutionModule",
+      "Optimist",
+      "Pessimist",
+      "Mathematician",
+      "Synoptic"
+    ]
+  },
+  "mappers"       : [
+    {
+      "description" : "Convert input data to application format",
+      "producers"   : [ "JsonDataSource" ],
+      "consumers"   : [ "Optimist", "Pessimist", "Mathematician", "Synoptic" ],
+      "filters"     : [
+        {
+          "name"   : "equals",
+          "fields" : [
+            { "field" : "city.country", "value" : "RU" },
+            { "field" : "city.name", "value" : "Moscow" }
+          ]
+        }
+      ],
+      "transfers"   : {
+        "template" : {
+          "id" : "raw"
+        },
+        "mappings" : [
+          {
+            "from" : "main.humidity",
+            "to"   : "humidity"
+          }, {
+            "from" : "main.pressure",
+            "to"   : "pressure"
+          }, {
+            "from" : "main.temp",
+            "to"   : "temp"
+          }, {
+            "from" : "wind.deg",
+            "to"   : "wind.deg"
+          }, {
+            "from" : "wind.speed",
+            "to"   : "wind.speed"
+          }, {
+            "from" : "clouds.all",
+            "to"   : "clouds"
+          },
+          {
+            "from" : "time",
+            "to"   : "time"
+          }
         ]
       }
+    },
+    {
+      "description" : "Convert simple modules data to solution format",
+      "producers"   : [ "Optimist", "Pessimist", "Synoptic" ],
+      "consumers"   : [ "SolutionModule" ],
+      "converters"  : [
+        {
+          "sourcePath" : "answer",
+          "targetPath" : "value",
+          "matcher"    : {
+            "name" : "mapper",
+            "map"  : {
+              "Завтра можно не просыпаться"  : 1,
+              "Мама, роди меня обратно"      : 2,
+              "Хорошего не жди"              : 3,
+              "Отличная погодка"             : 1,
+              "У природы нет плохой погоды"  : 2,
+              "Завтра будет лучше чем вчера" : 3,
+              "Как вчера"                    : 1,
+              "Туманно"                      : 2,
+              "Ясно как всегда"              : 3,
+              "Погода перменчивая"           : 4
+            }
+          }
+        }
+      ]
+    },
+    {
+      "description" : "Convert Mathematician module data to solution format",
+      "producers"   : [ "Optimist", "Pessimist", "Synoptic" ],
+      "consumers"   : [ "SolutionModule" ],
+      "converter"   : [
+        {
+          "sourcePath" : "answer",
+          "targetPath" : "value",
+          "matcher"    : {
+            "name"     : "anyOf",
+            "matchers" : [
+              {
+                "name"       : "lessThen",
+                "matchValue" : 1,
+                "template"   : 33.33
+              },
+              {
+                "name"       : "between",
+                "matchValue" : 2,
+                "from"       : 33.330,
+                "to"         : 66.66
+              },
+              {
+                "name"       : "greatThen",
+                "matchValue" : 3,
+                "template"   : 66.660
+              }
+            ]
+          }
+        }
+      ]
     }
-  }
+  ]
 }
