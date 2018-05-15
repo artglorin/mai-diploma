@@ -136,13 +136,67 @@
       "targetPath" : "mapped[0]",
       "matchValue" : { "say" : "yes" },
       "matcher"    : {
-        "name"     : "between",
-        "type"     : "double",
+        "name" : "between",
+        "type" : "double",
         "from" : 1.0,
-        "to" : 2.0
+        "to"   : 2.0
       }
     },
     "target"   : { "one" : "test" },
     "expected" : { "one" : "test", "mapped" : [ { "say" : "yes" } ] }
+  },
+  {
+    "caseName" : "test convert from {\"value\" : 1.5} by path \"value\" to {\"one\":\"exist\"} by path \"mapped[0]\" with ComplexMatcher from 1.0=ONE to 1.5=ONE_AND_HALF ",
+    "source"   : {
+      "value" : 1.5
+    },
+    "settings" : {
+      "sourcePath" : "value",
+      "targetPath" : "mapped[0]",
+      "matcher"    : {
+        "name"     : "complex",
+        "matchers" : [
+          {
+            "name"       : "equals",
+            "template"   : 1.0,
+            "matchValue" : "ONE"
+          },
+          {
+            "name"       : "equals",
+            "template"   : 1.5,
+            "matchValue" : "ONE_AND_HALF"
+          }
+        ]
+      }
+    },
+    "target"   : { "one" : "test" },
+    "expected" : { "one" : "test", "mapped" : [ "ONE_AND_HALF" ] }
+  },
+  {
+    "caseName" : "test convert from {\"value\" : 1.5} by path \"value\" to {\"one\":\"exist\"} by path \"mapped[0]\" with ComplexMatcher from 1.0=ONE to 2.5=ONE_AND_HALF ",
+    "source"   : {
+      "value" : 1.5
+    },
+    "settings" : {
+      "sourcePath" : "value",
+      "targetPath" : "mapped[0]",
+      "matcher"    : {
+        "name"     : "complex",
+        "matchers" : [
+          {
+            "name"       : "equals",
+            "template"   : 1.0,
+            "matchValue" : "ONE"
+          },
+          {
+            "name"       : "equals",
+            "template"   : 2.5,
+            "matchValue" : "ONE_AND_HALF"
+          }
+        ]
+      }
+    },
+    "target"   : { "one" : "test" },
+    "expected" : { "one" : "test" }
   }
 ]

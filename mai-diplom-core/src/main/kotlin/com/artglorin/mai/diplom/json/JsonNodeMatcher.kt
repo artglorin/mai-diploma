@@ -84,7 +84,7 @@ object JsonNodeMatcherFactory {
             }
             "between" -> {
                 val type = settings.get("type").asText()
-                when (type){
+                when (type) {
 //                    template.isTextual -> StringEqualsMatcher(template.asText())
 //                    template.isInt -> IntegerEqualsMatcher(template.asInt())
 //                    template.isBigInteger -> BigIntegerEqualsMatcher(template.bigIntegerValue())
@@ -96,7 +96,6 @@ object JsonNodeMatcherFactory {
                     else -> throw IllegalArgumentException("Unsupported json type: $type. Supported values: $types")
                 }
             }
-//            "between" -> BetweenTransformerMatcher(settings.path("from"), settings.path("to"))
             else -> throw IllegalArgumentException("Unsupported TransformerMatcher type: '$name'")
         }
     }
@@ -187,7 +186,7 @@ class DoubleLessThanMatcher(private val template: Double) : JsonNodeMatcher() {
 //<editor-fold desc="Between">
 class DoubleBetweenMatcher(private val from: Double, private val to: Double) : JsonNodeMatcher() {
     override fun match(node: JsonNode): Boolean {
-        return (from <= node.doubleValue()).and( node.doubleValue() <= to)
+        return (from <= node.doubleValue()).and(node.doubleValue() <= to)
     }
 
     override fun toString(): String {
