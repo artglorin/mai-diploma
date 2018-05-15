@@ -2,20 +2,23 @@ package com.artglorin.mai.diplom.core
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.MissingNode
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.springframework.core.io.ClassPathResource
 import java.util.function.BiConsumer
 
 /**
  * @author V.Verminskiy (vverminskiy@alfabank.ru)
  * @since 05/05/2018
  */
-internal class ConfigurationKtTest {
+internal class ConfigurationTest {
 
-    open class TestModule: Module, Customizable, SolutionModule {
+    open class TestModule : Module, Customizable, SolutionModule {
         override fun process(data: List<JsonNode>) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
@@ -65,6 +68,19 @@ internal class ConfigurationKtTest {
         configuration.configure(spy)
         verify(spy, times(1)).getModuleId()
         verify(spy, times(0)).applySettings(any())
+    }
+
+    @Test
+    fun `test deserialize configuration`() {
+        val configuration = ConfigurationLoader({ ClassPathResource("AppConfiguration.json").uri }).loadProperties()
+        assertEquals("path", configuration.modulesPath)
+        assertTrue(configuration.modules.isNotEmpty())
+        assertNotEquals(MissingNode.getInstance(), configuration.modules["one"]?.settings)
+        assertTrue(configuration.filters.isNotEmpty())
+        assertEquals(1, configuration.filters.size)
+        assertEquals(1, configuration.filters[0].producers.size)
+        assertEquals(3, configuration.filters[0].consumers.size)
+        assertNotEquals(MissingNode.getInstance(), configuration.filters[0].filter)
     }
 
 }

@@ -1,0 +1,15 @@
+{
+  "modulesPath" : "path",
+  "modules"     : {
+    "one" : {
+      "settings" : { }
+    }
+  },
+  "filters" : [
+    {
+      "producers"   : [ "one" ],
+      "consumers"   : [ "two", "three", "four" ],
+      "filter" : {}
+    }
+  ]
+}

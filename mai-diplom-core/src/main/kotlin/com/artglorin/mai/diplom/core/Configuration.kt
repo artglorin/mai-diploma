@@ -4,6 +4,7 @@ import com.artglorin.mai.diplom.error
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.MissingNode
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
 import java.net.URI
@@ -16,8 +17,13 @@ import java.nio.file.Paths
  */
 data class Configuration(
         var modulesPath: String = FilesAndFolders.MODULES_DIR,
-        var modules: Map<String, ModuleConfig> = emptyMap()
+        var modules: Map<String, ModuleConfig> = emptyMap(),
+        var filters: List<FilterConfig> = emptyList()
 )
+
+data class FilterConfig(var producers: Collection<String> = emptyList(),
+                        var consumers: Collection<String> = emptyList(),
+                        var filter: JsonNode = MissingNode.getInstance())
 
 object ConfigurationLogger{
     val LOG = LoggerFactory.getLogger(ConfigurationLogger::class.java.name)!!
@@ -38,7 +44,7 @@ fun Configuration.configure(module: Module) {
     }
 }
 
-data class ModuleConfig(var settings: JsonNode = ObjectMapper().createObjectNode().nullNode(),
+data class ModuleConfig(var settings: JsonNode = MissingNode.getInstance(),
                         var id: String = ""
 )
 
