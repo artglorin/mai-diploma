@@ -16,7 +16,7 @@
         "answers" : [ "Завтра можно не просыпаться", "Мама, роди меня обратно", "Хорошего не жди" ]
       }
     },
-    "Mathematician"    : { },
+    "Mathematician"  : { },
     "Synoptic"       : {
       "settings" : {
         "answers" : [ "Как вчера", "Туманно", "Ясно как всегда", "Погода перменчивая" ]
@@ -25,31 +25,31 @@
     "taskManager"    : {
       "settings" : {
         "dependencies" : {
-          "Optimist"    : {
+          "Optimist"       : {
             "input"    : {
               "from" : "JsonDataSource"
             },
             "priority" : 0.1
           },
-          "Pessimist"   : {
+          "Pessimist"      : {
             "input"    : {
               "from" : "JsonDataSource"
             },
             "priority" : 0.1
           },
-          "Mathematician" : {
+          "Mathematician"  : {
             "input"    : {
               "from" : "JsonDataSource"
             },
             "priority" : 0.1
           },
-          "Synoptic"    : {
+          "Synoptic"       : {
             "input"    : {
               "from" : "JsonDataSource"
             },
             "priority" : 0.1
           },
-          "solution"    : {
+          "SolutionModule" : {
             "input" : {
               "allOf" : [ "Optimist", "Pessimist", "Mathematician", "Synoptic" ]
             }
@@ -57,13 +57,13 @@
         }
       }
     },
-    "solution"       : {
+    "SolutionModule" : {
       "settings" : {
-        "weights"     : {
-          "Optimist"    : 0.25,
-          "Pessimist"   : 0.25,
+        "weights"       : {
+          "Optimist"      : 0.25,
+          "Pessimist"     : 0.25,
           "Mathematician" : 0.4,
-          "Synoptic"    : 0.1
+          "Synoptic"      : 0.1
         },
         "inputScheme"   : {
           "title" : ""
