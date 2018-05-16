@@ -1,5 +1,6 @@
 package com.artglorin.mai.diplom.json
 
+import com.artglorin.mai.diplom.core.CopierConfig
 import com.fasterxml.jackson.databind.JsonNode
 
 /**
@@ -11,7 +12,10 @@ interface JsonNodeCopier {
     fun transfer(from: JsonNode, to : JsonNode)
 }
 
-class SimpleJsonNodeCopier(private val getter: JsonNodeGetter, private val setter: JsonNodeSetter) : JsonNodeCopier {
+class SimpleJsonNodeCopier(
+        private val getter: JsonNodeGetter,
+        private val setter: JsonNodeSetter
+) : JsonNodeCopier {
     override fun transfer(from: JsonNode, to: JsonNode) {
         setter.set(getter.extract(from).deepCopy(), to)
     }
@@ -19,9 +23,10 @@ class SimpleJsonNodeCopier(private val getter: JsonNodeGetter, private val sette
 
 class JsonNodeCopierFactory {
     companion object {
-        fun create(settings: JsonNode): JsonNodeCopier {
-            return SimpleJsonNodeCopier(JsonNodeGetterFactory.create(settings.get("from").textValue()),
-                    JsonNodeSetterFactory.create(settings.get("to").textValue()))
+        fun create(settings: CopierConfig): JsonNodeCopier {
+            return SimpleJsonNodeCopier(
+                    JsonNodeGetterFactory.create(settings.from),
+                    JsonNodeSetterFactory.create(settings.to))
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.artglorin.mai.diplom.json
 
+import com.artglorin.mai.diplom.core.CopierConfig
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -19,7 +20,9 @@ internal class JsonNodeCopierFactoryTest {
                 .map {
                     DynamicTest.dynamicTest(it.get("caseName").textValue(), {
                         val target = it.get("target")
-                        JsonNodeCopierFactory.create(it.get("settings")).transfer(it.get("source"), target)
+
+                        val settings = it.get("settings")
+                        JsonNodeCopierFactory.create(CopierConfig(settings.get("from").textValue(), settings.get("to").textValue())).transfer(it.get("source"), target)
                         assertEquals(it.get("expected"), target)
                     })
                 }

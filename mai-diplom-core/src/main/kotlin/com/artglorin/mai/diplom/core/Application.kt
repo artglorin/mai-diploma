@@ -16,8 +16,9 @@ open class Application(@Autowired private val loader: MultipleModuleLoader) {
     @PostConstruct
     fun init() {
         LOG.debug("Starting load modules")
-        val result = loader.load(arrayOf(DataSourceModule::class,
-                TaskManagerModule::class
+        val result = loader.load(arrayOf(
+                DataSourceModule::class
+                , TaskManagerModule::class
                 , DataHandlerModule::class
                 , DataObserver::class
                 , SolutionModule::class
@@ -29,7 +30,8 @@ open class Application(@Autowired private val loader: MultipleModuleLoader) {
         val solution = result.getModulesFor(SolutionModule::class, ModulesNames.SOLUTION)[0]
         LOG.info("Modules were loaded. Starting configure modules")
         val allModules = ArrayList(sources) + taskManager + dataHandlers + observers + solution
-        APP_CONFIG.loadProperties().configure(allModules)
+        val configuration = APP_CONFIG.loadProperties()
+        configuration.configure(allModules)
         LOG.debug("Add observers to modules")
         (ArrayList<ObservableModule>(sources) + dataHandlers + solution).forEach {
             val observable = it
@@ -38,6 +40,9 @@ open class Application(@Autowired private val loader: MultipleModuleLoader) {
         LOG.debug("Set sources and handlers to task manager")
         taskManager.setSources(sources)
         taskManager.setHandlers(dataHandlers)
+        taskManager.setSolution(solution)
+        taskManager.setDataFlow(configuration.dataFlow)
+        taskManager.setPipes(configuration.pipes.map { PipeFactory.create(it) })
         LOG.debug("Run tasks")
         taskManager.process()
     }

@@ -8,16 +8,16 @@
   "dataFlow"    : [
     {
       "moduleId" : "one",
-      "outputId"   : "a-out"
+      "outputId" : "a-out"
     },
     {
       "moduleId" : "two",
-      "inputId"    : "a-out",
-      "outputId"   : "b-in"
+      "inputId"  : "a-out",
+      "outputId" : "b-in"
     },
     {
       "moduleId"    : "three",
-      "inputId"       : "c-out",
+      "inputId"     : "c-out",
       "wholeSeries" : true
     }
   ],
@@ -30,13 +30,8 @@
       ],
       "copiers"    : [
         {
-          "template" : { },
-          "paths"    : [
-            {
-              "from" : "one",
-              "to"   : "to"
-            }
-          ]
+          "from" : "one",
+          "to"   : "to"
         }
       ],
       "converters" : [

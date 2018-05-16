@@ -1,11 +1,13 @@
 package com.artglorin.mai.diplom.core
 
 import com.artglorin.mai.diplom.error
+import com.artglorin.mai.diplom.json.JsonFilter
+import com.artglorin.mai.diplom.json.JsonNodeCopier
+import com.artglorin.mai.diplom.json.JsonValueConverter
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.MissingNode
-import com.fasterxml.jackson.databind.node.ObjectNode
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
 import java.net.URI
@@ -36,6 +38,15 @@ data class PipeConfiguration(
         var filters: List<JsonNode> = emptyList(),
         var copiers: List<CopierConfig> = emptyList(),
         var converters: List<ConverterDescription> = emptyList()
+)
+
+data class Pipe(
+        var inputId: List<String> = emptyList(),
+        var outputId: List<String> = emptyList(),
+        var filters: List<JsonFilter> = emptyList(),
+        var copiers: List<JsonNodeCopier> = emptyList(),
+        var converters: List<JsonValueConverter> = emptyList()
+
 
 )
 
@@ -49,8 +60,8 @@ data class ConverterDescription(
 )
 
 data class CopierConfig(
-        var template: JsonNode = MissingNode.getInstance(),
-        var paths: List<ObjectNode> = emptyList()
+        var from: String = "",
+        var to: String = ""
 )
 
 object ConfigurationLogger {

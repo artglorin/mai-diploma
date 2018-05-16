@@ -43,6 +43,8 @@ interface TaskManagerModule : Module {
     fun setSources(source: List<DataSourceModule>)
     fun setHandlers(handler: List<DataHandlerModule>)
     fun setSolution(solutionModule: SolutionModule)
+    fun setDataFlow(dataFlow: List<FlowItem>)
+    fun setPipes(pipes: List<Pipe>)
     fun process()
 }
 
