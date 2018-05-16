@@ -5,38 +5,48 @@
       "settings" : { }
     }
   },
-  "filters"     : [
+  "dataFlow"    : [
     {
-      "producers" : [ "one" ],
-      "consumers" : [ "two", "three", "four" ],
-      "filter"    : { }
+      "moduleId" : "one",
+      "outputId"   : "a-out"
+    },
+    {
+      "moduleId" : "two",
+      "inputId"    : "a-out",
+      "outputId"   : "b-in"
+    },
+    {
+      "moduleId"    : "three",
+      "inputId"       : "c-out",
+      "wholeSeries" : true
     }
   ],
-  "copiers"     : [
+  "pipes"       : [
     {
-      "producers" : [ "one" ],
-      "consumers" : [ "two", "three", "four" ],
-      "template"  : { },
-      "paths"     : [
+      "inputId"    : [ "a-in" ],
+      "outputId"   : [ "a-out" ],
+      "filters"    : [
+        { }
+      ],
+      "copiers"    : [
         {
-          "from" : "one",
-          "to"   : "to"
+          "template" : { },
+          "paths"    : [
+            {
+              "from" : "one",
+              "to"   : "to"
+            }
+          ]
         }
-      ]
-    }
-  ],
-  "converters"  : [
-    {
-      "producers"  : [ "one" ],
-      "consumers"  : [ "two", "three", "four" ],
+      ],
       "converters" : [
         {
-          "sourcePath"    : "one",
-          "targetPath"    : "two",
-          "matchValue"    : "one",
-          "mismatchValue" : "one",
-          "matcherId" : "one",
-          "matcherSettings"      : [
+          "sourcePath"      : "one",
+          "targetPath"      : "two",
+          "matchValue"      : "2",
+          "mismatchValue"   : "3",
+          "matcherId"       : "oo",
+          "matcherSettings" : [
             { }
           ]
         }

@@ -19,15 +19,24 @@ import java.nio.file.Paths
 data class Configuration(
         var modulesPath: String = FilesAndFolders.MODULES_DIR,
         var modules: Map<String, ModuleConfig> = emptyMap(),
-        var filters: List<FilterConfig> = emptyList(),
-        var copiers: List<CopierConfig> = emptyList(),
-        var converters: List<ConverterConfig> = emptyList()
+        var dataFlow: List<FlowItem> = emptyList(),
+        var pipes: List<PipeConfiguration> = emptyList()
 )
 
-data class ConverterConfig(
-        var producers: Collection<String> = emptyList(),
-        var consumers: Collection<String> = emptyList(),
+data class FlowItem (
+        var moduleId : String = "",
+        var inputId: String = "",
+        var outputId: String = "",
+        var wholeSeries: Boolean = false
+)
+
+data class PipeConfiguration(
+        var inputId: List<String> = emptyList(),
+        var outputId: List<String> = emptyList(),
+        var filters: List<JsonNode> = emptyList(),
+        var copiers: List<CopierConfig> = emptyList(),
         var converters: List<ConverterDescription> = emptyList()
+
 )
 
 data class ConverterDescription(
@@ -40,16 +49,8 @@ data class ConverterDescription(
 )
 
 data class CopierConfig(
-        var producers: Collection<String> = emptyList(),
-        var consumers: Collection<String> = emptyList(),
         var template: JsonNode = MissingNode.getInstance(),
         var paths: List<ObjectNode> = emptyList()
-)
-
-data class FilterConfig(
-        var producers: Collection<String> = emptyList(),
-        var consumers: Collection<String> = emptyList(),
-        var filter: JsonNode = MissingNode.getInstance()
 )
 
 object ConfigurationLogger {

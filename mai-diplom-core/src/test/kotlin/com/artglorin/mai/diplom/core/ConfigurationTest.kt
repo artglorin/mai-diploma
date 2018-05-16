@@ -2,6 +2,7 @@ package com.artglorin.mai.diplom.core
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.MissingNode
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.spy
@@ -76,27 +77,43 @@ internal class ConfigurationTest {
         assertEquals("path", configuration.modulesPath)
         assertTrue(configuration.modules.isNotEmpty())
         assertNotEquals(MissingNode.getInstance(), configuration.modules["one"]?.settings)
-        assertTrue(configuration.filters.isNotEmpty())
-        assertEquals(1, configuration.filters.size)
-        assertEquals(1, configuration.filters[0].producers.size)
-        assertEquals(3, configuration.filters[0].consumers.size)
-        assertNotEquals(MissingNode.getInstance(), configuration.filters[0].filter)
-        assertTrue(configuration.copiers.isNotEmpty())
-        assertEquals(1, configuration.copiers.size)
-        assertEquals(1, configuration.copiers[0].producers.size)
-        assertEquals(3, configuration.copiers[0].consumers.size)
-        assertNotEquals(MissingNode.getInstance(), configuration.copiers[0].template)
-        assertEquals(1, configuration.copiers[0].paths.size)
-        assertNotEquals(MissingNode.getInstance(), configuration.copiers[0].paths[0])
-        assertTrue(configuration.converters.isNotEmpty())
-        assertEquals(1, configuration.converters[0].producers.size)
-        assertEquals(3, configuration.converters[0].consumers.size)
-        assertTrue(configuration.converters[0].converters.isNotEmpty())
-        assertTrue(configuration.converters[0].converters[0].sourcePath.isNotBlank())
-        assertTrue(configuration.converters[0].converters[0].targetPath.isNotBlank())
-        assertNotEquals(MissingNode.getInstance(), configuration.converters[0].converters[0].mismatchValue)
-        assertNotEquals(MissingNode.getInstance(), configuration.converters[0].converters[0].matchValue)
-        assertTrue(configuration.converters[0].converters[0].matcherId.isNotBlank())
+        assertEquals(3, configuration.dataFlow.size)
+        assertEquals("one", configuration.dataFlow[0].moduleId)
+        assertEquals("", configuration.dataFlow[0].inputId)
+        assertEquals("a-out", configuration.dataFlow[0].outputId)
+        assertEquals(false, configuration.dataFlow[0].wholeSeries)
+        assertEquals("two", configuration.dataFlow[1].moduleId)
+        assertEquals("a-out", configuration.dataFlow[1].inputId)
+        assertEquals("b-in", configuration.dataFlow[1].outputId)
+        assertEquals(false, configuration.dataFlow[1].wholeSeries)
+        assertEquals("three", configuration.dataFlow[2].moduleId)
+        assertEquals("c-out", configuration.dataFlow[2].inputId)
+        assertEquals("", configuration.dataFlow[2].outputId)
+        assertEquals(true, configuration.dataFlow[2].wholeSeries)
+        assertEquals(1, configuration.pipes.size)
+        assertEquals(1, configuration.pipes[0].inputId.size)
+        assertEquals("a-in", configuration.pipes[0].inputId[0])
+        assertEquals(1, configuration.pipes[0].outputId.size)
+        assertEquals("a-out", configuration.pipes[0].outputId[0])
+        assertEquals(1, configuration.pipes[0].filters.size)
+        assertEquals(JsonNodeFactory.instance.objectNode(), configuration.pipes[0].filters[0])
+        assertEquals(1, configuration.pipes[0].copiers.size)
+        assertEquals(JsonNodeFactory.instance.objectNode(), configuration.pipes[0].copiers[0].template)
+        assertEquals(1, configuration.pipes[0].copiers[0].paths.size)
+        assertEquals(JsonNodeFactory.instance.objectNode().apply {
+            put("from", "one")
+            put("to", "to")
+        }, configuration.pipes[0].copiers[0].paths[0])
+        assertEquals(1, configuration.pipes[0].converters.size)
+        assertEquals(1, configuration.pipes[0].converters.size)
+        assertEquals("one", configuration.pipes[0].converters[0].sourcePath)
+        assertEquals("two", configuration.pipes[0].converters[0].targetPath)
+        assertEquals(JsonNodeFactory.instance.textNode("2"), configuration.pipes[0].converters[0].matchValue)
+        assertEquals(JsonNodeFactory.instance.textNode("3"), configuration.pipes[0].converters[0].mismatchValue)
+        assertEquals("oo", configuration.pipes[0].converters[0].matcherId)
+        assertEquals(JsonNodeFactory.instance.arrayNode().apply {
+            addObject()
+        }, configuration.pipes[0].converters[0].matcherSettings)
     }
 
 }
