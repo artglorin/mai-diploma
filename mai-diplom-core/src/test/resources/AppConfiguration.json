@@ -5,11 +5,24 @@
       "settings" : { }
     }
   },
-  "filters" : [
+  "filters"     : [
     {
-      "producers"   : [ "one" ],
-      "consumers"   : [ "two", "three", "four" ],
-      "filter" : {}
+      "producers" : [ "one" ],
+      "consumers" : [ "two", "three", "four" ],
+      "filter"    : { }
+    }
+  ],
+  "copiers"     : [
+    {
+      "producers" : [ "one" ],
+      "consumers" : [ "two", "three", "four" ],
+      "template"  : { },
+      "paths"     : [
+        {
+          "from" : "one",
+          "to"   : "to"
+        }
+      ]
     }
   ]
 }

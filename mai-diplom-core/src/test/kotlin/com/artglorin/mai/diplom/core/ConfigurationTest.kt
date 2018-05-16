@@ -81,6 +81,13 @@ internal class ConfigurationTest {
         assertEquals(1, configuration.filters[0].producers.size)
         assertEquals(3, configuration.filters[0].consumers.size)
         assertNotEquals(MissingNode.getInstance(), configuration.filters[0].filter)
+        assertTrue(configuration.copiers.isNotEmpty())
+        assertEquals(1, configuration.copiers.size)
+        assertEquals(1, configuration.copiers[0].producers.size)
+        assertEquals(3, configuration.copiers[0].consumers.size)
+        assertNotEquals(MissingNode.getInstance(), configuration.copiers[0].template)
+        assertEquals(1, configuration.copiers[0].paths.size)
+        assertNotEquals(MissingNode.getInstance(), configuration.copiers[0].paths[0])
     }
 
 }

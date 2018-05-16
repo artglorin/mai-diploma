@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.MissingNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
 import java.net.URI
@@ -18,14 +19,24 @@ import java.nio.file.Paths
 data class Configuration(
         var modulesPath: String = FilesAndFolders.MODULES_DIR,
         var modules: Map<String, ModuleConfig> = emptyMap(),
-        var filters: List<FilterConfig> = emptyList()
+        var filters: List<FilterConfig> = emptyList(),
+        var copiers: List<CopierConfig> = emptyList()
 )
 
-data class FilterConfig(var producers: Collection<String> = emptyList(),
-                        var consumers: Collection<String> = emptyList(),
-                        var filter: JsonNode = MissingNode.getInstance())
+data class CopierConfig(
+        var producers: Collection<String> = emptyList(),
+        var consumers: Collection<String> = emptyList(),
+        var template: JsonNode = MissingNode.getInstance(),
+        var paths: List<ObjectNode> = emptyList()
+)
 
-object ConfigurationLogger{
+data class FilterConfig(
+        var producers: Collection<String> = emptyList(),
+        var consumers: Collection<String> = emptyList(),
+        var filter: JsonNode = MissingNode.getInstance()
+)
+
+object ConfigurationLogger {
     val LOG = LoggerFactory.getLogger(ConfigurationLogger::class.java.name)!!
 }
 
