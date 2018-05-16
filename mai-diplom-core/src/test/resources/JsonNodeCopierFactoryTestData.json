@@ -1,0 +1,44 @@
+{
+  "data" : [
+    {
+      "caseName" : "test copy node from object to object",
+      "settings" : {
+        "from" : "obj.my",
+        "to"   : "copyItem[0].toObject"
+      },
+      "source"   : { "obj" : { "my" : 1 }, "hi" : [ ] },
+      "target"   : { "notTouch" : 1 },
+      "expected" : { "notTouch" : 1, "copyItem" : [ { "toObject" : 1 } ] }
+    },
+    {
+      "caseName" : "test copy node from array to object",
+      "settings" : {
+        "from" : "[1].obj.my",
+        "to"   : "copyItem[0].toObject"
+      },
+      "source"   : [ null, { "obj" : { "my" : 1 }, "hi" : [ ] } ],
+      "target"   : { "notTouch" : 1 },
+      "expected" : { "notTouch" : 1, "copyItem" : [ { "toObject" : 1 } ] }
+    },
+    {
+      "caseName" : "test copy node from array to array",
+      "settings" : {
+        "from" : "[1].obj.my",
+        "to"   : "[5]"
+      },
+      "source"   : [ null, { "obj" : { "my" : 1 }, "hi" : [ ] } ],
+      "target"   : [],
+      "expected" : [ null, null, null, null, null, 1 ]
+    },
+    {
+      "caseName" : "test copy node from object to array",
+      "settings" : {
+        "from" : "obj.my",
+        "to"   : "[5]"
+      },
+      "source"   : { "obj" : { "my" : 1 }, "hi" : [ ] },
+      "target"   : [],
+      "expected" : [ null, null, null, null, null, 1 ]
+    }
+  ]
+}
