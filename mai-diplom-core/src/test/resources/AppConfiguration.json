@@ -24,5 +24,22 @@
         }
       ]
     }
+  ],
+  "converters"  : [
+    {
+      "producers"  : [ "one" ],
+      "consumers"  : [ "two", "three", "four" ],
+      "converters" : [
+        {
+          "sourcePath"    : "one",
+          "targetPath"    : "two",
+          "matchValue"    : "one",
+          "mismatchValue" : "one",
+          "matchers"      : [
+            { }
+          ]
+        }
+      ]
+    }
   ]
 }

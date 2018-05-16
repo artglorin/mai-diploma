@@ -167,7 +167,7 @@
       "description" : "Convert Mathematician module data to solution format",
       "producers"   : [ "Optimist", "Pessimist", "Synoptic" ],
       "consumers"   : [ "SolutionModule" ],
-      "converter"   : [
+      "convertersKSALj,hd"   : [
         {
           "sourcePath" : "answer",
           "targetPath" : "value",

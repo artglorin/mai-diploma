@@ -20,7 +20,22 @@ data class Configuration(
         var modulesPath: String = FilesAndFolders.MODULES_DIR,
         var modules: Map<String, ModuleConfig> = emptyMap(),
         var filters: List<FilterConfig> = emptyList(),
-        var copiers: List<CopierConfig> = emptyList()
+        var copiers: List<CopierConfig> = emptyList(),
+        var converters: List<ConverterConfig> = emptyList()
+)
+
+data class ConverterConfig(
+        var producers: Collection<String> = emptyList(),
+        var consumers: Collection<String> = emptyList(),
+        var converters: List<ConverterDescription> = emptyList()
+)
+
+data class ConverterDescription(
+        var sourcePath: String = "",
+        var targetPath: String = "",
+        var matchValue: String = "",
+        var mismatchValue: String = "",
+        var matchers : List<ObjectNode> = emptyList()
 )
 
 data class CopierConfig(
