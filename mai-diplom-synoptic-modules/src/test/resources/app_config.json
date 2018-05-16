@@ -143,23 +143,61 @@
       "consumers"   : [ "SolutionModule" ],
       "converters"  : [
         {
-          "sourcePath" : "answer",
-          "targetPath" : "value",
-          "matcher"    : {
-            "name" : "mapper",
-            "map"  : {
-              "Завтра можно не просыпаться"  : 1,
-              "Мама, роди меня обратно"      : 2,
-              "Хорошего не жди"              : 3,
-              "Отличная погодка"             : 1,
-              "У природы нет плохой погоды"  : 2,
-              "Завтра будет лучше чем вчера" : 3,
-              "Как вчера"                    : 1,
-              "Туманно"                      : 2,
-              "Ясно как всегда"              : 3,
-              "Погода перменчивая"           : 4
+          "sourcePath"      : "answer",
+          "targetPath"      : "value",
+          "matcherId"       : "complex",
+          "matcherSettings" : [
+            {
+              "name"       : "equals",
+              "template"   : "Завтра можно не просыпаться",
+              "matchValue" : 1
+            },
+            {
+              "name"       : "equals",
+              "template"   : "Мама, роди меня обратно",
+              "matchValue" : 2
+            },
+            {
+              "name"       : "equals",
+              "template"   : "Хорошего не жди",
+              "matchValue" : 3
+            },
+            {
+              "name"       : "equals",
+              "template"   : "Отличная погодка",
+              "matchValue" : 1
+            },
+            {
+              "name"       : "equals",
+              "template"   : "У природы нет плохой погоды",
+              "matchValue" : 2
+            },
+            {
+              "name"       : "equals",
+              "template"   : "Завтра будет лучше чем вчера",
+              "matchValue" : 3
+            },
+            {
+              "name"       : "equals",
+              "template"   : "Как вчера",
+              "matchValue" : 1
+            },
+            {
+              "name"       : "equals",
+              "template"   : "Туманно",
+              "matchValue" : 2
+            },
+            {
+              "name"       : "equals",
+              "template"   : "Ясно как всегда",
+              "matchValue" : 3
+            },
+            {
+              "name"       : "equals",
+              "template"   : "Погода перменчивая",
+              "matchValue" : 4
             }
-          }
+          ]
         }
       ]
     },
@@ -167,31 +205,29 @@
       "description" : "Convert Mathematician module data to solution format",
       "producers"   : [ "Optimist", "Pessimist", "Synoptic" ],
       "consumers"   : [ "SolutionModule" ],
-      "convertersKSALj,hd"   : [
+      "converters"  : [
         {
-          "sourcePath" : "answer",
-          "targetPath" : "value",
-          "matcher"    : {
-            "name"     : "anyOf",
-            "matchers" : [
-              {
-                "name"       : "lessThen",
-                "matchValue" : 1,
-                "template"   : 33.33
-              },
-              {
-                "name"       : "between",
-                "matchValue" : 2,
-                "from"       : 33.330,
-                "to"         : 66.66
-              },
-              {
-                "name"       : "greatThen",
-                "matchValue" : 3,
-                "template"   : 66.660
-              }
-            ]
-          }
+          "sourcePath"      : "answer",
+          "targetPath"      : "value",
+          "matcherId"       : "complex",
+          "matcherSettings" : [
+            {
+              "name"       : "lessThen",
+              "matchValue" : 1,
+              "template"   : 33.33
+            },
+            {
+              "name"       : "between",
+              "matchValue" : 2,
+              "from"       : 33.330,
+              "to"         : 66.66
+            },
+            {
+              "name"       : "greatThen",
+              "matchValue" : 3,
+              "template"   : 66.660
+            }
+          ]
         }
       ]
     }

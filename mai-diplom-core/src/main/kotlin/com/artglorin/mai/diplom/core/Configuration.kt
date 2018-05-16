@@ -33,9 +33,10 @@ data class ConverterConfig(
 data class ConverterDescription(
         var sourcePath: String = "",
         var targetPath: String = "",
-        var matchValue: String = "",
-        var mismatchValue: String = "",
-        var matchers : List<ObjectNode> = emptyList()
+        var matchValue: JsonNode = MissingNode.getInstance(),
+        var mismatchValue: JsonNode = MissingNode.getInstance(),
+        var matcherId : String = "",
+        var matcherSettings : JsonNode = MissingNode.getInstance()
 )
 
 data class CopierConfig(

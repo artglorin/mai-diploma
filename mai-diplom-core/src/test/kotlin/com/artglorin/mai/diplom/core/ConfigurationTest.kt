@@ -92,11 +92,11 @@ internal class ConfigurationTest {
         assertEquals(1, configuration.converters[0].producers.size)
         assertEquals(3, configuration.converters[0].consumers.size)
         assertTrue(configuration.converters[0].converters.isNotEmpty())
-        assertNotEquals("", configuration.converters[0].converters[0].sourcePath)
-        assertNotEquals("", configuration.converters[0].converters[0].targetPath)
-        assertNotEquals("", configuration.converters[0].converters[0].mismatchValue)
-        assertNotEquals("", configuration.converters[0].converters[0].matchValue)
-        assertTrue(configuration.converters[0].converters[0].matchers.isNotEmpty())
+        assertTrue(configuration.converters[0].converters[0].sourcePath.isNotBlank())
+        assertTrue(configuration.converters[0].converters[0].targetPath.isNotBlank())
+        assertNotEquals(MissingNode.getInstance(), configuration.converters[0].converters[0].mismatchValue)
+        assertNotEquals(MissingNode.getInstance(), configuration.converters[0].converters[0].matchValue)
+        assertTrue(configuration.converters[0].converters[0].matcherId.isNotBlank())
     }
 
 }

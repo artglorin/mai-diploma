@@ -35,7 +35,8 @@
           "targetPath"    : "two",
           "matchValue"    : "one",
           "mismatchValue" : "one",
-          "matchers"      : [
+          "matcherId" : "one",
+          "matcherSettings"      : [
             { }
           ]
         }

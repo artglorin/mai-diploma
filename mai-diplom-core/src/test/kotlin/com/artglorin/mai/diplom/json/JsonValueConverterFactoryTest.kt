@@ -1,5 +1,6 @@
 package com.artglorin.mai.diplom.json
 
+import com.artglorin.mai.diplom.core.ConverterDescription
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -27,7 +28,15 @@ internal class JsonValueConverterFactoryTest {
             DynamicTest.dynamicTest(it.get("caseName").asText(), {
                 LOG.info("$it")
                 val target = it.get("target")
-                JsonValueConverterFactory.create(it.get("settings")).transfer(it.get("source"),target)
+                val settings = it.get("settings")
+                JsonValueConverterFactory.create(ConverterDescription(
+                        settings.path("sourcePath").textValue(),
+                        settings.path("targetPath").textValue(),
+                        settings.path("matchValue"),
+                        settings.path("mismatchValue"),
+                        settings.path("matcherId").textValue(),
+                        settings.path("matcherSettings")
+                )).transfer(it.get("source"),target)
                 assertEquals(it.get("expected"), target)
             })
         }

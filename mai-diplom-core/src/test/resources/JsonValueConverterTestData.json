@@ -5,10 +5,11 @@
       "string" : "value"
     },
     "settings" : {
-      "sourcePath" : "string",
-      "targetPath" : "result.value",
-      "matchValue" : "SUCCESS",
-      "matcher"    : {
+      "sourcePath"      : "string",
+      "targetPath"      : "result.value",
+      "matchValue"      : "SUCCESS",
+      "matcherId"       : "equals",
+      "matcherSettings" : {
         "name"     : "equals",
         "template" : "value"
       }
@@ -29,7 +30,8 @@
       "sourcePath" : "[0]",
       "targetPath" : "fromArray",
       "matchValue" : "SUCCESS",
-      "matcher"    : {
+      "matcherId"  : "equals",
+      "matcherSettings"    : {
         "name"     : "equals",
         "template" : "value"
       }
@@ -48,7 +50,8 @@
       "sourcePath" : "[0]",
       "targetPath" : "[0].fromArray",
       "matchValue" : "SUCCESS",
-      "matcher"    : {
+      "matcherId"  : "equals",
+      "matcherSettings"    : {
         "name"     : "equals",
         "template" : "value"
       }
@@ -67,7 +70,8 @@
       "sourcePath" : "int",
       "targetPath" : "array[0]",
       "matchValue" : "SUCCESS",
-      "matcher"    : {
+      "matcherId"  : "equals",
+      "matcherSettings"    : {
         "name"     : "equals",
         "template" : 1
       }
@@ -84,7 +88,8 @@
       "sourcePath" : "bigDecimal",
       "targetPath" : "bigDecimal",
       "matchValue" : 345,
-      "matcher"    : {
+      "matcherId"  : "equals",
+      "matcherSettings"    : {
         "name"     : "equals",
         "template" : 123456789987654321.123456654321
       }
@@ -98,10 +103,11 @@
       "value" : 2.0
     },
     "settings" : {
-      "sourcePath" : "value",
-      "targetPath" : "mapped[0]",
-      "matchValue" : { "say" : "yes" },
-      "matcher"    : {
+      "sourcePath"      : "value",
+      "targetPath"      : "mapped[0]",
+      "matcherId"       : "equals",
+      "matchValue"      : { "say" : "yes" },
+      "matcherSettings" : {
         "name"     : "greatThen",
         "template" : 1.0
       }
@@ -115,10 +121,11 @@
       "value" : 2.0
     },
     "settings" : {
-      "sourcePath" : "value",
-      "targetPath" : "mapped[0]",
-      "matchValue" : { "say" : "yes" },
-      "matcher"    : {
+      "sourcePath"      : "value",
+      "targetPath"      : "mapped[0]",
+      "matcherId"       : "equals",
+      "matchValue"      : { "say" : "yes" },
+      "matcherSettings" : {
         "name"     : "lessThen",
         "template" : 2.0000001
       }
@@ -132,10 +139,11 @@
       "value" : 1.5
     },
     "settings" : {
-      "sourcePath" : "value",
-      "targetPath" : "mapped[0]",
-      "matchValue" : { "say" : "yes" },
-      "matcher"    : {
+      "sourcePath"      : "value",
+      "targetPath"      : "mapped[0]",
+      "matcherId"       : "equals",
+      "matchValue"      : { "say" : "yes" },
+      "matcherSettings" : {
         "name" : "between",
         "type" : "double",
         "from" : 1.0,
@@ -151,23 +159,21 @@
       "value" : 1.5
     },
     "settings" : {
-      "sourcePath" : "value",
-      "targetPath" : "mapped[0]",
-      "matcher"    : {
-        "name"     : "complex",
-        "matchers" : [
-          {
-            "name"       : "equals",
-            "template"   : 1.0,
-            "matchValue" : "ONE"
-          },
-          {
-            "name"       : "equals",
-            "template"   : 1.5,
-            "matchValue" : "ONE_AND_HALF"
-          }
-        ]
-      }
+      "sourcePath"      : "value",
+      "targetPath"      : "mapped[0]",
+      "matcherId"       : "complex",
+      "matcherSettings" : [
+        {
+          "name"       : "equals",
+          "template"   : 1.0,
+          "matchValue" : "ONE"
+        },
+        {
+          "name"       : "equals",
+          "template"   : 1.5,
+          "matchValue" : "ONE_AND_HALF"
+        }
+      ]
     },
     "target"   : { "one" : "test" },
     "expected" : { "one" : "test", "mapped" : [ "ONE_AND_HALF" ] }
@@ -178,23 +184,21 @@
       "value" : 1.5
     },
     "settings" : {
-      "sourcePath" : "value",
-      "targetPath" : "mapped[0]",
-      "matcher"    : {
-        "name"     : "complex",
-        "matchers" : [
-          {
-            "name"       : "equals",
-            "template"   : 1.0,
-            "matchValue" : "ONE"
-          },
-          {
-            "name"       : "equals",
-            "template"   : 2.5,
-            "matchValue" : "ONE_AND_HALF"
-          }
-        ]
-      }
+      "sourcePath"      : "value",
+      "targetPath"      : "mapped[0]",
+      "matcherId"       : "complex",
+      "matcherSettings" : [
+        {
+          "name"       : "equals",
+          "template"   : 1.0,
+          "matchValue" : "ONE"
+        },
+        {
+          "name"       : "equals",
+          "template"   : 2.5,
+          "matchValue" : "ONE_AND_HALF"
+        }
+      ]
     },
     "target"   : { "one" : "test" },
     "expected" : { "one" : "test" }
