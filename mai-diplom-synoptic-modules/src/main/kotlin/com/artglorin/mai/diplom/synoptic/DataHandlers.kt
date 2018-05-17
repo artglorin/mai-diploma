@@ -1,9 +1,8 @@
 package com.artglorin.mai.diplom.synoptic
 
+import com.artglorin.mai.diplom.core.Customizable
 import com.artglorin.mai.diplom.core.DataHandlerModule
-import com.artglorin.mai.diplom.core.JsonNodeObservableImpl
-import com.artglorin.mai.diplom.core.Processor
-import com.artglorin.mai.diplom.core.Settingable
+import com.artglorin.mai.diplom.core.JsonNodeListenersContainer
 import com.artglorin.mai.diplom.json.*
 import com.fasterxml.jackson.databind.JsonNode
 import java.util.*
@@ -16,20 +15,19 @@ import java.util.function.Consumer
 
 open class SimpleAnswerDataHandler: DataHandlerModule, Settingable, Processor {
 
-    private var answers: List<String>? = null
     private val random = Random()
-    private val outId = lazy { "${getModuleId()}.out"}
-    private val inId = lazy { "${getModuleId()}.out"}
+    private val outId = lazy { "${getModuleId()}.out" }
+    private val inId = lazy { "${getModuleId()}.in" }
 
-    private val listeners = lazy {
-        JsonNodeObservableImpl()
+    override fun addListener(listener: Consumer<JsonNode>) {
+        listeners.value.addObserver(listener)
     }
 
-    override fun process(data: JsonNode) {
-        if (listeners.isInitialized() && answers != null) {
-            answers?.let { it[random.nextInt(it.size)] }
-                    ?.let { JacksonNodeFactory.createModuleResult(outId.value, it) }
-                    ?.apply (listeners.value::notify)
+    override fun push(node: JsonNode) {
+        val answers = answers ?: throw IllegalStateException("Answers must be specified")
+        if (listeners.isInitialized()) {
+            listeners.value.notify((answers.let { it[random.nextInt(it.size)] }
+                    .let { JacksonNodeFactory.createModuleResult(outId.value, "", it) }))
         }
     }
 
@@ -60,7 +58,7 @@ open class SimpleAnswerDataHandler: DataHandlerModule, Settingable, Processor {
     data class Settings(var answers: List<String>? = null)
 }
 
-class Optimist: SimpleAnswerDataHandler()
-class Pessimist: SimpleAnswerDataHandler()
-class Synoptic: SimpleAnswerDataHandler()
-class Mathematician: SimpleAnswerDataHandler()
+class Optimist : SimpleAnswerDataHandler()
+class Pessimist : SimpleAnswerDataHandler()
+class Synoptic : SimpleAnswerDataHandler()
+class Mathematician : SimpleAnswerDataHandler()
