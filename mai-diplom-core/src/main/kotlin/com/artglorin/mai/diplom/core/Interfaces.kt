@@ -1,8 +1,7 @@
 package com.artglorin.mai.diplom.core
 
 import com.fasterxml.jackson.databind.JsonNode
-import java.util.function.BiConsumer
-import java.util.stream.Stream
+import java.util.function.Consumer
 
 /**
  * @author V.Verminskiy (vverminskiy@alfabank.ru)
@@ -14,11 +13,7 @@ interface Module {
 }
 
 interface Processor {
-    fun process(data: JsonNode)
-}
-
-interface BatchProcessor {
-    fun process(data: List<JsonNode>)
+    fun process(data: JsonNode) : JsonNode
 }
 
 interface Customizable {
@@ -27,35 +22,33 @@ interface Customizable {
 
 interface OutputModule : Module {
     fun getOutputSchema(): JsonNode
+    fun addListener (listener: Consumer<JsonNode>)
 }
 
 interface InputModule : Module {
     fun getInputSchema(): JsonNode
+    fun push(node: JsonNode)
 }
 
-interface DataSourceModule : ObservableModule {
-    fun getData(): Stream<JsonNode>
+interface DataSourceModule : Module, OutputModule {
+    fun launch()
 }
 
-interface DataHandlerModule : ObservableModule, InputModule, OutputModule
+interface DataHandlerModule :  InputModule, OutputModule
 
-interface TaskManagerModule : Module {
-    fun setSources(source: List<DataSourceModule>)
-    fun setHandlers(handler: List<DataHandlerModule>)
-    fun setSolution(solutionModule: SolutionModule)
-    fun setDataFlow(dataFlow: List<FlowItem>)
-    fun setPipes(pipes: List<Pipe>)
+interface TaskManagerModule : Module{
+    fun setData(data: TaskManagerData)
     fun process()
 }
+data class TaskManagerData (
+        val sources: List<DataSourceModule>,
+        val handlers: List<DataHandlerModule>,
+        val solutionModule: SolutionModule,
+        val observables: List<DataObserver>,
+        val dataFlow: List<FlowItem>,
+        val pipes: List<Pipe>
+)
 
-interface ObservableModule : Module {
-    fun addObserver(observer: BiConsumer<Module, JsonNode>)
-}
+interface DataObserver :  InputModule
 
-interface DataObserver : BiConsumer<Module, JsonNode>, Module {
-    fun getObservablesIds(): Collection<String>
-}
-
-interface SolutionModule : ObservableModule, OutputModule, InputModule {
-    fun process(data: List<JsonNode>)
-}
+interface SolutionModule : InputModule, OutputModule

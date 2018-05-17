@@ -11,7 +11,7 @@ import com.nhaarman.mockito_kotlin.verify
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.core.io.ClassPathResource
-import java.util.function.BiConsumer
+import java.util.function.Consumer
 
 /**
  * @author V.Verminskiy (vverminskiy@alfabank.ru)
@@ -20,11 +20,7 @@ import java.util.function.BiConsumer
 internal class ConfigurationTest {
 
     open class TestModule : Module, Customizable, SolutionModule {
-        override fun process(data: List<JsonNode>) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        override fun addObserver(observer: BiConsumer<Module, JsonNode>) {
+        override fun addListener(listener: Consumer<JsonNode>) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -32,6 +28,9 @@ internal class ConfigurationTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
+        override fun push(node: JsonNode) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
         override fun getInputSchema(): JsonNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
@@ -79,27 +78,20 @@ internal class ConfigurationTest {
         assertNotEquals(MissingNode.getInstance(), configuration.modules["one"]?.settings)
         assertEquals(3, configuration.dataFlow.size)
         assertEquals("one", configuration.dataFlow[0].moduleId)
-        assertEquals("", configuration.dataFlow[0].inputId)
-        assertEquals("a-out", configuration.dataFlow[0].outputId)
-        assertEquals(false, configuration.dataFlow[0].wholeSeries)
+        assertEquals(listOf<String>(), configuration.dataFlow[0].inputId)
+        assertEquals(listOf("a-out"), configuration.dataFlow[0].outputId)
         assertEquals("two", configuration.dataFlow[1].moduleId)
-        assertEquals("a-out", configuration.dataFlow[1].inputId)
-        assertEquals("b-in", configuration.dataFlow[1].outputId)
-        assertEquals(false, configuration.dataFlow[1].wholeSeries)
+        assertEquals(listOf("a-out"), configuration.dataFlow[1].inputId)
+        assertEquals(listOf("b-in"), configuration.dataFlow[1].outputId)
         assertEquals("three", configuration.dataFlow[2].moduleId)
-        assertEquals("c-out", configuration.dataFlow[2].inputId)
-        assertEquals("", configuration.dataFlow[2].outputId)
-        assertEquals(true, configuration.dataFlow[2].wholeSeries)
+        assertEquals(listOf("c-out"), configuration.dataFlow[2].inputId)
+        assertEquals(listOf<String>(), configuration.dataFlow[2].outputId)
         assertEquals(1, configuration.pipes.size)
-        assertEquals(1, configuration.pipes[0].inputId.size)
-        assertEquals("a-in", configuration.pipes[0].inputId[0])
-        assertEquals(1, configuration.pipes[0].outputId.size)
-        assertEquals("a-out", configuration.pipes[0].outputId[0])
-        assertEquals(1, configuration.pipes[0].filters.size)
-        assertEquals(JsonNodeFactory.instance.objectNode(), configuration.pipes[0].filters[0])
-        assertEquals(1, configuration.pipes[0].copiers.size)
-        assertEquals("one", configuration.pipes[0].copiers[0].from)
-        assertEquals("to", configuration.pipes[0].copiers[0].to)
+        assertNotNull(1, configuration.pipes[0].id)
+        assertEquals(JsonNodeFactory.instance.objectNode(), configuration.pipes[0].filter)
+        assertNotNull( configuration.pipes[0].template)
+//        assertEquals("one", configuration.pipes[0].copiers[0].from)
+//        assertEquals("to", configuration.pipes[0].copiers[0].to)
         assertEquals(1, configuration.pipes[0].converters.size)
         assertEquals(1, configuration.pipes[0].converters.size)
         assertEquals("one", configuration.pipes[0].converters[0].sourcePath)

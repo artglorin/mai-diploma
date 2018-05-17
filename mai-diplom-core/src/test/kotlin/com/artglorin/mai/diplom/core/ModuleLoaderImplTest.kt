@@ -10,8 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.function.BiConsumer
-import java.util.stream.Stream
+import java.util.function.Consumer
 
 /**
  * @author V.Verminskiy (vverminskiy@alfabank.ru)
@@ -56,22 +55,31 @@ internal class ModuleLoaderImplTest {
     }
 
     class PrivateDataSource(val int: Int) : DataSourceModule {
-        override fun addObserver(observer: BiConsumer<Module, JsonNode>) {
+        override fun getOutputSchema(): JsonNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun getData(): Stream<JsonNode> {
-            return Stream.empty()
+        override fun addListener(listener: Consumer<JsonNode>) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
+
+        override fun launch() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
     }
 
     open class EmptyDataSource : DataSourceModule {
-        override fun addObserver(observer: BiConsumer<Module, JsonNode>) {
+        override fun addListener(listener: Consumer<JsonNode>) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun getData(): Stream<JsonNode> {
-            return Stream.empty()
+        override fun launch() {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getOutputSchema(): JsonNode {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
     }
 

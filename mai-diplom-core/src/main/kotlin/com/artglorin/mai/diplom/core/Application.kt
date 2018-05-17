@@ -33,16 +33,17 @@ open class Application(@Autowired private val loader: MultipleModuleLoader) {
         val configuration = APP_CONFIG.loadProperties()
         configuration.configure(allModules)
         LOG.debug("Add observers to modules")
-        (ArrayList<ObservableModule>(sources) + dataHandlers + solution).forEach {
-            val observable = it
-            observers.filter { it.getObservablesIds().contains(observable.getModuleId()) }.forEach(observable::addObserver)
-        }
         LOG.debug("Set sources and handlers to task manager")
-        taskManager.setSources(sources)
-        taskManager.setHandlers(dataHandlers)
-        taskManager.setSolution(solution)
-        taskManager.setDataFlow(configuration.dataFlow)
-        taskManager.setPipes(configuration.pipes.map { PipeFactory.create(it) })
+        taskManager.setData(
+                TaskManagerData(
+                        sources,
+                        dataHandlers,
+                        solution,
+                        observers,
+                        configuration.dataFlow,
+                        configuration.pipes.map { PipeFactory.create(it) }
+                )
+        )
         LOG.debug("Run tasks")
         taskManager.process()
     }
