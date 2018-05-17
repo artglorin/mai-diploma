@@ -17,7 +17,34 @@ import java.util.function.Consumer
  * @since 05/05/2018
  */
 
-class JsonDataSource : DataSourceModule, Settingable, JsonNodeObservable {
+class JsonDataSource : DataSourceModule, Customizable {
+
+    private val listeners = lazy {
+        JsonNodeListenersContainer()
+    }
+
+    override fun getOutputSchema(): JsonNode {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
+    override fun addListener(listener: Consumer<JsonNode>) {
+        listeners.value.addObserver(listener)
+    }
+
+    override fun launch() {
+        val mapper = ObjectMapper()
+        if (listeners.isInitialized()) {
+            Files
+                    .lines(sourceFile)
+                    .map { mapper.readTree(it) }
+                    .map { JacksonNodeFactory.createModuleResult(getModuleId(), idGenerator.incrementAndGet().toString(), it) }
+                    .forEach {
+                        listeners.value.notify(it)
+                    }
+        }
+    }
+
     private var sourceFile: Path? = null
     private var idGenerator = AtomicInteger()
 

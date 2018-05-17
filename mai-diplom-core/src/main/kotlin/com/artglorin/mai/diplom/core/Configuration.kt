@@ -1,8 +1,6 @@
 package com.artglorin.mai.diplom.core
 
 import com.artglorin.mai.diplom.error
-import com.artglorin.mai.diplom.json.JsonFilter
-import com.artglorin.mai.diplom.json.JsonValueConverter
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -12,7 +10,6 @@ import org.springframework.core.io.ClassPathResource
 import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.util.function.Consumer
 
 /**
  * @author V.Verminskiy (vverminskiy@alfabank.ru)
@@ -38,33 +35,6 @@ data class PipeConfiguration(
         var converters: List<ConverterDescription> = emptyList()
 )
 
-data class Pipe(
-        val id: String,
-        private val filters: JsonFilter? = null,
-        private val template: JsonNode? = null,
-        private val converters: List<JsonValueConverter> = emptyList()
-) {
-    private val listeners = lazy {
-        JsonNodeListenersContainer()
-    }
-    fun push(node: JsonNode) {
-        if (listeners.isInitialized()) {
-            if (filters != null && filters.pass(node).not()) {
-                return
-            }
-            var result : JsonNode = node
-            if (converters.isNotEmpty()) {
-                result = template?.deepCopy() ?: node.deepCopy()
-                converters.forEach { it.transfer(node, result) }
-            }
-            listeners.value.notify(result)
-        }
-    }
-
-    fun addListener(listener: Consumer<JsonNode>) {
-        listeners.value.addObserver(listener)
-    }
-}
 
 data class ConverterDescription(
         var sourcePath: String = "",

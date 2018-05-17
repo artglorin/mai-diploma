@@ -13,7 +13,12 @@ import java.util.function.Consumer
  * @since 05/05/2018
  */
 
-open class SimpleAnswerDataHandler: DataHandlerModule, Settingable, Processor {
+open class SimpleAnswerDataHandler : DataHandlerModule, Customizable {
+
+    private var answers: List<String>? = null
+    private val listeners = lazy {
+        JsonNodeListenersContainer()
+    }
 
     private val random = Random()
     private val outId = lazy { "${getModuleId()}.out" }
@@ -42,10 +47,6 @@ open class SimpleAnswerDataHandler: DataHandlerModule, Settingable, Processor {
             property("answer", StringType)
             addRequired("answer")
         }.build()
-    }
-
-    override fun addObserver(observer: Consumer<JsonNode>) {
-        listeners.value.addObserver(observer)
     }
 
     override fun getInputSchema(): JsonNode {
