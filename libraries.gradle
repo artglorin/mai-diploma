@@ -1,7 +1,7 @@
 ext {
   slf4j_version = '1.7.25'
   log4j_version = "2.11.0"
-  kotlin_version = '1.2.31'
+  kotlin_version = '1.2.41'
   junit_version = "5.2.0"
   apache_lang = "3.7"
   apache_io = "2.6"
