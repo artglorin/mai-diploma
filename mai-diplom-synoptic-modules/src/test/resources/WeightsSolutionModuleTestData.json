@@ -1,0 +1,63 @@
+{
+  "settings": {
+    "weights" : [
+      {
+        "moduleId" : "one",
+        "weight"   : 0.2
+      },
+      {
+        "moduleId" : "two",
+        "weight"   : 0.25
+      },
+      {
+        "moduleId" : "three",
+        "weight"   : 0.25
+      },
+      {
+        "moduleId" : "four",
+        "weight"   : 0.3
+      }
+    ]
+  },
+  "data"     : [
+    {
+      "caseName" : "One item expected one answer",
+      "items"    : [
+        {
+          "moduleId" : "one"
+        }
+      ],
+      "expected" : { "moduleId" : "one" }
+    },
+    {
+      "caseName" : "Two items expected answer with higher priority",
+      "items"    : [
+        {
+          "moduleId" : "one"
+        },
+        {
+          "moduleId" : "two"
+        }
+      ],
+      "expected" : { "moduleId" : "two" }
+    },
+    {
+      "caseName" : "Four items expected answer with the most higher priority",
+      "items"    : [
+        {
+          "moduleId" : "one"
+        },
+        {
+          "moduleId" : "two"
+        },
+        {
+          "moduleId" : "three"
+        },
+        {
+          "moduleId" : "four"
+        }
+      ],
+      "expected" : { "moduleId" : "four" }
+    }
+  ]
+}
