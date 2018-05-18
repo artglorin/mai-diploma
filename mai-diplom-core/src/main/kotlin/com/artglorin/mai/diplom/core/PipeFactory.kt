@@ -36,12 +36,12 @@ class Pipe(
         JsonNodeListenersContainer()
     }
 
-    fun push(node: JsonNode) {
+    fun push(node: ObjectNode) {
         if (listeners.isInitialized()) {
             if (filters != null && filters.pass(node).not()) {
                 return
             }
-            var result: JsonNode = node
+            var result: ObjectNode = node
             if (converters.isNotEmpty()) {
                 result = template?.deepCopy() ?: node.deepCopy()
                 converters.forEach { it.transfer(node, result) }
@@ -50,7 +50,7 @@ class Pipe(
         }
     }
 
-    fun addListener(listener: Consumer<JsonNode>) {
+    fun addListener(listener: Consumer<ObjectNode>) {
         listeners.value.addObserver(listener)
     }
 }

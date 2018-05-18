@@ -1,7 +1,7 @@
 package com.artglorin.mai.diplom.synoptic
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.jupiter.api.Test
@@ -18,7 +18,7 @@ internal class JsonDataSourceTest {
     @Test
     fun `test read data from file`() {
         @Suppress("UNCHECKED_CAST")
-        val listener = mock(Consumer::class.java) as Consumer<JsonNode>
+        val listener = mock(Consumer::class.java) as Consumer<ObjectNode>
         val dataSource = JsonDataSource()
         dataSource.applySettings(JsonNodeFactory.instance.objectNode().apply {
             put("sourceFile", "test_data.json")

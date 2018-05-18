@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.MissingNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.times
@@ -20,18 +21,19 @@ import java.util.function.Consumer
 internal class ConfigurationTest {
 
     open class TestModule : Module, Customizable, SolutionModule {
-        override fun addListener(listener: Consumer<JsonNode>) {
+        override fun push(data: Collection<ObjectNode>) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun getOutputSchema(): JsonNode {
+        override fun addListener(listener: Consumer<ObjectNode>) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun push(node: JsonNode) {
+        override fun getOutputSchema(): ObjectNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
-        override fun getInputSchema(): JsonNode {
+
+        override fun getInputSchema(): ObjectNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 

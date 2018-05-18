@@ -2,8 +2,8 @@ package com.artglorin.mai.diplom.core
 
 import com.artglorin.mai.diplom.json.JsonFilterFactory
 import com.artglorin.mai.diplom.json.JsonValueConverterFactory
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -34,7 +34,7 @@ internal class PipeTest {
                 })
         )
         @Suppress("UNCHECKED_CAST")
-        val listener = mock(Consumer::class.java) as Consumer<JsonNode>
+        val listener = mock(Consumer::class.java) as Consumer<ObjectNode>
         pipe.addListener(listener)
         pipe.push(factory.objectNode().apply {
             put("obj", 1)
@@ -44,9 +44,6 @@ internal class PipeTest {
         })
         pipe.push(factory.objectNode().apply {
             put("obj", 2)
-        })
-        pipe.push(factory.arrayNode().apply {
-            add(2)
         })
         verify(listener, times(2)).accept(any())
     }
@@ -70,10 +67,10 @@ internal class PipeTest {
                 )))
         )
         @Suppress("UNCHECKED_CAST")
-        val listener = object: Consumer<JsonNode> {
-            val items = ArrayList<JsonNode>()
+        val listener = object: Consumer<ObjectNode> {
+            val items = ArrayList<ObjectNode>()
 
-            override fun accept(t: JsonNode) {
+            override fun accept(t: ObjectNode) {
                 items.add(t)
             }
         }

@@ -2,6 +2,7 @@ package com.artglorin.mai.diplom.json
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import java.math.BigDecimal
 
 object JacksonNodeFactory {
@@ -9,10 +10,10 @@ object JacksonNodeFactory {
     private val factory = JsonNodeFactory.instance
     private val mapper = AppJsonMappers.ignoreUnknown
 
-    fun <T: Any>createModuleResult(moduleId: String, series: String, data: T): JsonNode {
+    fun <T: Any>createModuleResult(moduleId: String, series: String, data: T): ObjectNode {
         return factory.objectNode().apply {
             put("moduleId", moduleId)
-            put("series", series)
+            put("seriesId", series)
             putPOJO("data", data)
         }
     }

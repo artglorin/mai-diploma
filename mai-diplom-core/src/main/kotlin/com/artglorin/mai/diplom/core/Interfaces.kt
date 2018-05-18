@@ -1,6 +1,7 @@
 package com.artglorin.mai.diplom.core
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import java.util.function.Consumer
 
 /**
@@ -12,8 +13,9 @@ interface Module {
     fun getModuleId(): String = this::javaClass.name
 }
 
-interface Processor {
-    fun process(data: JsonNode) : JsonNode
+interface BatchProcessor: Module {
+    fun getInputSchema(): ObjectNode
+    fun push(data: Collection<ObjectNode>)
 }
 
 interface Customizable {
@@ -21,13 +23,13 @@ interface Customizable {
 }
 
 interface OutputModule : Module {
-    fun getOutputSchema(): JsonNode
-    fun addListener (listener: Consumer<JsonNode>)
+    fun getOutputSchema(): ObjectNode
+    fun addListener (listener: Consumer<ObjectNode>)
 }
 
 interface InputModule : Module {
-    fun getInputSchema(): JsonNode
-    fun push(node: JsonNode)
+    fun getInputSchema(): ObjectNode
+    fun push(node: ObjectNode)
 }
 
 interface DataSourceModule : Module, OutputModule {
@@ -51,4 +53,4 @@ data class TaskManagerData (
 
 interface DataObserver :  InputModule
 
-interface SolutionModule : InputModule, OutputModule
+interface SolutionModule : BatchProcessor, OutputModule

@@ -1,7 +1,7 @@
 package com.artglorin.mai.diplom.synoptic
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
@@ -18,7 +18,7 @@ internal class SimpleAnswerDataHandlerTest {
     fun `test read data from file`() {
         val dataHandler = SimpleAnswerDataHandler()
         @Suppress("UNCHECKED_CAST")
-        val listener = Mockito.mock(Consumer::class.java) as Consumer<JsonNode>
+        val listener = Mockito.mock(Consumer::class.java) as Consumer<ObjectNode>
         dataHandler.addListener(listener)
         val node = JsonNodeFactory.instance.objectNode().apply {
             putArray("answers").apply {

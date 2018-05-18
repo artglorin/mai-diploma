@@ -5,6 +5,7 @@ import com.artglorin.mai.diplom.core.DataHandlerModule
 import com.artglorin.mai.diplom.core.JsonNodeListenersContainer
 import com.artglorin.mai.diplom.json.*
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import java.util.*
 import java.util.function.Consumer
 
@@ -24,11 +25,11 @@ open class SimpleAnswerDataHandler : DataHandlerModule, Customizable {
     private val outId = lazy { "${getModuleId()}.out" }
     private val inId = lazy { "${getModuleId()}.in" }
 
-    override fun addListener(listener: Consumer<JsonNode>) {
+    override fun addListener(listener: Consumer<ObjectNode>) {
         listeners.value.addObserver(listener)
     }
 
-    override fun push(node: JsonNode) {
+    override fun push(node: ObjectNode) {
         val answers = answers ?: throw IllegalStateException("Answers must be specified")
         if (listeners.isInitialized()) {
             listeners.value.notify((answers.let { it[random.nextInt(it.size)] }
@@ -40,7 +41,7 @@ open class SimpleAnswerDataHandler : DataHandlerModule, Customizable {
         answers = AppJsonMappers.ignoreUnknown.treeToValue(settings, Settings::class.java)?.answers
     }
 
-    override fun getOutputSchema(): JsonNode {
+    override fun getOutputSchema(): ObjectNode {
         return JsonSchemaBuilder().apply {
             title = outId.value
             type = ObjectType
@@ -49,7 +50,7 @@ open class SimpleAnswerDataHandler : DataHandlerModule, Customizable {
         }.build()
     }
 
-    override fun getInputSchema(): JsonNode {
+    override fun getInputSchema(): ObjectNode {
         return JsonSchemaBuilder().apply {
             title = inId.value
             type = ObjectType

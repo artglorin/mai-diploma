@@ -1,7 +1,7 @@
 package com.artglorin.mai.diplom.core
 
 import com.artglorin.mai.diplom.test.JarUtil.makeServiceJarWithSingleClass
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import kotlinx.coroutines.experimental.runBlocking
 import org.apache.commons.io.FileUtils
 import org.junit.jupiter.api.AfterEach
@@ -55,11 +55,11 @@ internal class ModuleLoaderImplTest {
     }
 
     class PrivateDataSource(val int: Int) : DataSourceModule {
-        override fun getOutputSchema(): JsonNode {
+        override fun getOutputSchema(): ObjectNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun addListener(listener: Consumer<JsonNode>) {
+        override fun addListener(listener: Consumer<ObjectNode>) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -70,7 +70,7 @@ internal class ModuleLoaderImplTest {
     }
 
     open class EmptyDataSource : DataSourceModule {
-        override fun addListener(listener: Consumer<JsonNode>) {
+        override fun addListener(listener: Consumer<ObjectNode>) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -78,7 +78,7 @@ internal class ModuleLoaderImplTest {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun getOutputSchema(): JsonNode {
+        override fun getOutputSchema(): ObjectNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
     }

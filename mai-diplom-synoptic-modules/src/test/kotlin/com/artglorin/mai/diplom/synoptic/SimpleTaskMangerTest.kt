@@ -1,8 +1,8 @@
 package com.artglorin.mai.diplom.synoptic
 
 import com.artglorin.mai.diplom.core.*
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.artglorin.mai.diplom.json.JacksonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.times
@@ -15,38 +15,68 @@ import java.util.function.Consumer
  * @since 17/05/2018
  */
 internal class SimpleTaskMangerTest {
-    open class TestHandler(val name: String) : DataHandlerModule, SolutionModule, DataObserver, DataSourceModule {
+    open class TestHandler(private val name: String) : DataHandlerModule, DataObserver, DataSourceModule {
+        private val listeners = lazy {
+
+            JsonNodeListenersContainer()
+        }
+
+        override fun addListener(listener: Consumer<ObjectNode>) {
+            listeners.value.addObserver(listener)
+        }
+
         override fun launch() {
-            val node = JsonNodeFactory.instance.objectNode()
-            listeners.value.notify(node)
-//                for (i in 1..10) {
-//                }
+
+            listeners.value.notify(JacksonNodeFactory.createModuleResult(getModuleId(), "1", "")
+            )
         }
 
         override fun getModuleId(): String {
             return name
         }
 
+        override fun getInputSchema(): ObjectNode {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun push(node: ObjectNode) {
+
+            listeners.value.notify(JacksonNodeFactory.createModuleResult(getModuleId(), node.get("seriesId").textValue(), node))
+        }
+
+        override fun getOutputSchema(): ObjectNode {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+    }
+
+    open class TestBatchProcessor(private val name: String) : SolutionModule {
+        override fun getModuleId(): String {
+            return name
+        }
+
         private val listeners = lazy {
+
             JsonNodeListenersContainer()
         }
 
-        override fun addListener(listener: Consumer<JsonNode>) {
+        override fun addListener(listener: Consumer<ObjectNode>) {
             listeners.value.addObserver(listener)
         }
 
-        override fun getInputSchema(): JsonNode {
+        override fun getOutputSchema(): ObjectNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
-        override fun push(node: JsonNode) {
-            listeners.value.notify(node)
+        override fun push(data: Collection<ObjectNode>) {
+            data.forEach {
+
+                listeners.value.notify(JacksonNodeFactory.createModuleResult(getModuleId(), it.get("seriesId").textValue(), it))
+            }
         }
 
-        override fun getOutputSchema(): JsonNode {
+        override fun getInputSchema(): ObjectNode {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
-
     }
 
 
@@ -58,7 +88,7 @@ internal class SimpleTaskMangerTest {
         val modA = spy(TestHandler("A"))
         val modB = spy(TestHandler("B"))
         val modC = spy(TestHandler("C"))
-        val solution = spy(TestHandler("solution"))
+        val solution = spy(TestBatchProcessor("solution"))
         val l1 = spy(TestHandler("listener1"))
         val l2 = spy(TestHandler("listener2"))
         taskManger.setData(
@@ -97,7 +127,7 @@ internal class SimpleTaskMangerTest {
         verify(modA, times(1)).push(any())
         verify(modB, times(1)).push(any())
         verify(modC, times(1)).push(any())
-        verify(solution, times(2)).push(any())
+        verify(solution, times(1)).push(any<Collection<ObjectNode>>())
         verify(l1, times(3)).push(any())
         verify(l2, times(1)).push(any())
 

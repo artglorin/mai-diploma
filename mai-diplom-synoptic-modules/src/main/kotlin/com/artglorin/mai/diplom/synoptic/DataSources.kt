@@ -6,6 +6,7 @@ import com.artglorin.mai.diplom.core.JsonNodeListenersContainer
 import com.artglorin.mai.diplom.json.JacksonNodeFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import org.springframework.core.io.ClassPathResource
 import java.nio.file.Files
 import java.nio.file.Path
@@ -23,12 +24,12 @@ class JsonDataSource : DataSourceModule, Customizable {
         JsonNodeListenersContainer()
     }
 
-    override fun getOutputSchema(): JsonNode {
+    override fun getOutputSchema(): ObjectNode {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 
-    override fun addListener(listener: Consumer<JsonNode>) {
+    override fun addListener(listener: Consumer<ObjectNode>) {
         listeners.value.addObserver(listener)
     }
 
