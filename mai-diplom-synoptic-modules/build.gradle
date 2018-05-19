@@ -45,3 +45,5 @@ test {
         html.enabled = true
     }
 }
+
+apply from: file("./tasks.gradle")

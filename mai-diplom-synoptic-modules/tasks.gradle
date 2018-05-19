@@ -1,0 +1,35 @@
+task DataHandlersJar(group: "modulesJar", type: Jar) {
+  baseName = "DataHandlerModule"
+  include("com/artglorin/mai/diplom/synoptic/modules/datahandlers/**")
+  include("META-INF/services/com.artglorin.mai.diplom.core.api.DataHandlerModule")
+  with jar
+}
+task DataObserversJar(group: "modulesJar", type: Jar) {
+  baseName = "DataObserver"
+  include("com/artglorin/mai/diplom/synoptic/modules/datalisteners/**")
+  include("META-INF/services/com.artglorin.mai.diplom.core.api.DataObserver")
+  with jar
+}
+task DataSourcesJar(group: "modulesJar", type: Jar) {
+  baseName = "DataSourceModule"
+  include("com/artglorin/mai/diplom/synoptic/modules/datasource/**")
+  include("META-INF/services/com.artglorin.mai.diplom.core.api.DataSourceModule")
+  with jar
+}
+task SolutionJar(group: "modulesJar", type: Jar) {
+  baseName = "SolutionModule"
+  include("com/artglorin/mai/diplom/synoptic/modules/solutions/**")
+  include("META-INF/services/com.artglorin.mai.diplom.core.api.SolutionModule")
+  with jar
+}
+task TaskManagerJar(group: "modulesJar", type: Jar) {
+  baseName = "TaskManagerModule"
+  include("com/artglorin/mai/diplom/synoptic/modules/taskmanagers/**")
+  include("META-INF/services/com.artglorin.mai.diplom.core.api.TaskManagerModule")
+  with jar
+}
+
+task allModules(group: "modulesJar",
+        dependsOn: ["TaskManagerJar","SolutionJar", "DataSourcesJar", "DataObserversJar", "DataHandlersJar"]) {
+
+}
