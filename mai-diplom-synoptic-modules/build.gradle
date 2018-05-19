@@ -12,13 +12,16 @@ buildscript {
 group 'com.artglorin'
 version '0.0.1'
 
+apply plugin: 'java'
 apply plugin: 'kotlin'
+apply plugin: 'idea'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    compile project(':mai-diplom-core')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
@@ -31,9 +34,6 @@ compileTestKotlin {
 
 apply from: file('../libraries.gradle')
 
-dependencies{
-    compile project(':mai-diplom-core')
-}
 test {
     useJUnitPlatform()
 
