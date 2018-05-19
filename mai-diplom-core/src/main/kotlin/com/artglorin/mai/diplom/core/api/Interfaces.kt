@@ -12,7 +12,9 @@ import java.util.function.Consumer
  */
 
 interface Module {
-    fun getModuleId(): String = this::javaClass.name
+    fun getModuleId(): String {
+        return this::class.java.simpleName
+    }
 }
 
 interface BatchProcessor: Module {
