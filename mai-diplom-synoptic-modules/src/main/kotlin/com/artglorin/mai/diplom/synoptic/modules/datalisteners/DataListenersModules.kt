@@ -5,7 +5,6 @@ import com.artglorin.mai.diplom.core.api.DataObserver
 import com.artglorin.mai.diplom.json.JsonSchemaBuilder
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
-import org.springframework.core.io.ClassPathResource
 import java.io.File
 
 /**
@@ -20,12 +19,12 @@ class FileOutputModule: Customizable, DataObserver {
     }
 
     override fun push(node: ObjectNode) {
-        file?.appendText(node.asText())
+        file?.appendText(node.toString())
     }
 
     override fun applySettings(settings: JsonNode) {
         file = settings.get("file").textValue()?.let {
-            ClassPathResource(it).file
+            File(it)
         }?.apply {
             createNewFile()
         }
