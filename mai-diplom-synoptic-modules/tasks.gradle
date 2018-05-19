@@ -15,7 +15,7 @@ task DataObserversJar(group: "modulesJar", type: Jar) {
 }
 task DataSourcesJar(group: "modulesJar", type: Jar) {
   baseName = "DataSourceModule"
-  include("com/artglorin/mai/diplom/synoptic/modules/datasource/**")
+  include("com/artglorin/mai/diplom/synoptic/modules/datasources/**")
   include("META-INF/services/com.artglorin.mai.diplom.core.api.DataSourceModule")
   with jar
 }
