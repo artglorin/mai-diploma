@@ -47,12 +47,12 @@ interface TaskManagerModule : Module {
     fun process()
 }
 data class TaskManagerData (
-        val sources: List<DataSourceModule>,
-        val handlers: List<DataHandlerModule>,
+        val sources: Collection<DataSourceModule>,
+        val handlers: Collection<DataHandlerModule>,
         val solutionModule: SolutionModule,
-        val observables: List<DataObserver>,
-        val dataFlow: List<FlowItem>,
-        val pipes: List<Pipe>
+        val observables: Collection<DataObserver>,
+        val dataFlow: Collection<FlowItem>,
+        val pipes: Collection<Pipe>
 )
 
 interface DataObserver : InputModule
