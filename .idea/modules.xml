@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules/mai-diplom-synoptic-modules_test.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules/mai-diplom-synoptic-modules_test.iml" group="mai-diplom-synoptic-modules" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai.diplom.example.iml" filepath="$PROJECT_DIR$/.idea/modules/mai.diplom.example.iml" group="mai.diplom.example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/mai.diplom.example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/example/mai.diplom.example_main.iml" group="mai.diplom.example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/mai.diplom.example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/example/mai.diplom.example_test.iml" group="mai.diplom.example" />
     </modules>
   </component>
 </project>

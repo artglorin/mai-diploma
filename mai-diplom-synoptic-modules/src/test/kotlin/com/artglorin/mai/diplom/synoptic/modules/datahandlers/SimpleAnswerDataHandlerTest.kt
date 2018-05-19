@@ -21,6 +21,7 @@ internal class SimpleAnswerDataHandlerTest {
         val listener = Mockito.mock(Consumer::class.java) as Consumer<ObjectNode>
         dataHandler.addListener(listener)
         val node = JsonNodeFactory.instance.objectNode().apply {
+            put("seriesId", "0")
             putArray("answers").apply {
                 add("hello")
                 add("world")

@@ -6,9 +6,7 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.ClassPathResource
-import org.springframework.stereotype.Component
 import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Path
@@ -57,8 +55,7 @@ class MultipleModuleLoadResult(private val result: List<LoadResult<Module>>) {
     }
 }
 
-@Component
-class MultiplyModuleLoaderImpl(@Autowired private val factory: ModuleLoaderFactory) : MultipleModuleLoader {
+class MultiplyModuleLoaderImpl(private val factory: ModuleLoaderFactory) : MultipleModuleLoader {
     override fun load(loaders: Array<KClass<out Module>>): MultipleModuleLoadResult {
         val factories = loaders.map(factory::createLoader)
         return MultipleModuleLoadResult(runBlocking {
@@ -70,7 +67,6 @@ class MultiplyModuleLoaderImpl(@Autowired private val factory: ModuleLoaderFacto
 }
 
 
-@Component
 open class DefaultModuleLoaderFactory : ModuleLoaderFactory {
     override fun  createLoader(module: KClass<out Module>): ModuleLoader<Module> = when (module) {
         SolutionModule::class -> createSolutionModuleLoader()

@@ -1,7 +1,8 @@
 package com.artglorin.mai.diplom
 
 import com.artglorin.mai.diplom.core.Application
-import org.springframework.boot.SpringApplication
+import com.artglorin.mai.diplom.core.DefaultModuleLoaderFactory
+import com.artglorin.mai.diplom.core.MultiplyModuleLoaderImpl
 
 /**
  * @author V.Verminskiy (vverminskiy@alfabank.ru)
@@ -9,5 +10,5 @@ import org.springframework.boot.SpringApplication
  */
 
 fun main(args: Array<String>) {
-    SpringApplication.run(Application::class.java)
+    Application(MultiplyModuleLoaderImpl(DefaultModuleLoaderFactory()))
 }

@@ -3,13 +3,10 @@ package com.artglorin.mai.diplom.core
 import com.artglorin.mai.diplom.core.ConfigurationLoader.Companion.APP_CONFIG
 import com.artglorin.mai.diplom.core.api.*
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.SpringBootApplication
 import java.util.*
 import javax.annotation.PostConstruct
 
-@SpringBootApplication
-open class Application(@Autowired private val loader: MultipleModuleLoader) {
+open class Application(private val loader: MultipleModuleLoader) {
     companion object {
         val LOG = LoggerFactory.getLogger(Application::class.java.name)!!
     }

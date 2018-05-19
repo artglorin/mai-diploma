@@ -8,14 +8,11 @@ ext {
   snakeyaml_version = "1.21"
   jackson_version = "2.9.5"
   spring_version = "5.0.5.RELEASE"
-  spring_boot_version = "2.0.1.RELEASE"
   kotlin_kourutines_version = "0.22.5"
 
   libpack = [
           spring : [
-                  "org.springframework:spring-core:$spring_version",
-                  "org.springframework.boot:spring-boot:$spring_boot_version",
-                  "org.springframework.boot:spring-boot-starter:$spring_boot_version",
+                  "org.springframework:spring-core:$spring_version"
           ],
           utils  : [
                   "org.apache.commons:commons-lang3:$apache_lang",
@@ -36,8 +33,6 @@ ext {
           ],
           test   : [
                   "org.junit.jupiter:junit-jupiter-api:$junit_version",
-                  "org.springframework.boot:spring-boot-starter-test:$spring_boot_version",
-                  "org.springframework.boot:spring-boot-test:$spring_boot_version",
                   "org.junit.jupiter:junit-jupiter-engine:$junit_version",
                   "com.nhaarman:mockito-kotlin-kt1.1:1.5.0",
           ]
