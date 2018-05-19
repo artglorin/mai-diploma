@@ -1,0 +1,14 @@
+tasks.withType(Jar) {
+  destinationDir = file("bin")
+}
+
+task StandaloneJar(group: "Jar", type: Jar) {
+  manifest {
+    attributes 'Implementation-Title': 'Gradle Jar File Example',
+            'Implementation-Version': version,
+            'Main-Class': 'com.artglorin.mai.diplom.MainKt'
+  }
+  baseName = project.name + '-standalone'
+  from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+  with jar
+}
