@@ -19,7 +19,7 @@ class FileOutputModule: Customizable, DataObserver {
     }
 
     override fun push(node: ObjectNode) {
-        file?.appendText(node.toString())
+        file?.appendText("$node\n")
     }
 
     override fun applySettings(settings: JsonNode) {
