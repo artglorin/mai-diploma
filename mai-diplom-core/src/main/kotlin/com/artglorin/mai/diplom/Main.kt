@@ -10,5 +10,5 @@ import com.artglorin.mai.diplom.core.MultiplyModuleLoaderImpl
  */
 
 fun main(args: Array<String>) {
-    Application(MultiplyModuleLoaderImpl(DefaultModuleLoaderFactory()))
+    Application(MultiplyModuleLoaderImpl(DefaultModuleLoaderFactory())).loadModulesAndStart()
 }
