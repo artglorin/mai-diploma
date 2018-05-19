@@ -30,6 +30,15 @@ class SingleJsonValueConverter(private val nodeGetter: JsonNodeGetter,
     }
 }
 
+class CopyJsonValueConverter(private val nodeGetter: JsonNodeGetter,
+                               private val nodeSetter: JsonNodeSetter) : JsonValueConverter {
+
+    override fun transfer(from: JsonNode, to: JsonNode): Boolean {
+        nodeSetter.set(nodeGetter.extract(from), to)
+        return true
+    }
+}
+
 class ComplexJsonValueConverters(private val others: Collection<JsonValueConverter>) : JsonValueConverter {
     override fun transfer(from: JsonNode, to: JsonNode): Boolean {
         return others.any { it.transfer(from, to) }
@@ -41,18 +50,20 @@ internal object JsonValueConverterFactory {
 
         val sourceGetter = JsonNodeGetterFactory.create(settings.sourcePath)
         val targetSetter = JsonNodeSetterFactory.create(settings.targetPath)
-        return if ("complex" == settings.matcherId) {
-            ComplexJsonValueConverters((settings.matcherSettings as ArrayNode)
+        return when {
+            "complex" == settings.matcherId -> ComplexJsonValueConverters((settings.matcherSettings as ArrayNode)
                     .map {
                         val matcher = JsonNodeMatcherFactory.create(it)
                         val matchValue = it.get("matchValue")
                         SingleJsonValueConverter(sourceGetter, matcher, targetSetter, matchValue
                                 ?: settings.matchValue, settings.mismatchValue)
                     })
-        } else {
-            val nodeMatcher = JsonNodeMatcherFactory.create(settings.matcherSettings)
-            val matchValue = settings.matcherSettings.get("matchValue")
-            SingleJsonValueConverter(sourceGetter, nodeMatcher, targetSetter, matchValue ?: settings.matchValue, settings.mismatchValue)
+            "copy" == settings.matcherId -> return CopyJsonValueConverter(sourceGetter, targetSetter)
+            else -> {
+                val nodeMatcher = JsonNodeMatcherFactory.create(settings.matcherSettings)
+                val matchValue = settings.matcherSettings.get("matchValue")
+                SingleJsonValueConverter(sourceGetter, nodeMatcher, targetSetter, matchValue ?: settings.matchValue, settings.mismatchValue)
+            }
         }
     }
 }
