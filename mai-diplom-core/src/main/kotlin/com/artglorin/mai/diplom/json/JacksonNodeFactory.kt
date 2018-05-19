@@ -10,11 +10,26 @@ object JacksonNodeFactory {
     private val factory = JsonNodeFactory.instance
     private val mapper = AppJsonMappers.ignoreUnknown
 
-    fun <T: Any>createModuleResult(moduleId: String, series: String, data: T): ObjectNode {
+    fun <T: JsonNode>createModuleResult(moduleId: String, series: String, data: T): ObjectNode {
         return factory.objectNode().apply {
             put("moduleId", moduleId)
             put("seriesId", series)
-            putPOJO("data", data)
+            set("data", data)
+        }
+    }
+
+    fun createModuleResult(moduleId: String, series: String, data: String): ObjectNode {
+        return factory.objectNode().apply {
+            put("moduleId", moduleId)
+            put("seriesId", series)
+            put("data", data)
+        }
+    }
+    fun createModuleResult(moduleId: String, series: String, data: Double): ObjectNode {
+        return factory.objectNode().apply {
+            put("moduleId", moduleId)
+            put("seriesId", series)
+            put("data", data)
         }
     }
 
