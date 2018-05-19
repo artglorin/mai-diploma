@@ -1,4 +1,4 @@
-package com.artglorin.mai.diplom.synoptic
+package com.artglorin.mai.diplom.synoptic.modules.taskmanagers
 
 import com.artglorin.mai.diplom.core.*
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -80,7 +80,7 @@ class SimpleTaskManger : TaskManagerModule {
         override fun accept(t: ObjectNode) {
             val seriesId = t.get("seriesId").textValue()
             if (seriesHolder
-                            .getOrPut(seriesId, { SimpleTaskManger.SeriesHolder(partsCount) })
+                            .getOrPut(seriesId, { SeriesHolder(partsCount) })
                             .add(t)) {
                 seriesHolder
                         .remove(seriesId)

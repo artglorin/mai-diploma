@@ -1,4 +1,4 @@
-package com.artglorin.mai.diplom.synoptic
+package com.artglorin.mai.diplom.synoptic.modules.datasources
 
 import com.artglorin.mai.diplom.core.Customizable
 import com.artglorin.mai.diplom.core.DataSourceModule

@@ -1,4 +1,4 @@
-package com.artglorin.mai.diplom.synoptic
+package com.artglorin.mai.diplom.synoptic.modules.datahandlers
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.ObjectNode

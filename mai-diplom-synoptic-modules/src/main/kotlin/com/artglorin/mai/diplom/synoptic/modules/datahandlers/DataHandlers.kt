@@ -1,4 +1,4 @@
-package com.artglorin.mai.diplom.synoptic
+package com.artglorin.mai.diplom.synoptic.modules.datahandlers
 
 import com.artglorin.mai.diplom.core.Customizable
 import com.artglorin.mai.diplom.core.DataHandlerModule

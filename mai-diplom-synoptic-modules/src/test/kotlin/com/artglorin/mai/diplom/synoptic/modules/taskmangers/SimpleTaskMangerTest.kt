@@ -1,7 +1,8 @@
-package com.artglorin.mai.diplom.synoptic
+package com.artglorin.mai.diplom.synoptic.modules.taskmangers
 
 import com.artglorin.mai.diplom.core.*
 import com.artglorin.mai.diplom.json.JacksonNodeFactory
+import com.artglorin.mai.diplom.synoptic.modules.taskmanagers.SimpleTaskManger
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.spy
