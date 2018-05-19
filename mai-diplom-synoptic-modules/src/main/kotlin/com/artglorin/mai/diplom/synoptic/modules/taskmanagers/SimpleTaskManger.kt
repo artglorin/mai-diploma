@@ -11,7 +11,7 @@ import java.util.stream.Collectors
  */
 
 class SimpleTaskManger : TaskManagerModule {
-    var sources: List<DataSourceModule>? = null
+    private var sources: Collection<DataSourceModule>? = null
 
     override fun setData(data: TaskManagerData) {
         sources = data.sources
