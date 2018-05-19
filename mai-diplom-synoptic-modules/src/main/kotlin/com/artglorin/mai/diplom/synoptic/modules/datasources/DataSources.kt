@@ -7,9 +7,9 @@ import com.artglorin.mai.diplom.json.JacksonNodeFactory
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
-import org.springframework.core.io.ClassPathResource
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
 
@@ -52,7 +52,7 @@ class JsonDataSource : DataSourceModule, Customizable {
     override fun applySettings(settings: JsonNode) {
         sourceFile = settings.get("sourceFile")
                 ?.textValue()
-                ?.let { ClassPathResource(it).file.toPath() }
+                ?.let { Paths.get(it) }
                 ?: throw IllegalArgumentException("sourceFile must be present in settings")
     }
 }
