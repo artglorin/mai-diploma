@@ -1,3 +1,6 @@
+tasks.withType(Jar) {
+  destinationDir = file("bin")
+}
 task DataHandlersJar(group: "modulesJar", type: Jar) {
   baseName = "DataHandlerModule"
   include("com/artglorin/mai/diplom/synoptic/modules/datahandlers/**")
