@@ -86,7 +86,7 @@ class ConfigurationLoader(private val source: () -> URI?) {
             } else {
                 val resource = ClassPathResource(FilesAndFolders.CONFIG_FILE)
                 if (resource.exists()) {
-                    LOG.debug("${FilesAndFolders.CONFIG_FILE} was loaded from classpath")
+                    LOG.debug("${FilesAndFolders.CONFIG_FILE} was loaded from classpath. ${resource.file.absolutePath}" )
                     return@ConfigurationLoader resource.uri
                 } else {
                     LOG.debug("${FilesAndFolders.CONFIG_FILE} was not found")
