@@ -57,7 +57,7 @@ object ConfigurationLogger {
 }
 
 fun Configuration.configure(modules: List<Module>) {
-    modules.filter { it -> it.javaClass.kotlin.isInstance(Customizable::class) }
+    modules.filter { it is Customizable }
             .forEach { configure(it) }
 }
 
