@@ -63,4 +63,30 @@ open class SimpleAnswerDataHandler : DataHandlerModule, Customizable {
 class Optimist : SimpleAnswerDataHandler()
 class Pessimist : SimpleAnswerDataHandler()
 class Synoptic : SimpleAnswerDataHandler()
-class Mathematician : SimpleAnswerDataHandler()
+class Mathematician : DataHandlerModule {
+    private val listeners = lazy {
+        JsonNodeListenersContainer()
+    }
+
+    override fun getOutputSchema(): ObjectNode {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
+    override fun addListener(listener: Consumer<ObjectNode>) {
+        listeners.value.addObserver(listener)
+    }
+
+    override fun getInputSchema(): ObjectNode {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private val random = Random()
+
+    override fun push(node: ObjectNode) {
+        if (listeners.isInitialized()) {
+            listeners.value.notify(JacksonNodeFactory.createModuleResult(getModuleId(), node.get("seriesId").textValue(), random.nextDouble()))
+        }
+    }
+
+}
