@@ -15,7 +15,7 @@ open class Application(@Autowired private val loader: MultipleModuleLoader) {
     }
 
     @PostConstruct
-    fun init() {
+    fun loadModulesAndStart() {
         LOG.debug("Starting load modules")
         val result = loader.load(arrayOf(
                 DataSourceModule::class
@@ -29,9 +29,17 @@ open class Application(@Autowired private val loader: MultipleModuleLoader) {
         val dataHandlers = result.getModulesFor(DataHandlerModule::class, ModulesNames.DATA_HANDLERS)
         val observers = result.getModulesFor(DataObserver::class, ModulesNames.DATA_OBSERVERS, false)
         val solution = result.getModulesFor(SolutionModule::class, ModulesNames.SOLUTION)[0]
+        startWithModules(taskManager, sources, dataHandlers, observers, solution)
+    }
+
+    fun startWithModules(taskManager: TaskManagerModule,
+                         sources: Collection<DataSourceModule>,
+                         dataHandlers: Collection<DataHandlerModule>,
+                         observers: Collection<DataObserver>,
+                         solution: SolutionModule) {
         LOG.info("Modules were loaded. Starting configure modules")
         val allModules = ArrayList(sources) + taskManager + dataHandlers + observers + solution
-        LOG.debug("All modulesIds:${allModules.mapIndexed{index, module ->  "[$index] ${module.getModuleId()} "}.joinToString("\n\t", "\n\t") }")
+        LOG.debug("All modulesIds:${allModules.mapIndexed { index, module -> "[$index] ${module.getModuleId()} " }.joinToString("\n\t", "\n\t")}")
         val configuration = APP_CONFIG.loadProperties()
         configuration.configure(allModules)
         LOG.debug("Set sources and handlers to task manager")
@@ -47,6 +55,7 @@ open class Application(@Autowired private val loader: MultipleModuleLoader) {
         )
         LOG.debug("Run tasks")
         taskManager.process()
+
     }
 
 }
