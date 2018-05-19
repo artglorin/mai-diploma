@@ -10,6 +10,8 @@
       <module name="mai-diplom-synoptic-modules_test" target="1.8" />
       <module name="mai-diplom_main" target="1.8" />
       <module name="mai-diplom_test" target="1.8" />
+      <module name="mai.diplom.example_main" target="1.8" />
+      <module name="mai.diplom.example_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

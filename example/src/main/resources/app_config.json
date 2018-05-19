@@ -1,0 +1,132 @@
+{
+  "description" : "Настройка программы для работы из Json файла, где каждый объект на отдельной строке. Используются следующие модули: Оптимист, Пессимист, Синоптик, Математик. Данные выводяться на консоль. Рузультаты в файл",
+  "modules"     : {
+    "JsonDataSource"        : {
+      "settings" : {
+        "sourceFile" : "./test_data.json"
+      }
+    },
+    "Optimist"              : {
+      "settings" : {
+        "answers" : [ "Отличная погодка", "Завтра будет лучше чем вчера", "У природы нет плохой погоды" ]
+      }
+    },
+    "Pessimist"             : {
+      "settings" : {
+        "answers" : [ "Завтра можно не просыпаться", "Мама, роди меня обратно", "Хорошего не жди" ]
+      }
+    },
+    "Mathematician"         : { },
+    "Synoptic"              : {
+      "settings" : {
+        "answers" : [ "Как вчера", "Туманно", "Ясно как всегда", "Погода перменчивая" ]
+      }
+    },
+    "SimpleTaskManger"      : { },
+    "FileOutputModule"      : {
+      "settings" : {
+        "file" : "./data-out.json"
+      }
+    },
+    "WeightsSolutionModule" : {
+      "settings" : {
+        "weights" : [
+          {
+            "moduleId" : "Pessimist",
+            "weight"   : 0.2
+          },
+          {
+            "moduleId" : "Optimist",
+            "weight"   : 0.25
+          },
+          {
+            "moduleId" : "Synoptic",
+            "weight"   : 0.25
+          },
+          {
+            "moduleId" : "Mathematician",
+            "weight"   : 0.3
+          }
+        ]
+      }
+    }
+  },
+  "dataFlow"    : [
+    {
+      "moduleId" : "JsonDataSource",
+      "outputId" : [ "raw" ]
+    },
+    {
+      "moduleId" : "Optimist",
+      "inputId"  : [ "raw" ],
+      "outputId" : [ "solution-in" ]
+    },
+    {
+      "moduleId" : "Pessimist",
+      "inputId"  : [ "raw" ],
+      "outputId" : [ "solution-in" ]
+    },
+    {
+      "moduleId" : "Synoptic",
+      "inputId"  : [ "raw" ],
+      "outputId" : [ "solution-in" ]
+    },
+    {
+      "moduleId" : "Mathematician",
+      "inputId"  : [ "raw" ],
+      "outputId" : [ "solution-in" ]
+    },
+    {
+      "moduleId" : "WeightsSolutionModule",
+      "inputId"  : [ "solution-in" ],
+      "outputId" : [ "solution-out" ]
+    },
+    {
+      "moduleId" : "FileOutputModule",
+      "inputId"  : [ "solution-out" ]
+    },
+    {
+      "moduleId" : "ConsoleOutputModule",
+      "inputId"  : [ "raw" ]
+    }
+  ],
+  "pipes"       : [
+    {
+      "id"          : "raw",
+      "description" : "Convert input data to application format",
+      "template"    : { },
+      "filter"      : {
+        "type"    : "all",
+        "filters" : [
+          {
+            "sourcePath" : "data.city.country",
+            "matcher"    : {
+              "name"     : "equals",
+              "template" : "RU"
+            }
+          },
+          {
+            "sourcePath" : "data.city.name",
+            "matcher"    : {
+              "name"     : "equals",
+              "template" : "Moscow"
+            }
+          }
+        ]
+      },
+      "converters"  : [
+        {
+          "sourcePath" : "seriesId",
+          "targetPath" : "seriesId",
+          "matcherId"  : "copy"
+        }
+      ]
+    },
+    {
+      "id" : "solution-in"
+    },
+    {
+      "id" : "solution-out"
+    }
+  ]
+}

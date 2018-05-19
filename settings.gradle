@@ -1,4 +1,6 @@
 rootProject.name = 'mai-diplom'
 include 'mai-diplom-core'
 include 'mai-diplom-synoptic-modules'
+include 'example'
+findProject(':example')?.name = 'mai.diplom.example'
 
