@@ -65,7 +65,7 @@ fun Configuration.configure(module: Module) {
     val moduleId = module.getModuleId()
     modules[moduleId]?.apply {
         if (module is Customizable) {
-            ConfigurationLogger.LOG.debug("Apply settings got module '$moduleId'")
+            ConfigurationLogger.LOG.debug("Apply settings to module '$moduleId'")
             module.applySettings(this.settings)
         }
     }
