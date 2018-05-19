@@ -169,7 +169,7 @@ class ModuleLoaderImpl<out T : Module>(
             return LoadResult(clazz,
                     true,
                     if (modules.isNotEmpty()) {
-                        val msg = "Modules for module by name '$moduleName' were loaded. Count of modules: ${modules.size}"
+                        val msg = "Modules for module by name '$moduleName' were loaded. Count of modules: ${modules.size}, modulesIds:${modules.joinToString(",") { it.getModuleId() }}"
                         LOG.info(msg)
                         msg
                     } else {

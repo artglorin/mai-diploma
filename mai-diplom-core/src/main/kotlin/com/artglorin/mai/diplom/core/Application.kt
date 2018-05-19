@@ -31,9 +31,9 @@ open class Application(@Autowired private val loader: MultipleModuleLoader) {
         val solution = result.getModulesFor(SolutionModule::class, ModulesNames.SOLUTION)[0]
         LOG.info("Modules were loaded. Starting configure modules")
         val allModules = ArrayList(sources) + taskManager + dataHandlers + observers + solution
+        LOG.debug("All modulesIds:${allModules.mapIndexed{index, module ->  "[$index] ${module.getModuleId()} "}.joinToString("\n\t", "\n\t") }")
         val configuration = APP_CONFIG.loadProperties()
         configuration.configure(allModules)
-        LOG.debug("Add observers to modules")
         LOG.debug("Set sources and handlers to task manager")
         taskManager.setData(
                 TaskManagerData(
