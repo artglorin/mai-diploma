@@ -74,7 +74,7 @@ class MultiplyModuleLoaderImpl(@Autowired private val factory: ModuleLoaderFacto
 open class DefaultModuleLoaderFactory : ModuleLoaderFactory {
     override fun  createLoader(module: KClass<out Module>): ModuleLoader<Module> = when (module) {
         SolutionModule::class -> createSolutionModuleLoader()
-        DataObserver::class -> createDataHandlerModuleLoader()
+        DataObserver::class -> createDataObserversLoader()
         DataHandlerModule::class -> createDataHandlerModuleLoader()
         TaskManagerModule::class -> createTaskManagerModuleLoader()
         DataSourceModule::class -> createSourceModuleLoader()
@@ -162,7 +162,7 @@ class ModuleLoaderImpl<out T : Module>(
                     .map { it.toUri().toURL() }
                     .collect(Collectors.toList()).toTypedArray()
                     .let {
-                        val loader = URLClassLoader(it)
+                        val loader = URLClassLoader(it, ModuleLoaderImpl::class.java.classLoader)
                         val load = ServiceLoader.load(clazz.java, loader)
                         load.toList()
                     }
