@@ -1,8 +1,8 @@
 package com.artglorin.mai.diplom.synoptic.modules.datahandlers
 
-import com.artglorin.mai.diplom.core.Customizable
-import com.artglorin.mai.diplom.core.DataHandlerModule
 import com.artglorin.mai.diplom.core.JsonNodeListenersContainer
+import com.artglorin.mai.diplom.core.api.Customizable
+import com.artglorin.mai.diplom.core.api.DataHandlerModule
 import com.artglorin.mai.diplom.json.*
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode

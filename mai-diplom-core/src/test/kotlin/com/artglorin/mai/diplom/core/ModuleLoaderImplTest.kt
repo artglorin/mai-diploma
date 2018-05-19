@@ -1,5 +1,6 @@
 package com.artglorin.mai.diplom.core
 
+import com.artglorin.mai.diplom.core.api.DataSourceModule
 import com.artglorin.mai.diplom.test.JarUtil.makeServiceJarWithSingleClass
 import com.fasterxml.jackson.databind.node.ObjectNode
 import kotlinx.coroutines.experimental.runBlocking

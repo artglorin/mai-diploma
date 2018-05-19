@@ -1,8 +1,8 @@
 package com.artglorin.mai.diplom.synoptic.modules.solutions
 
-import com.artglorin.mai.diplom.core.Customizable
 import com.artglorin.mai.diplom.core.JsonNodeListenersContainer
-import com.artglorin.mai.diplom.core.SolutionModule
+import com.artglorin.mai.diplom.core.api.Customizable
+import com.artglorin.mai.diplom.core.api.SolutionModule
 import com.artglorin.mai.diplom.json.AppJsonMappers
 import com.artglorin.mai.diplom.json.IntegerType
 import com.artglorin.mai.diplom.json.JsonSchemaBuilder

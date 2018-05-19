@@ -1,5 +1,7 @@
 package com.artglorin.mai.diplom.core
 
+import com.artglorin.mai.diplom.core.api.Customizable
+import com.artglorin.mai.diplom.core.api.Module
 import com.artglorin.mai.diplom.error
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode

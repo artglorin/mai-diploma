@@ -1,5 +1,7 @@
-package com.artglorin.mai.diplom.core
+package com.artglorin.mai.diplom.core.api
 
+import com.artglorin.mai.diplom.core.FlowItem
+import com.artglorin.mai.diplom.core.Pipe
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import java.util.function.Consumer
@@ -38,7 +40,7 @@ interface DataSourceModule : Module, OutputModule {
 
 interface DataHandlerModule :  InputModule, OutputModule
 
-interface TaskManagerModule : Module{
+interface TaskManagerModule : Module {
     fun setData(data: TaskManagerData)
     fun process()
 }
@@ -51,6 +53,6 @@ data class TaskManagerData (
         val pipes: List<Pipe>
 )
 
-interface DataObserver :  InputModule
+interface DataObserver : InputModule
 
 interface SolutionModule : BatchProcessor, OutputModule

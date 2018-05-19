@@ -1,5 +1,8 @@
 package com.artglorin.mai.diplom.core
 
+import com.artglorin.mai.diplom.core.api.Customizable
+import com.artglorin.mai.diplom.core.api.Module
+import com.artglorin.mai.diplom.core.api.SolutionModule
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.JsonNodeFactory

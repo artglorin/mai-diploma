@@ -1,6 +1,6 @@
 package com.artglorin.mai.diplom.synoptic.modules.taskmanagers
 
-import com.artglorin.mai.diplom.core.*
+import com.artglorin.mai.diplom.core.api.*
 import com.fasterxml.jackson.databind.node.ObjectNode
 import java.util.function.Consumer
 import java.util.stream.Collectors
