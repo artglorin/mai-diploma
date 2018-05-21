@@ -36,7 +36,7 @@ interface InputModule : Module {
     fun push(node: ObjectNode)
 }
 
-interface DataSourceModule : Module, OutputModule {
+interface DataSourceModule : OutputModule {
     fun launch()
 }
 
