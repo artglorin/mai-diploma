@@ -1,11 +1,55 @@
 tasks.withType(Jar) {
   destinationDir = file("bin")
 }
-task DataHandlersJar(group: "modulesJar", type: Jar) {
-  baseName = "DataHandlerModule"
-  include("com/artglorin/mai/diplom/synoptic/modules/datahandlers/**")
+task Optimist(group: "modulesJar", type: Jar) {
+  baseName = "Optimist"
+  include("com/artglorin/mai/diplom/synoptic/modules/datahandlers/$baseName*")
+  include("com/artglorin/mai/diplom/synoptic/modules/datahandlers/SimpleAnswerDataHandle*")
+  doFirst {
+    createServiceFile("com.artglorin.mai.diplom.core.api.DataHandlerModule", "com.artglorin.mai.diplom.synoptic.modules.datahandlers.$baseName")
+  }
   include("META-INF/services/com.artglorin.mai.diplom.core.api.DataHandlerModule")
   with jar
+}
+
+task Pessimist(group: "modulesJar", type: Jar) {
+  baseName = "Pessimist"
+  include("com/artglorin/mai/diplom/synoptic/modules/datahandlers/$baseName*")
+  include("com/artglorin/mai/diplom/synoptic/modules/datahandlers/SimpleAnswerDataHandle*")
+  doFirst {
+    createServiceFile("com.artglorin.mai.diplom.core.api.DataHandlerModule", "com.artglorin.mai.diplom.synoptic.modules.datahandlers.$baseName")
+  }
+  include("META-INF/services/com.artglorin.mai.diplom.core.api.DataHandlerModule")
+  with jar
+}
+
+task Synoptic(group: "modulesJar", type: Jar) {
+  baseName = "Synoptic"
+  include("com/artglorin/mai/diplom/synoptic/modules/datahandlers/$baseName*")
+  include("com/artglorin/mai/diplom/synoptic/modules/datahandlers/SimpleAnswerDataHandle*")
+  doFirst {
+    createServiceFile("com.artglorin.mai.diplom.core.api.DataHandlerModule", "com.artglorin.mai.diplom.synoptic.modules.datahandlers.$baseName")
+  }
+  include("META-INF/services/com.artglorin.mai.diplom.core.api.DataHandlerModule")
+  with jar
+}
+task Mathematician(group: "modulesJar", type: Jar) {
+  baseName = "Mathematician"
+  include("com/artglorin/mai/diplom/synoptic/modules/datahandlers/$baseName*")
+  doFirst {
+    createServiceFile("com.artglorin.mai.diplom.core.api.DataHandlerModule", "com.artglorin.mai.diplom.synoptic.modules.datahandlers.$baseName")
+  }
+  include("META-INF/services/com.artglorin.mai.diplom.core.api.DataHandlerModule")
+  with jar
+}
+
+def createServiceFile(String interfaceName, serviceName) {
+  def resDir = new File(buildDir, 'resources/main/META-INF/')
+  def serviceDirs = new File(resDir, 'services')
+  serviceDirs.mkdirs()
+  def serviceFile = new File(serviceDirs, interfaceName)
+  serviceFile.text = serviceName
+  return serviceFile.absolutePath
 }
 task DataObserversJar(group: "modulesJar", type: Jar) {
   baseName = "DataObserver"
@@ -33,6 +77,6 @@ task TaskManagerJar(group: "modulesJar", type: Jar) {
 }
 
 task allModules(group: "modulesJar",
-        dependsOn: ["TaskManagerJar","SolutionJar", "DataSourcesJar", "DataObserversJar", "DataHandlersJar"]) {
+        dependsOn: ["TaskManagerJar","SolutionJar", "DataSourcesJar", "DataObserversJar", "Optimist", "Mathematician", "Synoptic", "Pessimist"]) {
 
 }
