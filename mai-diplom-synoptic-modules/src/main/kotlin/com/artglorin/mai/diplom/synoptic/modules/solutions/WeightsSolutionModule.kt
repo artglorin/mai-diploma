@@ -45,6 +45,7 @@ class WeightsSolutionModule : SolutionModule, Customizable {
             val node = groupBy[weight.moduleId]
             if (node != null) {
                 listeners.value.notify(node)
+                break
             }
         }
     }
