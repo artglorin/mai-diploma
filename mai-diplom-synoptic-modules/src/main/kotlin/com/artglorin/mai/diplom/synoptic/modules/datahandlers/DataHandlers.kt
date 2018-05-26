@@ -33,7 +33,7 @@ open class SimpleAnswerDataHandler : DataHandlerModule, Customizable {
         val answers = answers ?: throw IllegalStateException("Answers must be specified")
         if (listeners.isInitialized()) {
             listeners.value.notify((answers.let { it[random.nextInt(it.size)] }
-                    .let { JacksonNodeFactory.createModuleResult(outId.value, node.get("seriesId").textValue(), it) }))
+                    .let { JacksonNodeFactory.createModuleResult(getModuleId(), node.get("seriesId").textValue(), it) }))
         }
     }
 
