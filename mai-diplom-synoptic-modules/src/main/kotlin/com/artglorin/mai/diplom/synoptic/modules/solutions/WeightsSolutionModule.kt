@@ -8,6 +8,7 @@ import com.artglorin.mai.diplom.json.IntegerType
 import com.artglorin.mai.diplom.json.JsonSchemaBuilder
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import java.util.*
 import java.util.function.Consumer
 import java.util.stream.Collectors
 
@@ -17,7 +18,7 @@ import java.util.stream.Collectors
  */
 
 class WeightsSolutionModule : SolutionModule, Customizable {
-    private val weights = HashSet<ModuleWeight>()
+    private val weights = TreeSet<ModuleWeight>()
     private val listeners = lazy { JsonNodeListenersContainer() }
     private val inId = lazy { "${getModuleId()}.in" }
     private val outId = lazy { "${getModuleId()}.out" }
@@ -68,21 +69,20 @@ class WeightsSolutionModule : SolutionModule, Customizable {
             var weights: Collection<ModuleWeight>? = null
     )
 
-    data class ModuleWeight(
+    data class ModuleWeight (
             var weight: Double? = null,
             var moduleId: String? = null
-    ) {
-        override fun equals(other: Any?): Boolean {
-            return when (other) {
-                is ModuleWeight -> weight == other.weight
-                else -> false
-            }
-        }
-
-        override fun hashCode(): Int {
-            var result = weight?.hashCode() ?: 0
-            result = 31 * result + (moduleId?.hashCode() ?: 0)
-            return result
-        }
+    ): Comparable<ModuleWeight> {
+        override fun compareTo(other: ModuleWeight): Int  {
+                return if (weight == other.weight) {
+                        0
+                    } else if (weight != null && other.weight != null) {
+                        weight!!.compareTo(other.weight!!).unaryMinus()
+                    } else if (weight == null) {
+                        1
+                    } else {
+                        -1
+                    }
+                }
     }
 }
