@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import java.util.function.Consumer
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 01/05/2018
  */
 

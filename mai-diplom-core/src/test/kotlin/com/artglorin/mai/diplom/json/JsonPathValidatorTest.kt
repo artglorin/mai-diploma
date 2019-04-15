@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 08/05/2018
  */
 internal class JsonPathValidatorTest {

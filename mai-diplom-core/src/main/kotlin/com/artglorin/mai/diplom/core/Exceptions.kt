@@ -1,7 +1,7 @@
 package com.artglorin.mai.diplom.core
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 01/05/2018
  */
 

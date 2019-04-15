@@ -14,7 +14,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 03/05/2018
  */
 data class Configuration(

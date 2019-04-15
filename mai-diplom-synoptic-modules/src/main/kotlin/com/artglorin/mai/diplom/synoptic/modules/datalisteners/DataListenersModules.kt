@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import java.io.File
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 18/05/2018
  */
 

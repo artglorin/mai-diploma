@@ -20,6 +20,10 @@
           <option name="pluginClasspaths">
             <array />
           </option>
+          <option name="coroutinesState" value="warn" />
+          <option name="errors">
+            <ArgumentParseErrors />
+          </option>
         </compilerArguments>
       </configuration>
     </facet>
@@ -28,7 +32,7 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
-    <output url="file://$MODULE_DIR$/../../../example/out/production/classes" />
+    <output url="file://$MODULE_DIR$/../../../example/build/classes/java/main" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../example/src/main">
       <sourceFolder url="file://$MODULE_DIR$/../../../example/src/main/java" isTestSource="false" />

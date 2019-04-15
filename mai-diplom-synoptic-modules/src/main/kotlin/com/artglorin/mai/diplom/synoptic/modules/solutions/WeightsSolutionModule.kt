@@ -13,7 +13,7 @@ import java.util.function.Consumer
 import java.util.stream.Collectors
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 09/05/2018
  */
 

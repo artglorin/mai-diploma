@@ -21,6 +21,9 @@
             <array />
           </option>
           <option name="coroutinesState" value="enable" />
+          <option name="errors">
+            <ArgumentParseErrors />
+          </option>
         </compilerArguments>
       </configuration>
     </facet>
@@ -29,7 +32,7 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
-    <output-test url="file://$MODULE_DIR$/../../../mai-diplom-core/out/test/classes" />
+    <output-test url="file://$MODULE_DIR$/../../../mai-diplom-core/build/classes/java/test" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../mai-diplom-core/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../mai-diplom-core/src/test/java" isTestSource="true" />

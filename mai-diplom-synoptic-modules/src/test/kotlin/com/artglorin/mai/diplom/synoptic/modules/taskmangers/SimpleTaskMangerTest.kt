@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import java.util.function.Consumer
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 17/05/2018
  */
 internal class SimpleTaskMangerTest {

@@ -10,7 +10,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 01/05/2018
  */
 @Tag(Category.UNIT)

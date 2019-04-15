@@ -9,7 +9,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 14/05/2018
  */
 internal class JsonNodeMatcherFactoryTest {

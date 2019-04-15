@@ -2,16 +2,16 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-core.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-core.iml" group="mai-diplom-core" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-core/mai-diplom-core_main.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-core/mai-diplom-core_main.iml" group="mai-diplom-core" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-core/mai-diplom-core_test.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-core/mai-diplom-core_test.iml" group="mai-diplom-core" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules.iml" group="mai-diplom-synoptic-modules" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules/mai-diplom-synoptic-modules_main.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules/mai-diplom-synoptic-modules_main.iml" group="mai-diplom-synoptic-modules" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules/mai-diplom-synoptic-modules_test.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules/mai-diplom-synoptic-modules_test.iml" group="mai-diplom-synoptic-modules" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai.diplom.example.iml" filepath="$PROJECT_DIR$/.idea/modules/mai.diplom.example.iml" group="mai.diplom.example" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/mai.diplom.example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/example/mai.diplom.example_main.iml" group="mai.diplom.example" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/mai.diplom.example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/example/mai.diplom.example_test.iml" group="mai.diplom.example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom.iml" group="mai-diplom" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-core.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-core.iml" group="mai-diplom/mai-diplom-core" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-core/mai-diplom-core_main.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-core/mai-diplom-core_main.iml" group="mai-diplom/mai-diplom-core" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-core/mai-diplom-core_test.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-core/mai-diplom-core_test.iml" group="mai-diplom/mai-diplom-core" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules.iml" group="mai-diplom/mai-diplom-synoptic-modules" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules/mai-diplom-synoptic-modules_main.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules/mai-diplom-synoptic-modules_main.iml" group="mai-diplom/mai-diplom-synoptic-modules" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules/mai-diplom-synoptic-modules_test.iml" filepath="$PROJECT_DIR$/.idea/modules/mai-diplom-synoptic-modules/mai-diplom-synoptic-modules_test.iml" group="mai-diplom/mai-diplom-synoptic-modules" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mai.diplom.example.iml" filepath="$PROJECT_DIR$/.idea/modules/mai.diplom.example.iml" group="mai-diplom/mai.diplom.example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/mai.diplom.example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/example/mai.diplom.example_main.iml" group="mai-diplom/mai.diplom.example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/mai.diplom.example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/example/mai.diplom.example_test.iml" group="mai-diplom/mai.diplom.example" />
     </modules>
   </component>
 </project>

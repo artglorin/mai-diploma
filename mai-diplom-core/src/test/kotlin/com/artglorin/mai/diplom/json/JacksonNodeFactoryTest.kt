@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestFactory
 import java.math.BigDecimal
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 08/05/2018
  */
 internal class JacksonNodeFactoryTest {

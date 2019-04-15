@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 19/05/2018
  */
 public class ProgrammaticallyRunExample {

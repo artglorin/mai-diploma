@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 14/05/2018
  */
 internal class JsonValueConverterFactoryTest {

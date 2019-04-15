@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestFactory
 import org.springframework.core.io.ClassPathResource
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 16/05/2018
  */
 internal class JsonNodeCopierFactoryTest {

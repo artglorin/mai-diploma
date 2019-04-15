@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 05/05/2018
  */
 

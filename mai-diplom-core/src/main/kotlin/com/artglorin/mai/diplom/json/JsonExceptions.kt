@@ -3,7 +3,7 @@ package com.artglorin.mai.diplom.json
 import com.fasterxml.jackson.databind.JsonNode
 
 /**
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 07/05/2018
  */
 

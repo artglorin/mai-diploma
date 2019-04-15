@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.*
 /**
  *
  * File with Validations for Json Object according JsonScheme
- * @author V.Verminskiy (vverminskiy@alfabank.ru)
+ * @author V.Verminskiy (develop@artglorin.com)
  * @since 05/05/2018
  */
 
